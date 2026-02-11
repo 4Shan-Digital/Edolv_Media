@@ -1,0 +1,243 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { usePathname } from 'next/navigation';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Menu, X, ChevronRight } from 'lucide-react';
+import { cn } from '@/lib/utils';
+
+const navLinks = [
+  { href: '/', label: 'Home' },
+  { href: '/services', label: 'Services' },
+  { href: '/portfolio', label: 'Portfolio' },
+  { href: '/about', label: 'About' },
+  { href: '/careers', label: 'Careers' },
+  { href: '/contact', label: 'Contact' },
+];
+
+export default function Header() {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isMobileMenuOpen]);
+
+  return (
+    <>
+      <motion.header
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        className={cn(
+          'fixed top-0 left-0 right-0 z-50 transition-all duration-500',
+          isScrolled
+            ? 'py-3 bg-white/90 backdrop-blur-xl shadow-soft border-b border-silver-100'
+            : 'py-5 bg-transparent'
+        )}
+      >
+        <nav className="container-custom flex items-center justify-between">
+          {/* Logo */}
+          <Link href="/" className="relative z-10 group">
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="flex items-center gap-2"
+            >
+              {/* Logo Image */}
+              <div className="relative w-10 h-10 md:w-12 md:h-12">
+                <Image
+                  src="/images/Edolv png.png"
+                  alt="Edolv Media"
+                  fill
+                  className="object-contain"
+                  priority
+                />
+              </div>
+              {/* Logo Text */}
+              {/* <div className="flex flex-col">
+                <span className="text-xl md:text-2xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary-600 via-primary-500 to-indigo-500">
+                  Edolv
+                </span>
+                <span className="text-[10px] md:text-xs font-medium tracking-[0.25em] text-silver-400 -mt-1">
+                  MEDIA
+                </span>
+              </div> */}
+            </motion.div>
+          </Link>
+
+          {/* Desktop Navigation */}
+          <div className="hidden lg:flex items-center gap-1">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={cn(
+                  'relative px-4 py-2 text-sm font-medium transition-colors duration-300 rounded-lg',
+                  pathname === link.href
+                    ? 'text-primary-600'
+                    : 'text-silver-600 hover:text-primary-600'
+                )}
+              >
+                {link.label}
+                {pathname === link.href && (
+                  <motion.div
+                    layoutId="activeNav"
+                    className="absolute inset-0 bg-primary-50 rounded-lg -z-10"
+                    transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
+                  />
+                )}
+              </Link>
+            ))}
+          </div>
+
+          {/* CTA Button */}
+          <div className="hidden lg:block">
+            <Link href="/contact">
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="btn-primary text-sm"
+              >
+                Get Started
+                <ChevronRight className="w-4 h-4 ml-1" />
+              </motion.button>
+            </Link>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <motion.button
+            whileTap={{ scale: 0.9 }}
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="lg:hidden relative z-10 p-2 -mr-2"
+            aria-label="Toggle menu"
+          >
+            <AnimatePresence mode="wait">
+              {isMobileMenuOpen ? (
+                <motion.div
+                  key="close"
+                  initial={{ rotate: -90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: 90, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <X className="w-6 h-6 text-silver-700" />
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="menu"
+                  initial={{ rotate: 90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: -90, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <Menu className="w-6 h-6 text-silver-700" />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.button>
+        </nav>
+      </motion.header>
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-40 lg:hidden"
+          >
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-black/20 backdrop-blur-sm"
+              onClick={() => setIsMobileMenuOpen(false)}
+            />
+
+            {/* Menu Panel */}
+            <motion.div
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+              className="absolute top-0 right-0 bottom-0 w-full max-w-sm bg-white shadow-soft-xl"
+            >
+              <div className="flex flex-col h-full pt-24 pb-8 px-6">
+                {/* Nav Links */}
+                <nav className="flex-1 space-y-1">
+                  {navLinks.map((link, index) => (
+                    <motion.div
+                      key={link.href}
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.05 + 0.1 }}
+                    >
+                      <Link
+                        href={link.href}
+                        className={cn(
+                          'flex items-center justify-between py-4 px-4 rounded-xl text-lg font-medium transition-all duration-300',
+                          pathname === link.href
+                            ? 'text-primary-600 bg-primary-50'
+                            : 'text-silver-700 hover:text-primary-600 hover:bg-silver-50'
+                        )}
+                      >
+                        {link.label}
+                        <ChevronRight className={cn(
+                          'w-5 h-5 transition-transform duration-300',
+                          pathname === link.href ? 'text-primary-400' : 'text-silver-300'
+                        )} />
+                      </Link>
+                    </motion.div>
+                  ))}
+                </nav>
+
+                {/* Mobile CTA */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4 }}
+                  className="pt-6 border-t border-silver-100"
+                >
+                  <Link href="/contact" className="block">
+                    <button className="w-full btn-primary py-4 text-lg">
+                      Get Started
+                      <ChevronRight className="w-5 h-5 ml-2" />
+                    </button>
+                  </Link>
+                </motion.div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
+}
+
