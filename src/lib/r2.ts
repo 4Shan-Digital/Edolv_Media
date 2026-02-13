@@ -26,7 +26,7 @@ const r2Client = new S3Client({
   },
 });
 
-export type UploadFolder = 'portfolio' | 'showreel' | 'thumbnails' | 'resumes';
+export type UploadFolder = 'portfolio' | 'showreel' | 'thumbnails' | 'resumes' | 'about-video' | 'team';
 
 /**
  * Upload a file to R2.
@@ -135,7 +135,7 @@ function isR2PrivateUrl(url: string): boolean {
 
 /**
  * Sign media URLs on a document (or array of documents).
- * Replaces thumbnailUrl, videoUrl, and resumeUrl with presigned read URLs
+ * Replaces thumbnailUrl, videoUrl, imageUrl, and resumeUrl with presigned read URLs
  * so that browsers can access files from private R2 buckets.
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -162,6 +162,14 @@ export async function signMediaUrls(docs: any): Promise<any> {
         const key = result.videoKey || extractKeyFromUrl(result.videoUrl);
         if (key) {
           result.videoUrl = await getPresignedReadUrl(key);
+        }
+      }
+
+      // Sign imageUrl (for team members and other images)
+      if (typeof result.imageUrl === 'string' && isR2PrivateUrl(result.imageUrl)) {
+        const key = result.imageKey || extractKeyFromUrl(result.imageUrl);
+        if (key) {
+          result.imageUrl = await getPresignedReadUrl(key);
         }
       }
 

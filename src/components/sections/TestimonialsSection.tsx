@@ -2,62 +2,138 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, useMotionValue, useTransform, useSpring } from 'framer-motion';
-import { Quote, Star, Play, ArrowRight } from 'lucide-react';
+import { Quote, Star, ArrowRight } from 'lucide-react';
 import { ScrollReveal } from '@/components/ui/Animations';
 
 const testimonials = [
   {
     id: 1,
-    name: 'Sarah Johnson',
-    role: 'Marketing Director',
-    company: 'TechStart Inc.',
-    image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&q=80',
-    content: 'Edolv Media transformed our brand videos beyond expectations. Their attention to detail and creative approach helped us increase engagement by 300%. Highly recommended!',
-    rating: 5,
-    project: 'Brand Launch Campaign',
+    name: 'Darpan is Live',
+    subscribers: '86.4k Subscribers',
+    image: '/images/Testimonials/review1.svg',
+    content: 'Edolv Media has been incredible to work with! They understand our vision perfectly and deliver high-quality content every time. Their professionalism and creativity make them a top choice. Highly recommend!',
     color: 'from-violet-500 to-purple-600',
   },
   {
     id: 2,
-    name: 'Michael Chen',
-    role: 'Content Creator',
-    company: 'YouTube (2M+ Subscribers)',
-    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80',
-    content: 'Working with Edolv Media has been a game-changer for my channel. Their editing quality is unmatched, and they always deliver on time. They truly understand content creation.',
-    rating: 5,
-    project: 'YouTube Channel Rebrand',
-    color: 'from-blue-500 to-cyan-600',
+    name: 'Gaming Guru',
+    subscribers: '1.14M Subscribers',
+    image: '/images/Testimonials/review2.jpg',
+    content: 'Awesome Work By Whole Team ❤️ Very Professional, Always Projects Done On Time.',
+    color: 'from-red-500 to-pink-600',
   },
   {
     id: 3,
-   name: 'Emily Rodriguez',
-    role: 'CEO',
-    company: 'GrowthBox Agency',
-    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&q=80',
-    content: 'We have partnered with Edolv Media for all our client projects. Their professionalism, creativity, and reliability make them our go-to video production partner.',
-    rating: 5,
-    project: 'Agency Partnership',
-    color: 'from-pink-500 to-rose-600',
+    name: 'REBEL PLAYS',
+    subscribers: '110k Subscribers',
+    image: '/images/Testimonials/review3.jpg',
+    content: 'Team Edolv has very talented editors. I\'ve recently started working with them and they haven\'t disappointed me at all. All of their work shows how much efforts they put in and they deliver the content on time as well.',
+    color: 'from-blue-500 to-cyan-600',
   },
   {
     id: 4,
-    name: 'David Kim',
-    role: 'Founder',
-    company: 'Wellness Brand Co.',
-    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&q=80',
-    content: 'The motion graphics and animations Edolv created for our product launch were stunning. They exceeded every expectation and helped us make a massive impact.',
-    rating: 5,
-    project: 'Product Launch Video',
+    name: 'ASLA SARDAR',
+    subscribers: '98.9k Subscribers',
+    image: '/images/Testimonials/review4.jpg',
+    content: 'It\'s great to work with Edolv Media. It\'s been more than six months and never faced any issue with content also they also help to improve my content on youtube and give me ideas what new we can try on youtube. Always provide videos, shorts & thumbnail on time.',
     color: 'from-emerald-500 to-teal-600',
   },
-];
-
-const clientLogos = [
-  { name: 'TechStart', gradient: 'from-blue-500 to-cyan-500' },
-  { name: 'Nike', gradient: 'from-gray-700 to-gray-900' },
-  { name: 'Apple', gradient: 'from-gray-600 to-gray-800' },
-  { name: 'Google', gradient: 'from-red-500 via-yellow-500 to-green-500' },
-  { name: 'Meta', gradient: 'from-blue-600 to-indigo-600' },
+  {
+    id: 5,
+    name: 'curlbury',
+    subscribers: '94.6k Subscribers',
+    image: '/images/Testimonials/review5.jpg',
+    content: 'Love the way they put in alot of efforts via editing to show the best of our content on our channel. They don\'t only do amazing work but make sure to deliver the work on time, which is the best part.',
+    color: 'from-purple-500 to-indigo-600',
+  },
+  {
+    id: 6,
+    name: 'Gaming with Latifa',
+    subscribers: '34.8k Subscribers',
+    image: '/images/Testimonials/review6.jpg',
+    content: '~ professional ~ good ~ quality work ~ affordable ~ punctual ~ friendly.',
+    color: 'from-pink-500 to-rose-600',
+  },
+  {
+    id: 7,
+    name: 'Kiwi Shio',
+    subscribers: '28.3k Subscribers',
+    image: '/images/Testimonials/review7.jpg',
+    content: 'I feel that joining Edolv has made my youtube journey a lot easier as they provide all the convenience for the creator along with amazing coordination ! The editing team is very talented and the management team is polite and helpful , always ready to help with everything i need- The pricing is reasonable and the outputs are commendable !',
+    color: 'from-amber-500 to-orange-600',
+  },
+  {
+    id: 8,
+    name: 'DemondproX Gaming',
+    subscribers: '22k Subscribers',
+    image: '/images/Testimonials/review8.jpg',
+    content: 'Edolv has been amazing to work with! Their creativity and attention to detail really stand out. They consistently deliver top-tier work that aligns perfectly with my brand. Highly recommend their services!',
+    color: 'from-cyan-500 to-blue-600',
+  },
+  {
+    id: 9,
+    name: 'AshX',
+    subscribers: '20.3k Subscribers',
+    image: '/images/Testimonials/review9.jpg',
+    content: 'Working with Edolv Media has been fantastic! Their team is efficient, creative, and delivers outstanding results every time. Highly recommend them for all your digital needs!',
+    color: 'from-green-500 to-emerald-600',
+  },
+  {
+    id: 10,
+    name: 'Gaming MagZ',
+    subscribers: '18.4k Subscribers',
+    image: '/images/Testimonials/review10.jpg',
+    content: 'Amazing Packages and Top Notch editing at this budget is extremely rare ✔️',
+    color: 'from-indigo-500 to-purple-600',
+  },
+  {
+    id: 11,
+    name: 'Dynamic Jatt',
+    subscribers: '10.4k Subscribers',
+    image: '/images/Testimonials/review11.jpg',
+    content: '1. On time delivery of videos/thumbnails 2. Best thumbnail editors as far as I have seen till now. 3. Co-operative team to assist me. 4. Management is top-notch as well. 5. Pricing is as good as it can be.',
+    color: 'from-yellow-500 to-amber-600',
+  },
+  {
+    id: 12,
+    name: 'DORE the PRO',
+    subscribers: '6.08k Subscribers',
+    image: '/images/Testimonials/review12.jpg',
+    content: 'Very good edits , on time video thumbnails are available, discipline staf',
+    color: 'from-teal-500 to-cyan-600',
+  },
+  {
+    id: 13,
+    name: 'Reckless',
+    subscribers: '5.82k Subscribers',
+    image: '/images/Testimonials/review13.jpg',
+    content: 'Good professional people focused on getting things done in given timeframe.',
+    color: 'from-rose-500 to-pink-600',
+  },
+  {
+    id: 14,
+    name: 'Darpan Arora Vlogs',
+    subscribers: '5.57k Subscribers',
+    image: '/images/Testimonials/review14.jpg',
+    content: 'Great work, on Time work , Thumbnail and shorts editors are jod.',
+    color: 'from-lime-500 to-green-600',
+  },
+  {
+    id: 15,
+    name: 'RiGiStar',
+    subscribers: '2.02k Subscribers',
+    image: '/images/Testimonials/review15.jpg',
+    content: 'Experience went well. Edolv doing great in the field of providing editing and YT services. Impressive !!',
+    color: 'from-violet-500 to-purple-600',
+  },
+  {
+    id: 16,
+    name: 'Damnguy Plays',
+    subscribers: '956 Subscribers',
+    image: '/images/Testimonials/review16.jpg',
+    content: 'Professional and good working ethics',
+    color: 'from-sky-500 to-blue-600',
+  },
 ];
 
 // Testimonial card component
@@ -169,9 +245,9 @@ function TestimonialCard({
         !isCenter ? 'cursor-pointer' : ''
       }`}
     >
-      <div className="relative">
+      <div className="relative h-[420px]">
         {/* Glassmorphism card */}
-        <div className="relative rounded-2xl backdrop-blur-xl bg-white/80 border border-white/60 shadow-2xl overflow-hidden">
+        <div className="relative h-full rounded-2xl backdrop-blur-xl bg-white/80 border border-white/60 shadow-2xl overflow-hidden flex flex-col">
           {/* Gradient overlay */}
           <div
             className={`absolute inset-0 bg-gradient-to-br ${testimonial.color} opacity-10`}
@@ -179,7 +255,7 @@ function TestimonialCard({
           <div className="absolute inset-[1px] bg-white/90 backdrop-blur-xl rounded-2xl" />
 
           {/* Content */}
-          <div className="relative p-8">
+          <div className="relative p-8 flex flex-col h-full">
             {/* Floating orb */}
             <motion.div
               animate={{
@@ -194,7 +270,7 @@ function TestimonialCard({
               className={`absolute -top-10 -right-10 w-32 h-32 rounded-full bg-gradient-to-br ${testimonial.color} blur-3xl`}
             />
 
-            <div className="flex items-center gap-4 mb-5">
+            <div className="flex items-center gap-4 mb-6">
               {/* Profile image */}
               <motion.div
                 animate={{
@@ -208,60 +284,68 @@ function TestimonialCard({
                 className="relative flex-shrink-0"
               >
                 <div
-                  className={`absolute inset-0 rounded-xl bg-gradient-to-br ${testimonial.color} blur-lg opacity-50`}
+                  className={`absolute inset-0 rounded-full bg-gradient-to-br ${testimonial.color} blur-lg opacity-50`}
                 />
                 <div
-                  className={`relative w-16 h-16 rounded-xl bg-gradient-to-br ${testimonial.color} p-0.5`}
+                  className={`relative w-20 h-20 rounded-full bg-gradient-to-br ${testimonial.color} p-1`}
                 >
                   <div
-                    className="w-full h-full rounded-xl bg-cover bg-center"
+                    className="w-full h-full rounded-full bg-cover bg-center border-2 border-white"
                     style={{ backgroundImage: `url(${testimonial.image})` }}
                   />
                 </div>
                 {/* Quote badge */}
                 <div
-                  className={`absolute -bottom-1.5 -right-1.5 w-7 h-7 rounded-lg bg-gradient-to-br ${testimonial.color} flex items-center justify-center shadow-lg`}
+                  className={`absolute -bottom-1.5 -right-1.5 w-8 h-8 rounded-full bg-gradient-to-br ${testimonial.color} flex items-center justify-center shadow-lg`}
                 >
-                  <Quote className="w-3.5 h-3.5 text-white" />
+                  <Quote className="w-4 h-4 text-white" />
                 </div>
               </motion.div>
 
-              {/* Name and role */}
+              {/* Channel name and subscribers */}
               <div className="flex-1 min-w-0">
-                <h4 className="text-lg font-bold text-gray-900 mb-1">
+                <h4 className="text-xl font-bold text-gray-900 mb-1.5">
                   {testimonial.name}
                 </h4>
-                <p className="text-sm text-gray-600">{testimonial.role}</p>
                 <p
-                  className={`text-sm font-semibold bg-gradient-to-r ${testimonial.color} bg-clip-text text-transparent`}
+                  className={`text-sm font-semibold bg-gradient-to-r ${testimonial.color} bg-clip-text text-transparent flex items-center gap-1.5`}
                 >
-                  {testimonial.company}
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                  </svg>
+                  {testimonial.subscribers}
                 </p>
               </div>
             </div>
 
-            {/* Rating stars */}
+            {/* 5 Star Rating */}
             <div className="flex items-center gap-1 mb-4">
-              {[...Array(testimonial.rating)].map((_, i) => (
-                <Star
+              {[...Array(5)].map((_, i) => (
+                <motion.div
                   key={i}
-                  className="w-4 h-4 text-amber-400 fill-amber-400"
-                />
+                  initial={{ scale: 0, rotate: -180 }}
+                  animate={{ scale: 1, rotate: 0 }}
+                  transition={{
+                    delay: i * 0.1,
+                    type: 'spring',
+                    stiffness: 200,
+                    damping: 12,
+                  }}
+                >
+                  <Star
+                    className={`w-5 h-5 ${
+                      isCenter ? 'text-amber-400' : 'text-amber-300'
+                    }`}
+                    fill="currentColor"
+                  />
+                </motion.div>
               ))}
             </div>
 
             {/* Testimonial content */}
-            <blockquote className="text-gray-700 text-base leading-relaxed mb-5">
+            <blockquote className="text-gray-700 text-base leading-relaxed flex-1 overflow-y-auto">
               &ldquo;{testimonial.content}&rdquo;
             </blockquote>
-
-            {/* Project tag */}
-            <div
-              className={`inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r ${testimonial.color} text-white text-sm font-medium shadow-lg`}
-            >
-              <Play className="w-3.5 h-3.5" fill="currentColor" />
-              {testimonial.project}
-            </div>
 
             {/* Center indicator */}
             {isCenter && (
@@ -285,7 +369,6 @@ export default function TestimonialsSection() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  const [hoveredLogo, setHoveredLogo] = useState<number | null>(null);
 
   const startAutoPlay = useCallback(() => {
     intervalRef.current = setInterval(() => {
@@ -510,56 +593,6 @@ export default function TestimonialsSection() {
             })}
           </div>
         </div>
-
-        {/* Client logos with hover effects */}
-        <ScrollReveal delay={0.3} className="mt-24">
-          <motion.p className="text-center text-sm text-gray-400 mb-10 uppercase tracking-wider font-medium flex items-center justify-center gap-3">
-            <motion.span
-              animate={{ rotate: 360 }}
-              transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
-            >
-              ✦
-            </motion.span>
-            Trusted by industry leaders
-            <motion.span
-              animate={{ rotate: -360 }}
-              transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
-            >
-              ✦
-            </motion.span>
-          </motion.p>
-
-          <div className="flex flex-wrap items-center justify-center gap-8 md:gap-12">
-            {clientLogos.map((logo, index) => (
-              <motion.div
-                key={logo.name}
-                onHoverStart={() => setHoveredLogo(index)}
-                onHoverEnd={() => setHoveredLogo(null)}
-                whileHover={{
-                  scale: 1.1,
-                  y: -5,
-                }}
-                className="relative group cursor-pointer"
-              >
-                {/* Glow effect */}
-                <motion.div
-                  animate={{
-                    opacity: hoveredLogo === index ? 1 : 0,
-                    scale: hoveredLogo === index ? 1.5 : 1,
-                  }}
-                  className={`absolute inset-0 rounded-xl bg-gradient-to-r ${logo.gradient} blur-xl opacity-0 transition-opacity`}
-                />
-
-                {/* Logo */}
-                <div
-                  className={`relative h-12 px-8 flex items-center justify-center rounded-xl bg-gradient-to-r ${logo.gradient} text-white font-bold text-lg shadow-lg transform transition-all`}
-                >
-                  {logo.name}
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </ScrollReveal>
       </div>
     </section>
   );

@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { ArrowRight, Play, Sparkles } from 'lucide-react';
+import { ArrowRight, Play } from 'lucide-react';
 
 export default function HeroSection() {
   const scrollToShowreel = () => {
@@ -110,10 +110,10 @@ export default function HeroSection() {
           transition={{ duration: 0.8, delay: 0.3 }}
           className="text-4xl md:text-6xl lg:text-7xl font-bold max-w-5xl mx-auto mb-6 leading-tight"
         >
-          <span className="text-white">Transform Your </span>
+          <span className="text-white">Where </span>
           <span className="relative inline-block">
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 via-purple-400 to-indigo-400">
-              Vision
+              Creativity
             </span>
             <motion.div
               initial={{ scaleX: 0 }}
@@ -122,11 +122,11 @@ export default function HeroSection() {
               className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-primary-500 to-indigo-500 rounded-full origin-left"
             />
           </span>
-          <span className="text-white"> Into</span>
+          <span className="text-white"> Evolves</span>
           <br className="hidden md:block" />
-          <span className="text-white">Cinematic </span>
+          <span className="text-white">Into Real </span>
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-primary-400">
-            Reality
+            Growth.
           </span>
         </motion.h1>
 

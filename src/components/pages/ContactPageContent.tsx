@@ -62,33 +62,33 @@ const contactInfo = [
   {
     icon: Mail,
     title: 'Email Us',
-    value: 'hello@Edolvmedia.com',
-    link: 'mailto:hello@Edolvmedia.com',
+    value: 'connect@edolv.com',
+    link: 'mailto:connect@edolv.com',
   },
   {
     icon: Phone,
     title: 'Call Us',
-    value: '+1 (234) 567-890',
-    link: 'tel:+1234567890',
+    value: '+91 6260758318',
+    link: 'tel:+916260758318',
   },
   {
     icon: MapPin,
     title: 'Visit Us',
-    value: '123 Creative Street, New York, NY 10001',
+    value: 'Shop 8 Palm City market, Mohali Punjab',
     link: '#',
   },
   {
     icon: Clock,
     title: 'Business Hours',
-    value: 'Mon - Fri: 9AM - 6PM EST',
+    value: 'Available 24/7',
     link: '#',
   },
 ];
 
 const socialLinks = [
-  { icon: Instagram, href: '#', label: 'Instagram' },
-  { icon: Twitter, href: '#', label: 'Twitter' },
-  { icon: Linkedin, href: '#', label: 'LinkedIn' },
+  { icon: Instagram, href: 'https://www.instagram.com/edolvmedia?igsh=MXJ2dDhsb2toc2wxaQ==', label: 'Instagram' },
+  { icon: Twitter, href: 'https://x.com/Edolv_media', label: 'Twitter' },
+  { icon: Linkedin, href: 'https://www.linkedin.com/company/edolv-media/', label: 'LinkedIn' },
   { icon: Youtube, href: '#', label: 'YouTube' },
 ];
 

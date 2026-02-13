@@ -40,9 +40,9 @@ const footerLinks = {
 };
 
 const socialLinks = [
-  { icon: Instagram, href: 'https://instagram.com', label: 'Instagram' },
-  { icon: Twitter, href: 'https://twitter.com', label: 'Twitter' },
-  { icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn' },
+  { icon: Instagram, href: 'https://www.instagram.com/edolvmedia?igsh=MXJ2dDhsb2toc2wxaQ==', label: 'Instagram' },
+  { icon: Twitter, href: 'https://x.com/Edolv_media', label: 'Twitter' },
+  { icon: Linkedin, href: 'https://www.linkedin.com/company/edolv-media/', label: 'LinkedIn' },
   { icon: Youtube, href: 'https://youtube.com', label: 'YouTube' },
 ];
 
@@ -191,28 +191,28 @@ export default function Footer() {
             <ul className="space-y-4">
               <li>
                 <a
-                  href="mailto:hello@Edolvmedia.com"
+                  href="mailto:connect@edolv.com"
                   className="flex items-start gap-3 text-silver-400 hover:text-primary-400 transition-colors duration-300 text-sm"
                 >
                   <Mail className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                  hello@Edolvmedia.com
+                  connect@edolv.com
                 </a>
               </li>
               <li>
                 <a
-                  href="tel:+1234567890"
+                  href="tel:+916260758318"
                   className="flex items-start gap-3 text-silver-400 hover:text-primary-400 transition-colors duration-300 text-sm"
                 >
                   <Phone className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                  +1 (234) 567-890
+                  +91 6260758318
                 </a>
               </li>
               <li>
                 <div className="flex items-start gap-3 text-silver-400 text-sm">
                   <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" />
                   <span>
-                    123 Creative Street<br />
-                    New York, NY 10001
+                    Shop 8 Palm City market<br />
+                    Mohali Punjab
                   </span>
                 </div>
               </li>

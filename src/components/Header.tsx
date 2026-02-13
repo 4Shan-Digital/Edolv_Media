@@ -55,7 +55,7 @@ export default function Header() {
         className={cn(
           'fixed top-0 left-0 right-0 z-50 transition-all duration-500',
           isScrolled
-            ? 'py-3 bg-white/90 backdrop-blur-xl shadow-soft border-b border-silver-100'
+            ? 'py-3 bg-gradient-to-r from-slate-950/95 via-slate-900/90 to-slate-700/80 backdrop-blur-xl shadow-soft border-b border-white/10'
             : 'py-5 bg-transparent'
         )}
       >
@@ -68,12 +68,18 @@ export default function Header() {
               className="flex items-center gap-2"
             >
               {/* Logo Image */}
-              <div className="relative w-10 h-10 md:w-12 md:h-12">
+              <div className={cn(
+                "relative w-10 h-10 md:w-12 md:h-12 transition-all duration-300",
+                isScrolled && "drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)]"
+              )}>
                 <Image
                   src="/images/Edolv png.png"
                   alt="Edolv Media"
                   fill
-                  className="object-contain"
+                  className={cn(
+                    "object-contain transition-all duration-300",
+                    isScrolled && "[filter:drop-shadow(0_0_2px_rgba(0,0,0,0.75))]"
+                  )}
                   priority
                 />
               </div>
@@ -98,15 +104,18 @@ export default function Header() {
                 className={cn(
                   'relative px-4 py-2 text-sm font-medium transition-colors duration-300 rounded-lg',
                   pathname === link.href
-                    ? 'text-primary-600'
-                    : 'text-silver-600 hover:text-primary-600'
+                    ? (isScrolled ? 'text-white' : 'text-primary-600')
+                    : (isScrolled ? 'text-slate-200 hover:text-white' : 'text-silver-600 hover:text-primary-600')
                 )}
               >
                 {link.label}
                 {pathname === link.href && (
                   <motion.div
                     layoutId="activeNav"
-                    className="absolute inset-0 bg-primary-50 rounded-lg -z-10"
+                    className={cn(
+                      "absolute inset-0 rounded-lg -z-10",
+                      isScrolled ? 'bg-white/10' : 'bg-primary-50'
+                    )}
                     transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
                   />
                 )}
@@ -144,7 +153,7 @@ export default function Header() {
                   exit={{ rotate: 90, opacity: 0 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <X className="w-6 h-6 text-silver-700" />
+                  <X className={cn('w-6 h-6', isScrolled ? 'text-white' : 'text-silver-700')} />
                 </motion.div>
               ) : (
                 <motion.div
@@ -154,7 +163,7 @@ export default function Header() {
                   exit={{ rotate: -90, opacity: 0 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <Menu className="w-6 h-6 text-silver-700" />
+                  <Menu className={cn('w-6 h-6', isScrolled ? 'text-white' : 'text-silver-700')} />
                 </motion.div>
               )}
             </AnimatePresence>

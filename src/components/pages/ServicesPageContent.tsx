@@ -1,8 +1,7 @@
 'use client';
 
-import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import { motion, useScroll, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import Image from 'next/image';
 import { useRef, useState, useEffect } from 'react';
 import { 
   Sparkles,
@@ -349,15 +348,15 @@ function StickyServicesSection() {
                 className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center"
               >
                 {/* Left side - Service Info */}
-                <div className="order-2 lg:order-1 text-center lg:text-left">
+                <div className="order-2 lg:order-1 text-center lg:text-left px-4 lg:px-0">
                   {/* Service number */}
                   <motion.div
                     initial={{ opacity: 0, x: -50 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.2, duration: 0.5 }}
-                    className="mb-6"
+                    className="mb-4 lg:mb-6"
                   >
-                    <span className={`text-8xl md:text-9xl font-bold bg-gradient-to-r ${currentService.gradient} bg-clip-text text-transparent opacity-30`}>
+                    <span className={`text-6xl md:text-8xl lg:text-9xl font-bold bg-gradient-to-r ${currentService.gradient} bg-clip-text text-transparent opacity-30`}>
                       {currentService.number}
                     </span>
                   </motion.div>
@@ -367,7 +366,7 @@ function StickyServicesSection() {
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3, duration: 0.5 }}
-                    className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight"
+                    className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-4 lg:mb-6 leading-tight"
                   >
                     {currentService.title}
                   </motion.h2>
@@ -377,7 +376,7 @@ function StickyServicesSection() {
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4, duration: 0.5 }}
-                    className="text-lg md:text-xl text-white/70 mb-8 leading-relaxed max-w-xl"
+                    className="text-base md:text-lg lg:text-xl text-white/70 mb-6 lg:mb-8 leading-relaxed max-w-xl mx-auto lg:mx-0"
                   >
                     {currentService.description}
                   </motion.p>
@@ -387,7 +386,7 @@ function StickyServicesSection() {
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.5, duration: 0.5 }}
-                    className="grid grid-cols-2 gap-4 mb-10"
+                    className="grid grid-cols-1 sm:grid-cols-2 gap-3 lg:gap-4 mb-8 lg:mb-10 max-w-xl mx-auto lg:mx-0"
                   >
                     {currentService.features.map((feature, idx) => (
                       <motion.div
@@ -395,12 +394,12 @@ function StickyServicesSection() {
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.5 + idx * 0.05 }}
-                        className="flex items-start gap-3"
+                        className="flex items-start gap-2 lg:gap-3"
                       >
-                        <div className={`w-5 h-5 rounded-full bg-gradient-to-r ${currentService.gradient} flex items-center justify-center flex-shrink-0 mt-0.5`}>
-                          <Check className="w-3 h-3 text-white" />
+                        <div className={`w-4 h-4 lg:w-5 lg:h-5 rounded-full bg-gradient-to-r ${currentService.gradient} flex items-center justify-center flex-shrink-0 mt-0.5`}>
+                          <Check className="w-2.5 h-2.5 lg:w-3 lg:h-3 text-white" />
                         </div>
-                        <span className="text-sm text-white/80">{feature}</span>
+                        <span className="text-xs md:text-sm text-white/80 text-left">{feature}</span>
                       </motion.div>
                     ))}
                   </motion.div>
@@ -415,17 +414,17 @@ function StickyServicesSection() {
                       <motion.button
                         whileHover={{ scale: 1.05, y: -2 }}
                         whileTap={{ scale: 0.95 }}
-                        className={`px-8 py-4 rounded-2xl bg-gradient-to-r ${currentService.gradient} text-white font-semibold text-lg shadow-2xl hover:shadow-glow transition-all duration-300 flex items-center gap-2 mx-auto lg:mx-0`}
+                        className={`px-6 lg:px-8 py-3 lg:py-4 rounded-2xl bg-gradient-to-r ${currentService.gradient} text-white font-semibold text-base lg:text-lg shadow-2xl hover:shadow-glow transition-all duration-300 flex items-center gap-2 mx-auto lg:mx-0`}
                       >
                         Get Started
-                        <ArrowRight className="w-5 h-5" />
+                        <ArrowRight className="w-4 h-4 lg:w-5 lg:h-5" />
                       </motion.button>
                     </Link>
                   </motion.div>
                 </div>
 
                 {/* Right side - Visual */}
-                <div className="order-1 lg:order-2 flex items-center justify-center">
+                <div className="order-1 lg:order-2 flex items-center justify-center px-4 lg:px-0">
                   <motion.div
                     initial={{ opacity: 0, scale: 0.5, rotateY: -30 }}
                     animate={{ opacity: 1, scale: 1, rotateY: 0 }}
@@ -463,27 +462,27 @@ function StickyServicesSection() {
                         repeat: Infinity, 
                         ease: "easeInOut" 
                       }}
-                      className={`relative w-64 h-64 md:w-80 md:h-80 rounded-[4rem] bg-gradient-to-br ${currentService.gradient} p-1 shadow-2xl`}
+                      className={`relative w-48 h-48 md:w-64 md:h-64 lg:w-80 lg:h-80 rounded-[2.5rem] md:rounded-[3rem] lg:rounded-[4rem] bg-gradient-to-br ${currentService.gradient} p-1 shadow-2xl`}
                     >
-                      <div className="w-full h-full rounded-[3.5rem] bg-silver-900/90 backdrop-blur-xl flex items-center justify-center">
-                        <IconComponent className="w-24 h-24 md:w-32 md:h-32 text-white/90" strokeWidth={1.5} />
+                      <div className="w-full h-full rounded-[2rem] md:rounded-[2.5rem] lg:rounded-[3.5rem] bg-silver-900/90 backdrop-blur-xl flex items-center justify-center">
+                        <IconComponent className="w-16 h-16 md:w-24 md:h-24 lg:w-32 lg:h-32 text-white/90" strokeWidth={1.5} />
                       </div>
 
                       {/* Floating accent elements */}
                       <motion.div
                         animate={{ y: [-10, 10, -10], x: [-5, 5, -5] }}
                         transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                        className={`absolute -top-4 -right-4 w-16 h-16 rounded-2xl bg-gradient-to-br ${currentService.gradient} shadow-lg flex items-center justify-center`}
+                        className={`absolute -top-3 -right-3 lg:-top-4 lg:-right-4 w-12 h-12 lg:w-16 lg:h-16 rounded-xl lg:rounded-2xl bg-gradient-to-br ${currentService.gradient} shadow-lg flex items-center justify-center`}
                       >
-                        <Sparkles className="w-8 h-8 text-white" />
+                        <Sparkles className="w-6 h-6 lg:w-8 lg:h-8 text-white" />
                       </motion.div>
 
                       <motion.div
                         animate={{ y: [10, -10, 10], x: [5, -5, 5] }}
                         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                        className={`absolute -bottom-4 -left-4 w-12 h-12 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 shadow-lg flex items-center justify-center`}
+                        className={`absolute -bottom-3 -left-3 lg:-bottom-4 lg:-left-4 w-10 h-10 lg:w-12 lg:h-12 rounded-lg lg:rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 shadow-lg flex items-center justify-center`}
                       >
-                        <Play className="w-5 h-5 text-white fill-white" />
+                        <Play className="w-4 h-4 lg:w-5 lg:h-5 text-white fill-white" />
                       </motion.div>
                     </motion.div>
                   </motion.div>

@@ -15,6 +15,8 @@ import {
   X,
   ChevronRight,
   Tag,
+  Play,
+  UserCog,
 } from 'lucide-react';
 
 interface AdminShellProps {
@@ -25,6 +27,8 @@ const navItems = [
   { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/admin/portfolio', label: 'Portfolio', icon: Film },
   { href: '/admin/showreel', label: 'Showreel', icon: Clapperboard },
+  { href: '/admin/about-video', label: 'About Video', icon: Play },
+  { href: '/admin/team', label: 'Team Members', icon: UserCog },
   { href: '/admin/categories', label: 'Categories', icon: Tag },
   { href: '/admin/jobs', label: 'Jobs', icon: Briefcase },
   { href: '/admin/applications', label: 'Applications', icon: Users },

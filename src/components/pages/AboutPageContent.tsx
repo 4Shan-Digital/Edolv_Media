@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { 
@@ -11,9 +12,33 @@ import {
   ArrowRight,
   Linkedin,
   Twitter,
+  Instagram,
   Play
 } from 'lucide-react';
 import { ScrollReveal, StaggerContainer, StaggerItem } from '@/components/ui/Animations';
+import VideoPlayerModal from '@/components/ui/VideoPlayerModal';
+
+interface AboutVideo {
+  _id: string;
+  title: string;
+  description?: string;
+  videoUrl: string;
+  thumbnailUrl: string;
+}
+
+interface TeamMember {
+  _id: string;
+  name: string;
+  role: string;
+  bio: string;
+  imageUrl: string;
+  order: number;
+  social?: {
+    linkedin?: string;
+    twitter?: string;
+    instagram?: string;
+  };
+}
 
 const values = [
   {
@@ -38,65 +63,83 @@ const values = [
   },
 ];
 
-const team = [
+const team: TeamMember[] = [
   {
+    _id: 'fallback-1',
     name: 'Alex Thompson',
     role: 'Founder & Creative Director',
-    image: '/images/team/team-1.jpg',
+    imageUrl: '/images/team/team-1.jpg',
     bio: '15+ years in video production. Former lead editor at major film studio.',
+    order: 1,
     social: {
       linkedin: '#',
       twitter: '#',
+      instagram: '#',
     },
   },
   {
+    _id: 'fallback-2',
     name: 'Sarah Chen',
     role: 'Lead Motion Designer',
-    image: '/images/team/team-2.jpg',
+    imageUrl: '/images/team/team-2.jpg',
     bio: 'Award-winning animator with expertise in 2D and 3D motion graphics.',
+    order: 2,
     social: {
       linkedin: '#',
       twitter: '#',
+      instagram: '#',
     },
   },
   {
+    _id: 'fallback-3',
     name: 'Marcus Williams',
     role: 'Senior Video Editor',
-    image: '/images/team/team-3.jpg',
+    imageUrl: '/images/team/team-3.jpg',
     bio: 'Documentary specialist with work featured on major streaming platforms.',
+    order: 3,
     social: {
       linkedin: '#',
       twitter: '#',
+      instagram: '#',
     },
   },
   {
+    _id: 'fallback-4',
     name: 'Emily Rodriguez',
     role: 'Colorist',
-    image: '/images/team/team-4.jpg',
+    imageUrl: '/images/team/team-4.jpg',
     bio: 'Color grading expert trained at the American Film Institute.',
+    order: 4,
     social: {
       linkedin: '#',
       twitter: '#',
+      instagram: '#',
     },
   },
   {
+    _id: 'fallback-5',
     name: 'David Park',
     role: 'Sound Designer',
-    image: '/images/team/team-5.jpg',
+    imageUrl: '/images/team/team-5.jpg',
     bio: 'Audio engineer with credits on Emmy-winning productions.',
+    order: 5,
     social: {
       linkedin: '#',
       twitter: '#',
+      instagram: '#',
     },
   },
   {
+    _id: 'fallback-6',
     name: 'Jessica Martinez',
     role: 'Project Manager',
-    image: '/images/team/team-6.jpg',
+    imageUrl: '/images/team/team-6.jpg',
     bio: 'Ensures every project runs smoothly from concept to delivery.',
+    order: 6,
     social: {
       linkedin: '#',
       twitter: '#',
+      instagram: '#',
     },
   },
 ];
@@ -111,6 +154,43 @@ const milestones = [
 ];
 
 export default function AboutPageContent() {
+  const [aboutVideo, setAboutVideo] = useState<AboutVideo | null>(null);
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
+
+  useEffect(() => {
+    // Fetch about video
+    const fetchAboutVideo = async () => {
+      try {
+        const res = await fetch('/api/about-video');
+        const data = await res.json();
+        if (data.success && data.data) {
+          setAboutVideo(data.data);
+        }
+      } catch (err) {
+        console.error('Failed to fetch about video:', err);
+      }
+    };
+
+    // Fetch team members
+    const fetchTeamMembers = async () => {
+      try {
+        const res = await fetch('/api/team');
+        const data = await res.json();
+        console.log('Team API Response:', data);
+        if (data.success && data.data) {
+          console.log('Setting team members:', data.data);
+          setTeamMembers(data.data);
+        }
+      } catch (err) {
+        console.error('Failed to fetch team members:', err);
+      }
+    };
+
+    fetchAboutVideo();
+    fetchTeamMembers();
+  }, []);
+
   return (
     <>
       {/* Hero Section */}
@@ -158,16 +238,40 @@ export default function AboutPageContent() {
               <div className="relative">
                 <div className="absolute -inset-4 bg-gradient-to-br from-primary-100 via-silver-100 to-indigo-100 rounded-3xl opacity-60" />
                 <div className="relative aspect-video rounded-2xl overflow-hidden bg-silver-200 shadow-soft-xl">
-                  {/* Placeholder for about video/image */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-silver-700 to-silver-900 flex items-center justify-center">
-                    <motion.button
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="w-20 h-20 rounded-full bg-white/90 flex items-center justify-center shadow-soft-lg"
-                    >
-                      <Play className="w-8 h-8 text-primary-600 ml-1" fill="currentColor" />
-                    </motion.button>
-                  </div>
+                  {aboutVideo ? (
+                    <>
+                      <img
+                        src={aboutVideo.thumbnailUrl}
+                        alt={aboutVideo.title}
+                        className="absolute inset-0 w-full h-full object-cover"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.style.display = 'none';
+                          console.log('Failed to load video thumbnail:', aboutVideo.thumbnailUrl);
+                        }}
+                      />
+                      <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+                        <motion.button
+                          onClick={() => setIsVideoModalOpen(true)}
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.95 }}
+                          className="w-20 h-20 rounded-full bg-white/90 flex items-center justify-center shadow-soft-lg"
+                        >
+                          <Play className="w-8 h-8 text-primary-600 ml-1" fill="currentColor" />
+                        </motion.button>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="absolute inset-0 bg-gradient-to-br from-silver-700 to-silver-900 flex items-center justify-center">
+                      <motion.button
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="w-20 h-20 rounded-full bg-white/90 flex items-center justify-center shadow-soft-lg"
+                      >
+                        <Play className="w-8 h-8 text-primary-600 ml-1" fill="currentColor" />
+                      </motion.button>
+                    </div>
+                  )}
                 </div>
               </div>
             </ScrollReveal>
@@ -214,53 +318,90 @@ export default function AboutPageContent() {
       </section>
 
       {/* Team Section */}
-      <section id="team" className="section-padding bg-white">
+      <section className="section-padding">
         <div className="container-custom">
           <ScrollReveal className="text-center mb-16">
             <span className="inline-block text-sm font-medium text-primary-600 uppercase tracking-wider mb-4">
               Our Team
             </span>
             <h2 className="heading-lg text-silver-900 mb-4">
-              Meet the <span className="gradient-text">Creatives</span>
+              Meet the <span className="gradient-text">Team</span>
             </h2>
             <p className="text-body max-w-2xl mx-auto">
-              A talented team of editors, designers, and storytellers dedicated to bringing your vision to life.
+              Talented individuals working together to create amazing results.
             </p>
           </ScrollReveal>
 
-          <StaggerContainer staggerDelay={0.1} className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {team.map((member) => (
-              <StaggerItem key={member.name}>
+          <StaggerContainer staggerDelay={0.1} className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {(() => {
+              const displayTeam = teamMembers.length > 0 ? teamMembers : team;
+              console.log('Displaying team:', displayTeam.length, 'members', displayTeam.map(m => ({ name: m.name, imageUrl: m.imageUrl })));
+              return displayTeam.map((member) => (
+              <StaggerItem key={member._id || member.name}>
                 <motion.div
                   whileHover={{ y: -5 }}
                   className="group bg-silver-50 rounded-2xl p-6 hover:bg-white hover:shadow-soft-lg transition-all duration-300"
                 >
                   {/* Avatar */}
                   <div className="relative mb-5 overflow-hidden rounded-xl aspect-square bg-silver-200">
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary-400/20 to-indigo-400/20 flex items-center justify-center">
+                    {member.imageUrl ? (
+                      <img
+                        src={member.imageUrl}
+                        alt={member.name}
+                        className="absolute inset-0 w-full h-full object-cover"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.style.display = 'none';
+                          const fallback = target.nextElementSibling as HTMLElement;
+                          if (fallback) fallback.style.display = 'flex';
+                          console.log('Failed to load team member image for', member.name, ':', member.imageUrl);
+                        }}
+                      />
+                    ) : null}
+                    <div className={member.imageUrl ? "absolute inset-0 bg-gradient-to-br from-primary-400/20 to-indigo-400/20 items-center justify-center hidden" : "absolute inset-0 bg-gradient-to-br from-primary-400/20 to-indigo-400/20 flex items-center justify-center"}>
                       <span className="text-6xl font-bold text-white/50">{member.name.charAt(0)}</span>
                     </div>
                     {/* Social overlay on hover */}
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      whileHover={{ opacity: 1 }}
-                      className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end justify-center pb-4 opacity-0 group-hover:opacity-100 transition-opacity"
-                    >
-                      <div className="flex gap-2">
-                        <a
-                          href={member.social.linkedin}
-                          className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/30 transition-colors"
-                        >
-                          <Linkedin className="w-4 h-4" />
-                        </a>
-                        <a
-                          href={member.social.twitter}
-                          className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/30 transition-colors"
-                        >
-                          <Twitter className="w-4 h-4" />
-                        </a>
-                      </div>
-                    </motion.div>
+                    {member.social && (member.social.linkedin || member.social.twitter || member.social.instagram) && (
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        whileHover={{ opacity: 1 }}
+                        className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end justify-center pb-4 opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        <div className="flex gap-2">
+                          {member.social.linkedin && (
+                            <a
+                              href={member.social.linkedin}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/30 transition-colors"
+                            >
+                              <Linkedin className="w-4 h-4" />
+                            </a>
+                          )}
+                          {member.social.twitter && (
+                            <a
+                              href={member.social.twitter}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/30 transition-colors"
+                            >
+                              <Twitter className="w-4 h-4" />
+                            </a>
+                          )}
+                          {member.social.instagram && (
+                            <a
+                              href={member.social.instagram}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/30 transition-colors"
+                            >
+                              <Instagram className="w-4 h-4" />
+                            </a>
+                          )}
+                        </div>
+                      </motion.div>
+                    )}
                   </div>
 
                   {/* Info */}
@@ -271,7 +412,8 @@ export default function AboutPageContent() {
                   <p className="text-silver-600 text-sm">{member.bio}</p>
                 </motion.div>
               </StaggerItem>
-            ))}
+            ));
+            })()}
           </StaggerContainer>
         </div>
       </section>
@@ -337,6 +479,16 @@ export default function AboutPageContent() {
             <Award className="w-16 h-16 text-primary-200 mx-auto mb-6" />
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
               Ready to Join Our Story?
+
+      {/* Video Modal */}
+      {aboutVideo && (
+        <VideoPlayerModal
+          isOpen={isVideoModalOpen}
+          onClose={() => setIsVideoModalOpen(false)}
+          videoUrl={aboutVideo.videoUrl}
+          title={aboutVideo.title}
+        />
+      )}
             </h2>
             <p className="text-xl text-primary-100 max-w-2xl mx-auto mb-10">
               Whether you want to work with us or join our team, we'd love to hear from you.
@@ -365,6 +517,17 @@ export default function AboutPageContent() {
           </ScrollReveal>
         </div>
       </section>
+
+      {/* Video Modal */}
+      {aboutVideo && (
+        <VideoPlayerModal
+          isOpen={isVideoModalOpen}
+          onClose={() => setIsVideoModalOpen(false)}
+          videoUrl={aboutVideo.videoUrl}
+          title={aboutVideo.title}
+          description={aboutVideo.description}
+        />
+      )}
     </>
   );
 }

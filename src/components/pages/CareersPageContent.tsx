@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
 import { 
   Briefcase, 
   MapPin, 
@@ -15,7 +16,6 @@ import {
   Laptop,
   Globe,
   GraduationCap,
-  Sparkles,
   Rocket,
   Target,
   TrendingUp,
@@ -387,16 +387,60 @@ export default function CareersPageContent() {
             <ScrollReveal direction="right">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-4">
-                  <div className="aspect-square rounded-2xl bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center">
-                    <Users className="w-16 h-16 text-white" />
-                  </div>
-                  <div className="aspect-video rounded-2xl bg-gradient-to-br from-silver-200 to-silver-300" />
+                  <motion.div
+                    whileHover={{ scale: 1.05, rotate: 2 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                    className="aspect-square rounded-2xl overflow-hidden shadow-xl"
+                  >
+                    <Image
+                      src="/images/Carrier/Carrier1.jpg"
+                      alt="Team Culture"
+                      width={400}
+                      height={400}
+                      className="w-full h-full object-cover"
+                    />
+                  </motion.div>
+                  <motion.div
+                    whileHover={{ scale: 1.05, rotate: -2 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                    className="aspect-video rounded-2xl overflow-hidden shadow-xl"
+                  >
+                    <Image
+                      src="/images/Carrier/Carrier2.jpeg"
+                      alt="Work Environment"
+                      width={600}
+                      height={400}
+                      className="w-full h-full object-cover"
+                    />
+                  </motion.div>
                 </div>
                 <div className="space-y-4 pt-8">
-                  <div className="aspect-video rounded-2xl bg-gradient-to-br from-silver-200 to-silver-300" />
-                  <div className="aspect-square rounded-2xl bg-gradient-to-br from-indigo-400 to-indigo-600 flex items-center justify-center">
-                    <Sparkles className="w-16 h-16 text-white" />
-                  </div>
+                  <motion.div
+                    whileHover={{ scale: 1.05, rotate: 2 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                    className="aspect-video rounded-2xl overflow-hidden shadow-xl"
+                  >
+                    <Image
+                      src="/images/Carrier/Carrier3.jpg"
+                      alt="Creative Space"
+                      width={600}
+                      height={400}
+                      className="w-full h-full object-cover"
+                    />
+                  </motion.div>
+                  <motion.div
+                    whileHover={{ scale: 1.05, rotate: -2 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                    className="aspect-square rounded-2xl overflow-hidden shadow-xl"
+                  >
+                    <Image
+                      src="/images/Carrier/Carrier4.jpg"
+                      alt="Team Collaboration"
+                      width={400}
+                      height={400}
+                      className="w-full h-full object-cover"
+                    />
+                  </motion.div>
                 </div>
               </div>
             </ScrollReveal>
