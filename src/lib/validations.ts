@@ -11,6 +11,11 @@ export const createPortfolioSchema = z.object({
   client: z.string().min(1, 'Client name is required').max(200),
   duration: z.string().min(1, 'Duration is required').regex(/^\d{1,2}:\d{2}$/, 'Duration must be in M:SS or MM:SS format'),
   year: z.string().regex(/^\d{4}$/, 'Year must be a 4-digit number'),
+  // File URLs and keys (for presigned upload method)
+  videoUrl: z.string().url().optional(),
+  videoKey: z.string().optional(),
+  thumbnailUrl: z.string().url().optional(),
+  thumbnailKey: z.string().optional(),
 });
 
 export const updatePortfolioSchema = createPortfolioSchema.partial();

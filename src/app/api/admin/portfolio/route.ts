@@ -59,9 +59,12 @@ export async function POST(request: Request) {
       // New method: JSON with pre-uploaded URLs
       const body = await request.json();
       
-      // Validate required fields
-      if (!body.videoUrl || !body.thumbnailUrl) {
-        return apiError('Video and thumbnail URLs are required', 400);
+      // Validate required fields for presigned upload
+      if (!body.videoUrl || !body.videoKey) {
+        return apiError('Video URL and key are required', 400);
+      }
+      if (!body.thumbnailUrl || !body.thumbnailKey) {
+        return apiError('Thumbnail URL and key are required', 400);
       }
 
       const validatedData = createPortfolioSchema.parse(body);
@@ -72,7 +75,16 @@ export async function POST(request: Request) {
 
       // Create portfolio item with pre-uploaded file URLs
       const portfolio = await Portfolio.create({
-        ...validatedData,
+        title: validatedData.title,
+        category: validatedData.category,
+        description: validatedData.description,
+        client: validatedData.client,
+        duration: validatedData.duration,
+        year: validatedData.year,
+        videoUrl: body.videoUrl,
+        videoKey: body.videoKey,
+        thumbnailUrl: body.thumbnailUrl,
+        thumbnailKey: body.thumbnailKey,
         order: nextOrder,
       });
 
