@@ -40,15 +40,64 @@ export async function GET() {
       },
     });
 
-    const result = await client.send(new ListBucketsCommand({}));
+    // Try two tests: list buckets (broad permission) and list objects (bucket-specific)
+    let listBucketsResult = null;
+    let listBucketsError = null;
+    
+    try {
+      const result = await client.send(new ListBucketsCommand({}));
+      listBucketsResult = {
+        buckets: result.Buckets?.map(b => b.Name) || [],
+        bucketExists: result.Buckets?.some(b => b.Name === process.env.R2_BUCKET_NAME),
+      };
+    } catch (error: unknown) {
+      listBucketsError = error instanceof Error ? error.message : 'Unknown error';
+    }
+
+    // Try a simple test upload to verify bucket access
+    const { PutObjectCommand } = await import('@aws-sdk/client-s3');
+    let uploadTestResult = null;
+    let uploadTestError = null;
+    
+    try {
+      const testKey = '_test_connection.txt';
+      await client.send(new PutObjectCommand({
+        Bucket: process.env.R2_BUCKET_NAME!,
+        Key: testKey,
+        Body: Buffer.from('Connection test from Edolv Media'),
+        ContentType: 'text/plain',
+      }));
+      
+      // Clean up test file
+      const { DeleteObjectCommand } = await import('@aws-sdk/client-s3');
+      await client.send(new DeleteObjectCommand({
+        Bucket: process.env.R2_BUCKET_NAME!,
+        Key: testKey,
+      }));
+      
+      uploadTestResult = 'Upload and delete test successful';
+    } catch (error: unknown) {
+      uploadTestError = error instanceof Error ? error.message : 'Unknown error';
+    }
 
     return NextResponse.json({
-      success: true,
-      message: 'R2 connection successful!',
+      success: !uploadTestError,
+      message: uploadTestError ? 'Bucket access test failed' : 'R2 connection successful!',
       endpoint,
-      buckets: result.Buckets?.map(b => b.Name) || [],
       expectedBucket: process.env.R2_BUCKET_NAME,
-      bucketExists: result.Buckets?.some(b => b.Name === process.env.R2_BUCKET_NAME),
+      publicUrl: process.env.R2_PUBLIC_URL,
+      tests: {
+        listBuckets: {
+          success: !listBucketsError,
+          error: listBucketsError,
+          result: listBucketsResult,
+        },
+        uploadTest: {
+          success: !uploadTestError,
+          error: uploadTestError,
+          result: uploadTestResult,
+        }
+      },
       credentials: {
         R2_ACCOUNT_ID: hasAccountId,
         R2_ACCESS_KEY_ID: hasAccessKey,
