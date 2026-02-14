@@ -13,7 +13,9 @@ interface PortfolioItem {
   duration: string;
   year: string;
   thumbnailUrl: string;
+  thumbnailKey?: string;
   videoUrl: string;
+  videoKey?: string;
   order: number;
   isActive: boolean;
   createdAt: string;
@@ -124,64 +126,156 @@ export default function AdminPortfolioPage() {
         return;
       }
 
-      const formData = new FormData();
-      formData.set('title', title);
-      formData.set('category', category);
-      formData.set('description', description);
-      formData.set('client', client);
-      formData.set('duration', duration);
-      formData.set('year', year);
+      let videoUrl = editing?.videoUrl;
+      let videoKey = editing?.videoKey;
+      let thumbnailUrl = editing?.thumbnailUrl;
+      let thumbnailKey = editing?.thumbnailKey;
 
-      if (videoFile) formData.set('video', videoFile);
-      if (thumbnailFile) formData.set('thumbnail', thumbnailFile);
+      // Upload files directly to R2 using presigned URLs (bypasses Vercel limits)
+      if (videoFile || thumbnailFile) {
+        setUploadingVideo(true);
+        const totalFiles = (videoFile ? 1 : 0) + (thumbnailFile ? 1 : 0);
+        let uploadedFiles = 0;
 
-      // Use XMLHttpRequest to track upload progress
-      const xhr = new XMLHttpRequest();
+        // Upload video if provided
+        if (videoFile) {
+          setUploadProgress(10);
+          
+          // Get presigned URL for video
+          const presignedRes = await fetch('/api/admin/portfolio/presigned-url', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              fileName: videoFile.name,
+              contentType: videoFile.type,
+              folder: 'portfolio'
+            })
+          });
 
-      // Track progress
-      xhr.upload.addEventListener('progress', (e) => {
-        if (e.lengthComputable) {
-          const percentComplete = Math.round((e.loaded / e.total) * 100);
-          setUploadProgress(percentComplete);
-          setUploadingVideo(videoFile !== null);
-          if (percentComplete === 100) {
-            setProcessingUpload(true);
+          if (!presignedRes.ok) {
+            throw new Error('Failed to get video upload URL');
           }
+
+          const { uploadUrl, key, publicUrl } = (await presignedRes.json()).data;
+
+          // Upload directly to R2 with progress tracking
+          await new Promise<void>((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+
+            xhr.upload.addEventListener('progress', (e) => {
+              if (e.lengthComputable) {
+                const fileProgress = (e.loaded / e.total) * 100;
+                const totalProgress = 10 + ((uploadedFiles + fileProgress / 100) / totalFiles) * 80;
+                setUploadProgress(Math.round(totalProgress));
+              }
+            });
+
+            xhr.addEventListener('load', () => {
+              if (xhr.status >= 200 && xhr.status < 300) {
+                videoUrl = publicUrl;
+                videoKey = key;
+                uploadedFiles++;
+                resolve();
+              } else {
+                reject(new Error('Video upload failed'));
+              }
+            });
+
+            xhr.addEventListener('error', () => reject(new Error('Video upload network error')));
+            xhr.open('PUT', uploadUrl);
+            xhr.setRequestHeader('Content-Type', videoFile.type);
+            xhr.send(videoFile);
+          });
         }
-      });
 
-      // Promisify the XHR request
-      await new Promise<void>((resolve, reject) => {
-        xhr.addEventListener('load', () => {
-          if (xhr.status >= 200 && xhr.status < 300) {
-            try {
-              const data = JSON.parse(xhr.responseText);
-              if (!data.success) reject(new Error(data.error));
-              else resolve();
-            } catch {
-              reject(new Error('Invalid response'));
-            }
-          } else {
-            try {
-              const data = JSON.parse(xhr.responseText);
-              reject(new Error(data.error || 'Upload failed'));
-            } catch {
-              reject(new Error('Upload failed'));
-            }
+        // Upload thumbnail if provided
+        if (thumbnailFile) {
+          setUploadProgress(videoFile ? 50 : 10);
+
+          // Get presigned URL for thumbnail
+          const presignedRes = await fetch('/api/admin/portfolio/presigned-url', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              fileName: thumbnailFile.name,
+              contentType: thumbnailFile.type,
+              folder: 'thumbnails'
+            })
+          });
+
+          if (!presignedRes.ok) {
+            throw new Error('Failed to get thumbnail upload URL');
           }
-        });
 
-        xhr.addEventListener('error', () => reject(new Error('Network error')));
-        xhr.addEventListener('abort', () => reject(new Error('Upload cancelled')));
+          const { uploadUrl, key, publicUrl } = (await presignedRes.json()).data;
 
-        const url = editing
-          ? `/api/admin/portfolio/${editing._id}`
-          : '/api/admin/portfolio';
-        const method = editing ? 'PATCH' : 'POST';
+          // Upload directly to R2
+          await new Promise<void>((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
 
-        xhr.open(method, url);
-        xhr.send(formData);
+            xhr.upload.addEventListener('progress', (e) => {
+              if (e.lengthComputable) {
+                const fileProgress = (e.loaded / e.total) * 100;
+                const baseProgress = videoFile ? 50 : 10;
+                const totalProgress = baseProgress + ((uploadedFiles + fileProgress / 100) / totalFiles) * 40;
+                setUploadProgress(Math.round(totalProgress));
+              }
+            });
+
+            xhr.addEventListener('load', () => {
+              if (xhr.status >= 200 && xhr.status < 300) {
+                thumbnailUrl = publicUrl;
+                thumbnailKey = key;
+                uploadedFiles++;
+                resolve();
+              } else {
+                reject(new Error('Thumbnail upload failed'));
+              }
+            });
+
+            xhr.addEventListener('error', () => reject(new Error('Thumbnail upload network error')));
+            xhr.open('PUT', uploadUrl);
+            xhr.setRequestHeader('Content-Type', thumbnailFile.type);
+            xhr.send(thumbnailFile);
+          });
+        }
+
+        setUploadProgress(90);
+        setProcessingUpload(true);
+      }
+
+      // Create/update portfolio item with metadata only (no files)
+      const payload = {
+        title,
+        category,
+        description,
+        client,
+        duration,
+        year,
+        videoUrl,
+        videoKey,
+        thumbnailUrl,
+        thumbnailKey,
+      };
+
+      const url = editing
+        ? `/api/admin/portfolio/${editing._id}`
+        : '/api/admin/portfolio';
+      const method = editing ? 'PATCH' : 'POST';
+
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
       });
+
+      const data = await res.json();
+      
+      if (!data.success) {
+        throw new Error(data.error || 'Failed to save portfolio item');
+      }
+
+      setUploadProgress(100);
 
       // Success - close form and refresh
       await fetchPortfolios();

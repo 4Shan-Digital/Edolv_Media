@@ -44,7 +44,7 @@ export async function GET(
 /**
  * PATCH /api/admin/portfolio/[id]
  * Admin endpoint - update a portfolio item.
- * Supports partial updates. Can optionally include new video/thumbnail files.
+ * Supports JSON (with pre-uploaded URLs) or FormData (with file uploads).
  */
 export async function PATCH(
   request: Request,
@@ -59,57 +59,78 @@ export async function PATCH(
     const portfolio = await Portfolio.findById(params.id);
     if (!portfolio) return apiError('Portfolio item not found', 404);
 
-    const { fields, files } = await parseFormData(request);
+    const contentType = request.headers.get('content-type') || '';
+    const updateData: Record<string, unknown> = {};
 
-    // Validate fields (partial)
-    const validatedData = updatePortfolioSchema.parse(fields);
+    if (contentType.includes('application/json')) {
+      // New method: JSON with pre-uploaded URLs
+      const body = await request.json();
+      const validatedData = updatePortfolioSchema.parse(body);
+      Object.assign(updateData, validatedData);
 
-    const updateData: Record<string, unknown> = { ...validatedData };
-
-    // Handle video file replacement
-    if (files.video) {
-      const videoError = validateFile(files.video, VIDEO_TYPES, MAX_VIDEO_SIZE_MB);
-      if (videoError) return apiError(videoError, 400);
-
-      const videoBuffer = await fileToBuffer(files.video);
-      const videoUpload = await uploadToR2(videoBuffer, files.video.name, files.video.type, 'portfolio');
-
-      // Delete old video from R2
-      if (portfolio.videoKey) {
+      // If new video or thumbnail URLs provided, delete old files from R2
+      if (body.videoUrl && body.videoUrl !== portfolio.videoUrl && portfolio.videoKey) {
         deleteFromR2(portfolio.videoKey).catch((err) =>
           console.error('Failed to delete old video:', err)
         );
       }
 
-      updateData.videoUrl = videoUpload.url;
-      updateData.videoKey = videoUpload.key;
-    }
-
-    // Handle thumbnail file replacement
-    if (files.thumbnail) {
-      const imageError = validateFile(files.thumbnail, IMAGE_TYPES, MAX_IMAGE_SIZE_MB);
-      if (imageError) return apiError(imageError, 400);
-
-      const thumbnailBuffer = await fileToBuffer(files.thumbnail);
-      const thumbnailUpload = await uploadToR2(thumbnailBuffer, files.thumbnail.name, files.thumbnail.type, 'thumbnails');
-
-      // Delete old thumbnail from R2
-      if (portfolio.thumbnailKey) {
+      if (body.thumbnailUrl && body.thumbnailUrl !== portfolio.thumbnailUrl && portfolio.thumbnailKey) {
         deleteFromR2(portfolio.thumbnailKey).catch((err) =>
           console.error('Failed to delete old thumbnail:', err)
         );
       }
+    } else {
+      // Old method: FormData with file uploads
+      const { fields, files } = await parseFormData(request);
+      const validatedData = updatePortfolioSchema.parse(fields);
+      Object.assign(updateData, validatedData);
 
-      updateData.thumbnailUrl = thumbnailUpload.url;
-      updateData.thumbnailKey = thumbnailUpload.key;
-    }
+      // Handle video file replacement
+      if (files.video) {
+        const videoError = validateFile(files.video, VIDEO_TYPES, MAX_VIDEO_SIZE_MB);
+        if (videoError) return apiError(videoError, 400);
 
-    // Handle order and isActive from fields
-    if (fields.order !== undefined) {
-      updateData.order = parseInt(fields.order, 10);
-    }
-    if (fields.isActive !== undefined) {
-      updateData.isActive = fields.isActive === 'true';
+        const videoBuffer = await fileToBuffer(files.video);
+        const videoUpload = await uploadToR2(videoBuffer, files.video.name, files.video.type, 'portfolio');
+
+        // Delete old video from R2
+        if (portfolio.videoKey) {
+          deleteFromR2(portfolio.videoKey).catch((err) =>
+            console.error('Failed to delete old video:', err)
+          );
+        }
+
+        updateData.videoUrl = videoUpload.url;
+        updateData.videoKey = videoUpload.key;
+      }
+
+      // Handle thumbnail file replacement
+      if (files.thumbnail) {
+        const imageError = validateFile(files.thumbnail, IMAGE_TYPES, MAX_IMAGE_SIZE_MB);
+        if (imageError) return apiError(imageError, 400);
+
+        const thumbnailBuffer = await fileToBuffer(files.thumbnail);
+        const thumbnailUpload = await uploadToR2(thumbnailBuffer, files.thumbnail.name, files.thumbnail.type, 'thumbnails');
+
+        // Delete old thumbnail from R2
+        if (portfolio.thumbnailKey) {
+          deleteFromR2(portfolio.thumbnailKey).catch((err) =>
+            console.error('Failed to delete old thumbnail:', err)
+          );
+        }
+
+        updateData.thumbnailUrl = thumbnailUpload.url;
+        updateData.thumbnailKey = thumbnailUpload.key;
+      }
+
+      // Handle order and isActive from fields
+      if (fields.order !== undefined) {
+        updateData.order = parseInt(fields.order, 10);
+      }
+      if (fields.isActive !== undefined) {
+        updateData.isActive = fields.isActive === 'true';
+      }
     }
 
     const updated = await Portfolio.findByIdAndUpdate(

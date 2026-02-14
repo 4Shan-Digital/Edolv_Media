@@ -43,7 +43,7 @@ export async function GET() {
 /**
  * POST /api/admin/portfolio
  * Admin endpoint - create a new portfolio item.
- * Expects multipart/form-data with video and thumbnail files.
+ * Now expects JSON with pre-uploaded file URLs (files uploaded via presigned URLs).
  */
 export async function POST(request: Request) {
   try {
@@ -52,50 +52,73 @@ export async function POST(request: Request) {
 
     await connectDB();
 
-    const { fields, files } = await parseFormData(request);
+    // Check if this is FormData (old method) or JSON (new presigned URL method)
+    const contentType = request.headers.get('content-type') || '';
+    
+    if (contentType.includes('application/json')) {
+      // New method: JSON with pre-uploaded URLs
+      const body = await request.json();
+      
+      // Validate required fields
+      if (!body.videoUrl || !body.thumbnailUrl) {
+        return apiError('Video and thumbnail URLs are required', 400);
+      }
 
-    // Validate files
-    const videoFile = files.video;
-    const thumbnailFile = files.thumbnail;
+      const validatedData = createPortfolioSchema.parse(body);
 
-    if (!videoFile) return apiError('Video file is required', 400);
-    if (!thumbnailFile) return apiError('Thumbnail image is required', 400);
+      // Get the next order number
+      const maxOrder = await Portfolio.findOne().sort({ order: -1 }).select('order').lean();
+      const nextOrder = (maxOrder?.order ?? -1) + 1;
 
-    const videoError = validateFile(videoFile, VIDEO_TYPES, MAX_VIDEO_SIZE_MB);
-    if (videoError) return apiError(videoError, 400);
+      // Create portfolio item with pre-uploaded file URLs
+      const portfolio = await Portfolio.create({
+        ...validatedData,
+        order: nextOrder,
+      });
 
-    const imageError = validateFile(thumbnailFile, IMAGE_TYPES, MAX_IMAGE_SIZE_MB);
-    if (imageError) return apiError(imageError, 400);
+      return apiSuccess(portfolio, 201);
+    } else {
+      // Old method: FormData with file uploads (kept for backward compatibility)
+      const { fields, files } = await parseFormData(request);
 
-    // Validate fields
-    const validatedData = createPortfolioSchema.parse(fields);
+      const videoFile = files.video;
+      const thumbnailFile = files.thumbnail;
 
-    // Upload files to R2
-    const [videoBuffer, thumbnailBuffer] = await Promise.all([
-      fileToBuffer(videoFile),
-      fileToBuffer(thumbnailFile),
-    ]);
+      if (!videoFile) return apiError('Video file is required', 400);
+      if (!thumbnailFile) return apiError('Thumbnail image is required', 400);
 
-    const [videoUpload, thumbnailUpload] = await Promise.all([
-      uploadToR2(videoBuffer, videoFile.name, videoFile.type, 'portfolio'),
-      uploadToR2(thumbnailBuffer, thumbnailFile.name, thumbnailFile.type, 'thumbnails'),
-    ]);
+      const videoError = validateFile(videoFile, VIDEO_TYPES, MAX_VIDEO_SIZE_MB);
+      if (videoError) return apiError(videoError, 400);
 
-    // Get the next order number
-    const maxOrder = await Portfolio.findOne().sort({ order: -1 }).select('order').lean();
-    const nextOrder = (maxOrder?.order ?? -1) + 1;
+      const imageError = validateFile(thumbnailFile, IMAGE_TYPES, MAX_IMAGE_SIZE_MB);
+      if (imageError) return apiError(imageError, 400);
 
-    // Create portfolio item
-    const portfolio = await Portfolio.create({
-      ...validatedData,
-      videoUrl: videoUpload.url,
-      videoKey: videoUpload.key,
-      thumbnailUrl: thumbnailUpload.url,
-      thumbnailKey: thumbnailUpload.key,
-      order: nextOrder,
-    });
+      const validatedData = createPortfolioSchema.parse(fields);
 
-    return apiSuccess(portfolio, 201);
+      const [videoBuffer, thumbnailBuffer] = await Promise.all([
+        fileToBuffer(videoFile),
+        fileToBuffer(thumbnailFile),
+      ]);
+
+      const [videoUpload, thumbnailUpload] = await Promise.all([
+        uploadToR2(videoBuffer, videoFile.name, videoFile.type, 'portfolio'),
+        uploadToR2(thumbnailBuffer, thumbnailFile.name, thumbnailFile.type, 'thumbnails'),
+      ]);
+
+      const maxOrder = await Portfolio.findOne().sort({ order: -1 }).select('order').lean();
+      const nextOrder = (maxOrder?.order ?? -1) + 1;
+
+      const portfolio = await Portfolio.create({
+        ...validatedData,
+        videoUrl: videoUpload.url,
+        videoKey: videoUpload.key,
+        thumbnailUrl: thumbnailUpload.url,
+        thumbnailKey: thumbnailUpload.key,
+        order: nextOrder,
+      });
+
+      return apiSuccess(portfolio, 201);
+    }
   } catch (error) {
     return handleApiError(error);
   }
