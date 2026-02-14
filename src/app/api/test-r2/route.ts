@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/response';
+import { NextResponse } from 'next/server';
 import { S3Client, ListBucketsCommand } from '@aws-sdk/client-s3';
 
 /**
