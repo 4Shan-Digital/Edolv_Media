@@ -19,7 +19,6 @@ import {
   Rocket,
   Target,
   TrendingUp,
-  Award,
   Star,
   Loader2,
   X,
@@ -255,8 +254,7 @@ export default function CareersPageContent() {
             <div className="flex flex-wrap items-center justify-center gap-8 mb-10">
               {[
                 { icon: Users, label: 'Team Members', value: '50+' },
-                { icon: Target, label: 'Projects Done', value: '500+' },
-                { icon: Award, label: 'Awards Won', value: '25+' },
+                { icon: Target, label: 'Projects Done', value: '50000+' },
               ].map((stat, index) => (
                 <motion.div
                   key={stat.label}

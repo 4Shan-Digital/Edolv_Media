@@ -179,10 +179,10 @@ export default function HeroSection() {
           className="flex flex-wrap items-center justify-center gap-8 md:gap-16 mt-16 pt-16 border-t border-white/10"
         >
           {[
-            { value: '500+', label: 'Projects Delivered' },
-            { value: '150+', label: 'Happy Clients' },
-            { value: '50M+', label: 'Views Generated' },
-            { value: '10+', label: 'Years Experience' },
+            { value: '50,000+', label: 'Projects Delivered' },
+            { value: '400+', label: 'Happy Clients' },
+            { value: '60M+', label: 'Views Generated' },
+            { value: '3+', label: 'Years Experience' },
           ].map((stat, index) => (
             <motion.div
               key={stat.label}

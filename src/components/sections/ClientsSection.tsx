@@ -136,10 +136,10 @@ const outerRing = clients.slice(13, 20);
 
 // Stats data
 const stats = [
-  { value: 500, suffix: '+', label: 'Projects Completed' },
-  { value: 150, suffix: '+', label: 'Happy Clients' },
-  { value: 10, suffix: '+', label: 'Years Experience' },
-  { value: 50, suffix: 'M+', label: 'Views Generated' },
+  { value: 2000, suffix: '+', label: 'Projects Completed' },
+  { value: 400, suffix: '+', label: 'Happy Clients' },
+  { value: 3, suffix: '+', label: 'Years Experience' },
+  { value: 60, suffix: 'M+', label: 'Views Generated' },
 ];
 
 function AnimatedCounter({ value, suffix }: { value: number; suffix: string }) {
@@ -361,7 +361,7 @@ export default function ClientsSection() {
                 transition={{ duration: 2.8, repeat: Infinity, ease: 'easeInOut' }}
               />
               <div className="w-full h-full rounded-full bg-white flex flex-col items-center justify-center gap-1">
-                <span className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary-600 via-indigo-600 to-violet-600 bg-clip-text text-transparent">150+</span>
+                <span className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary-600 via-indigo-600 to-violet-600 bg-clip-text text-transparent">400+</span>
                 <span className="text-xs md:text-sm text-silver-700 font-semibold tracking-wide">Happy Clients</span>
               </div>
             </motion.div>

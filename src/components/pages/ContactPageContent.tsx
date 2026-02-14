@@ -6,7 +6,6 @@ import {
   Mail, 
   Phone, 
   MapPin, 
-  Clock,
   Send,
   Check,
   Loader2,
@@ -14,8 +13,7 @@ import {
   MessageSquare,
   Instagram,
   Twitter,
-  Linkedin,
-  Youtube
+  Linkedin
 } from 'lucide-react';
 import { ScrollReveal } from '@/components/ui/Animations';
 
@@ -34,11 +32,11 @@ const services = [
 const faqs = [
   {
     question: 'What is your typical turnaround time?',
-    answer: 'Our standard turnaround is 3-5 business days for most projects. However, we offer rush delivery options for time-sensitive projects. Complex projects may require additional time, which we\'ll discuss during our initial consultation.',
+    answer: 'Our standard turnaround is 2-3 days for most projects. However, we offer rush delivery options for time-sensitive projects. Complex projects may require additional time, which we\'ll discuss during our initial consultation.',
   },
   {
     question: 'How do you handle revisions?',
-    answer: 'We include 2-3 rounds of revisions in our packages. We believe in getting it right, so we work closely with you until you\'re 100% satisfied. Additional revision rounds can be arranged if needed.',
+    answer: 'We include 2 rounds of revisions in our packages. We believe in getting it right, so we work closely with you until you\'re 100% satisfied. Additional revision rounds can be arranged if needed.',
   },
   {
     question: 'What file formats do you accept?',
@@ -46,7 +44,7 @@ const faqs = [
   },
   {
     question: 'How do I send you my footage?',
-    answer: 'We provide secure cloud upload links for your files. For larger projects, we also support physical hard drive delivery. We use enterprise-grade security to protect your content.',
+    answer: 'You can send us your footage via Google Drive. Simply share the link with us and we\'ll take care of the rest. We use enterprise-grade security to protect your content.',
   },
   {
     question: 'Do you offer ongoing packages?',
@@ -77,19 +75,12 @@ const contactInfo = [
     value: 'Shop 8 Palm City market, Mohali Punjab',
     link: '#',
   },
-  {
-    icon: Clock,
-    title: 'Business Hours',
-    value: 'Available 24/7',
-    link: '#',
-  },
 ];
 
 const socialLinks = [
   { icon: Instagram, href: 'https://www.instagram.com/edolvmedia?igsh=MXJ2dDhsb2toc2wxaQ==', label: 'Instagram' },
   { icon: Twitter, href: 'https://x.com/Edolv_media', label: 'Twitter' },
   { icon: Linkedin, href: 'https://www.linkedin.com/company/edolv-media/', label: 'LinkedIn' },
-  { icon: Youtube, href: '#', label: 'YouTube' },
 ];
 
 export default function ContactPageContent() {
