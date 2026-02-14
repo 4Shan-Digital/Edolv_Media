@@ -25,7 +25,7 @@ export async function verifyAdminCredentials(
   const adminPasswordHash = process.env.ADMIN_PASSWORD_HASH;
 
   if (!adminEmail || !adminPasswordHash) {
-    throw new Error('Admin credentials not configured in environment variables');
+    throw new Error('Email or password is incorrect');
   }
 
   // Check email match
@@ -34,7 +34,8 @@ export async function verifyAdminCredentials(
   }
 
   // Verify password using bcrypt
-  return bcrypt.compare(password, adminPasswordHash);
+  const isValid = await bcrypt.compare(password, adminPasswordHash);
+  return isValid;
 }
 
 /**

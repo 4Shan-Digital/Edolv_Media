@@ -7,7 +7,7 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: ['/api/', '/admin/'],
     },
-    sitemap: 'https://edolvmedia.com/sitemap.xml',
+    sitemap: 'https://edolv.com/sitemap.xml',
   };
 }
 

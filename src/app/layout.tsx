@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import NavigationProgress from "@/components/NavigationProgress";
+import { organizationSchema, websiteSchema } from "@/lib/schema";
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -25,14 +26,14 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://Edolvmedia.com'),
+  metadataBase: new URL('https://edolv.com'),
   alternates: {
     canonical: '/',
   },
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://Edolvmedia.com',
+    url: 'https://edolv.com',
     siteName: 'Edolv Media',
     title: 'Edolv Media | Premium Video Editing Services',
     description: 'Transform your vision into stunning reality with Edolv Media. Premium video editing, motion graphics, and post-production services.',
@@ -64,7 +65,7 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: 'your-google-verification-code',
+    google: 'add-your-google-search-console-verification-code-here',
   },
 };
 
@@ -80,6 +81,15 @@ export default function RootLayout({
         <link rel="icon" href="/images/Edolv png.png" type="image/png" />
         <link rel="apple-touch-icon" href="/images/Edolv png.png" />
         <link rel="manifest" href="/manifest.json" />
+        {/* Structured Data for SEO */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+        />
       </head>
       <body className={`${poppins.variable} font-poppins antialiased`}>
         <NavigationProgress />
