@@ -76,6 +76,22 @@ export async function POST(request: Request) {
     });
 
     // Send emails (non-blocking, fire-and-forget)
+    console.log('📧 Attempting to send application emails...');
+    console.log('📧 Admin email:', process.env.ADMIN_NOTIFICATION_EMAIL);
+    console.log('📧 From email:', process.env.EMAIL_FROM);
+    console.log('📧 Resend API key present:', !!process.env.RESEND_API_KEY);
+    
+    // Check if required env vars are present
+    if (!process.env.RESEND_API_KEY) {
+      console.error('❌ RESEND_API_KEY is not set!');
+    }
+    if (!process.env.ADMIN_NOTIFICATION_EMAIL) {
+      console.error('❌ ADMIN_NOTIFICATION_EMAIL is not set!');
+    }
+    if (!process.env.EMAIL_FROM) {
+      console.error('❌ EMAIL_FROM is not set!');
+    }
+    
     Promise.allSettled([
       sendApplicationAcknowledgment(
         validatedData.name,
