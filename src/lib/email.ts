@@ -17,7 +17,8 @@ export async function sendContactAcknowledgment(data: ContactEmailData): Promise
   try {
     const { name, email, service } = data;
 
-    console.log('📧 Sending acknowledgment email to:', email);
+    console.log('📧 Sending contact acknowledgment email to:', email);
+    console.log('📧 From:', process.env.EMAIL_FROM);
     
     const result = await resend.emails.send({
     from: process.env.EMAIL_FROM || 'Edolv Media <onboarding@resend.dev>',
@@ -85,9 +86,11 @@ export async function sendContactAcknowledgment(data: ContactEmailData): Promise
     `,
   });
     
-    console.log('✅ Acknowledgment email sent successfully. Email ID:', result.data?.id);
+    console.log('✅ Contact acknowledgment email sent. Result:', JSON.stringify(result));
+    console.log('✅ Email ID:', result.data?.id);
   } catch (error) {
-    console.error('❌ Failed to send acknowledgment email:', error);
+    console.error('❌ Failed to send contact acknowledgment email:', error);
+    console.error('❌ Error details:', JSON.stringify(error, null, 2));
     throw error;
   }
 }
@@ -99,7 +102,9 @@ export async function sendContactNotificationToAdmin(data: ContactEmailData): Pr
   try {
     const { name, email, phone, service, message } = data;
     
-    console.log('📧 Sending admin notification email');
+    console.log('📧 Sending contact admin notification email');
+    console.log('📧 To:', process.env.ADMIN_NOTIFICATION_EMAIL);
+    console.log('📧 From:', process.env.EMAIL_FROM);
 
   const result = await resend.emails.send({
     from: process.env.EMAIL_FROM || 'Edolv Media <onboarding@resend.dev>',
@@ -165,9 +170,11 @@ export async function sendContactNotificationToAdmin(data: ContactEmailData): Pr
     `,
   });
     
-    console.log('✅ Admin notification email sent successfully. Email ID:', result.data?.id);
+    console.log('✅ Contact admin notification email sent. Result:', JSON.stringify(result));
+    console.log('✅ Email ID:', result.data?.id);
   } catch (error) {
-    console.error('❌ Failed to send admin notification email:', error);
+    console.error('❌ Failed to send contact admin notification email:', error);
+    console.error('❌ Error details:', JSON.stringify(error, null, 2));
     throw error;
   }
 }
@@ -180,7 +187,11 @@ export async function sendApplicationAcknowledgment(
   applicantEmail: string,
   jobTitle: string
 ): Promise<void> {
-  await resend.emails.send({
+  try {
+    console.log('📧 Sending application acknowledgment to:', applicantEmail);
+    console.log('📧 From:', process.env.EMAIL_FROM);
+    
+    const result = await resend.emails.send({
     from: process.env.EMAIL_FROM || 'Edolv Media <onboarding@resend.dev>',
     to: applicantEmail,
     subject: `Application Received: ${jobTitle} - Edolv Media`,
@@ -231,7 +242,15 @@ export async function sendApplicationAcknowledgment(
       </body>
       </html>
     `,
-  });
+    });
+    
+    console.log('✅ Application acknowledgment email sent. Result:', JSON.stringify(result));
+    console.log('✅ Email ID:', result.data?.id);
+  } catch (error) {
+    console.error('❌ Failed to send application acknowledgment email:', error);
+    console.error('❌ Error details:', JSON.stringify(error, null, 2));
+    throw error;
+  }
 }
 
 interface ApplicationNotificationData {
@@ -262,6 +281,9 @@ export async function sendApplicationNotificationToAdmin(data: ApplicationNotifi
     } = data;
 
     console.log('📧 Sending job application admin notification email');
+    console.log('📧 Resend client initialized:', !!resend);
+    console.log('📧 Sending to:', process.env.ADMIN_NOTIFICATION_EMAIL);
+    console.log('📧 From:', process.env.EMAIL_FROM);
 
     const result = await resend.emails.send({
       from: process.env.EMAIL_FROM || 'Edolv Media <onboarding@resend.dev>',
@@ -338,9 +360,11 @@ export async function sendApplicationNotificationToAdmin(data: ApplicationNotifi
       `,
     });
 
-    console.log('✅ Application admin notification email sent. Email ID:', result.data?.id);
+    console.log('✅ Application admin notification email sent. Result:', JSON.stringify(result));
+    console.log('✅ Email ID:', result.data?.id);
   } catch (error) {
     console.error('❌ Failed to send application admin notification email:', error);
+    console.error('❌ Error details:', JSON.stringify(error, null, 2));
     throw error;
   }
 }
