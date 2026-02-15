@@ -2,7 +2,7 @@ import connectDB from '@/lib/db';
 import Job from '@/models/Job';
 import Application from '@/models/Application';
 import { createApplicationSchema } from '@/lib/validations';
-import { sendApplicationAcknowledgment } from '@/lib/email';
+import { sendApplicationAcknowledgment, sendApplicationNotificationToAdmin } from '@/lib/email';
 import {
   apiSuccess,
   apiError,
@@ -75,12 +75,35 @@ export async function POST(request: Request) {
       resumeKey,
     });
 
-    // Send acknowledgment email (non-blocking)
-    sendApplicationAcknowledgment(
-      validatedData.name,
-      validatedData.email,
-      job.title
-    ).catch((err) => console.error('Failed to send application email:', err));
+    // Send emails (non-blocking, fire-and-forget)
+    Promise.allSettled([
+      sendApplicationAcknowledgment(
+        validatedData.name,
+        validatedData.email,
+        job.title
+      ),
+      sendApplicationNotificationToAdmin({
+        applicantName: validatedData.name,
+        applicantEmail: validatedData.email,
+        applicantPhone: validatedData.phone,
+        jobTitle: job.title,
+        jobDepartment: job.department,
+        coverLetter: validatedData.coverLetter,
+        resumeUrl,
+        portfolioUrl: validatedData.portfolioUrl,
+      }),
+    ]).then((results) => {
+      results.forEach((result, index) => {
+        const emailType = index === 0 ? 'Applicant acknowledgment' : 'Admin notification';
+        if (result.status === 'rejected') {
+          console.error(`❌ ${emailType} email failed:`, result.reason);
+        } else {
+          console.log(`✅ ${emailType} email sent successfully`);
+        }
+      });
+    }).catch((error) => {
+      console.error('❌ Unexpected error sending application emails:', error);
+    });
 
     return apiSuccess(
       { id: application._id, message: 'Application submitted successfully' },

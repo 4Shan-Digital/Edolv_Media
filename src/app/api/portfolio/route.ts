@@ -24,7 +24,7 @@ export async function GET(request: Request) {
     }
 
     let query = Portfolio.find(filter)
-      .sort({ order: 1, createdAt: -1 })
+      .sort({ createdAt: -1 })
       .select('-videoKey -thumbnailKey -__v');
 
     if (limit) {

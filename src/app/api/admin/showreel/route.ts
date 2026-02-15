@@ -41,6 +41,7 @@ export async function GET() {
  * POST /api/admin/showreel
  * Admin endpoint - upload a new showreel.
  * Deactivates all previous showreels (only one active at a time).
+ * Supports JSON (presigned URL method) and FormData (legacy method).
  */
 export async function POST(request: Request) {
   try {
@@ -49,49 +50,76 @@ export async function POST(request: Request) {
 
     await connectDB();
 
-    const { fields, files } = await parseFormData(request);
+    const contentType = request.headers.get('content-type') || '';
 
-    // Validate files
-    const videoFile = files.video;
-    const thumbnailFile = files.thumbnail;
+    if (contentType.includes('application/json')) {
+      // New method: JSON with pre-uploaded URLs (presigned URL flow)
+      const body = await request.json();
 
-    if (!videoFile) return apiError('Video file is required', 400);
-    if (!thumbnailFile) return apiError('Thumbnail image is required', 400);
+      if (!body.videoUrl || !body.videoKey) {
+        return apiError('Video URL and key are required', 400);
+      }
+      if (!body.thumbnailUrl || !body.thumbnailKey) {
+        return apiError('Thumbnail URL and key are required', 400);
+      }
 
-    const videoError = validateFile(videoFile, VIDEO_TYPES, MAX_VIDEO_SIZE_MB);
-    if (videoError) return apiError(videoError, 400);
+      const validatedData = createShowreelSchema.parse(body);
 
-    const imageError = validateFile(thumbnailFile, IMAGE_TYPES, MAX_IMAGE_SIZE_MB);
-    if (imageError) return apiError(imageError, 400);
+      // Deactivate all existing showreels
+      await Showreel.updateMany({}, { isActive: false });
 
-    // Validate fields
-    const validatedData = createShowreelSchema.parse(fields);
+      const showreel = await Showreel.create({
+        ...validatedData,
+        videoUrl: body.videoUrl,
+        videoKey: body.videoKey,
+        thumbnailUrl: body.thumbnailUrl,
+        thumbnailKey: body.thumbnailKey,
+        isActive: true,
+      });
 
-    // Upload files to R2
-    const [videoBuffer, thumbnailBuffer] = await Promise.all([
-      fileToBuffer(videoFile),
-      fileToBuffer(thumbnailFile),
-    ]);
+      return apiSuccess(showreel, 201);
+    } else {
+      // Old method: FormData with file uploads (kept for backward compatibility)
+      const { fields, files } = await parseFormData(request);
 
-    const [videoUpload, thumbnailUpload] = await Promise.all([
-      uploadToR2(videoBuffer, videoFile.name, videoFile.type, 'showreel'),
-      uploadToR2(thumbnailBuffer, thumbnailFile.name, thumbnailFile.type, 'thumbnails'),
-    ]);
+      const videoFile = files.video;
+      const thumbnailFile = files.thumbnail;
 
-    // Deactivate all existing showreels
-    await Showreel.updateMany({}, { isActive: false });
+      if (!videoFile) return apiError('Video file is required', 400);
+      if (!thumbnailFile) return apiError('Thumbnail image is required', 400);
 
-    // Create new showreel
-    const showreel = await Showreel.create({
-      ...validatedData,
-      videoUrl: videoUpload.url,
-      videoKey: videoUpload.key,
-      thumbnailUrl: thumbnailUpload.url,
-      thumbnailKey: thumbnailUpload.key,
-      isActive: true,
-    });
+      const videoError = validateFile(videoFile, VIDEO_TYPES, MAX_VIDEO_SIZE_MB);
+      if (videoError) return apiError(videoError, 400);
 
-    return apiSuccess(showreel, 201);
+      const imageError = validateFile(thumbnailFile, IMAGE_TYPES, MAX_IMAGE_SIZE_MB);
+      if (imageError) return apiError(imageError, 400);
+
+      const validatedData = createShowreelSchema.parse(fields);
+
+      const [videoBuffer, thumbnailBuffer] = await Promise.all([
+        fileToBuffer(videoFile),
+        fileToBuffer(thumbnailFile),
+      ]);
+
+      const [videoUpload, thumbnailUpload] = await Promise.all([
+        uploadToR2(videoBuffer, videoFile.name, videoFile.type, 'showreel'),
+        uploadToR2(thumbnailBuffer, thumbnailFile.name, thumbnailFile.type, 'thumbnails'),
+      ]);
+
+      // Deactivate all existing showreels
+      await Showreel.updateMany({}, { isActive: false });
+
+      const showreel = await Showreel.create({
+        ...validatedData,
+        videoUrl: videoUpload.url,
+        videoKey: videoUpload.key,
+        thumbnailUrl: thumbnailUpload.url,
+        thumbnailKey: thumbnailUpload.key,
+        isActive: true,
+      });
+
+      return apiSuccess(showreel, 201);
+    }
   } catch (error) {
     return handleApiError(error);
   }

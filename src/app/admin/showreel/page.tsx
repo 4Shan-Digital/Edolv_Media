@@ -62,56 +62,142 @@ export default function AdminShowreelPage() {
         return;
       }
 
-      const formData = new FormData();
-      formData.set('title', title);
-      formData.set('description', description);
-      formData.set('duration', duration);
-      formData.set('year', year);
-      formData.set('video', videoFile);
-      formData.set('thumbnail', thumbnailFile);
+      let videoUrl = '';
+      let videoKey = '';
+      let thumbnailUrl = '';
+      let thumbnailKey = '';
 
-      // Use XMLHttpRequest to track upload progress
-      const xhr = new XMLHttpRequest();
+      // Upload files directly to R2 using presigned URLs (bypasses Vercel limits)
+      setUploadingVideo(true);
+      const totalFiles = 2;
+      let uploadedFiles = 0;
 
-      // Track progress
-      xhr.upload.addEventListener('progress', (e) => {
-        if (e.lengthComputable) {
-          const percentComplete = Math.round((e.loaded / e.total) * 100);
-          setUploadProgress(percentComplete);
-          setUploadingVideo(videoFile !== null);
-          if (percentComplete === 100) {
-            setProcessingUpload(true);
-          }
-        }
-      });
+      // Upload video
+      {
+        setUploadProgress(5);
 
-      // Promisify the XHR request
-      await new Promise<void>((resolve, reject) => {
-        xhr.addEventListener('load', () => {
-          if (xhr.status >= 200 && xhr.status < 300) {
-            try {
-              const data = JSON.parse(xhr.responseText);
-              if (!data.success) reject(new Error(data.error));
-              else resolve();
-            } catch {
-              reject(new Error('Invalid response'));
-            }
-          } else {
-            try {
-              const data = JSON.parse(xhr.responseText);
-              reject(new Error(data.error || 'Upload failed'));
-            } catch {
-              reject(new Error('Upload failed'));
-            }
-          }
+        const presignedRes = await fetch('/api/admin/presigned-url', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            fileName: videoFile.name,
+            contentType: videoFile.type,
+            folder: 'showreel'
+          })
         });
 
-        xhr.addEventListener('error', () => reject(new Error('Network error')));
-        xhr.addEventListener('abort', () => reject(new Error('Upload cancelled')));
+        if (!presignedRes.ok) {
+          throw new Error('Failed to get video upload URL');
+        }
 
-        xhr.open('POST', '/api/admin/showreel');
-        xhr.send(formData);
+        const presignedData = (await presignedRes.json()).data;
+
+        await new Promise<void>((resolve, reject) => {
+          const xhr = new XMLHttpRequest();
+
+          xhr.upload.addEventListener('progress', (ev) => {
+            if (ev.lengthComputable) {
+              const fileProgress = (ev.loaded / ev.total) * 100;
+              const totalProgress = 5 + ((uploadedFiles + fileProgress / 100) / totalFiles) * 85;
+              setUploadProgress(Math.round(totalProgress));
+            }
+          });
+
+          xhr.addEventListener('load', () => {
+            if (xhr.status >= 200 && xhr.status < 300) {
+              videoUrl = presignedData.publicUrl;
+              videoKey = presignedData.key;
+              uploadedFiles++;
+              resolve();
+            } else {
+              reject(new Error('Video upload failed'));
+            }
+          });
+
+          xhr.addEventListener('error', () => reject(new Error('Video upload network error')));
+          xhr.open('PUT', presignedData.uploadUrl);
+          xhr.setRequestHeader('Content-Type', videoFile.type);
+          xhr.send(videoFile);
+        });
+      }
+
+      // Upload thumbnail
+      {
+        setUploadProgress(50);
+
+        const presignedRes = await fetch('/api/admin/presigned-url', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            fileName: thumbnailFile.name,
+            contentType: thumbnailFile.type,
+            folder: 'thumbnails'
+          })
+        });
+
+        if (!presignedRes.ok) {
+          throw new Error('Failed to get thumbnail upload URL');
+        }
+
+        const presignedData = (await presignedRes.json()).data;
+
+        await new Promise<void>((resolve, reject) => {
+          const xhr = new XMLHttpRequest();
+
+          xhr.upload.addEventListener('progress', (ev) => {
+            if (ev.lengthComputable) {
+              const fileProgress = (ev.loaded / ev.total) * 100;
+              const totalProgress = 50 + ((uploadedFiles + fileProgress / 100) / totalFiles) * 40;
+              setUploadProgress(Math.round(totalProgress));
+            }
+          });
+
+          xhr.addEventListener('load', () => {
+            if (xhr.status >= 200 && xhr.status < 300) {
+              thumbnailUrl = presignedData.publicUrl;
+              thumbnailKey = presignedData.key;
+              uploadedFiles++;
+              resolve();
+            } else {
+              reject(new Error('Thumbnail upload failed'));
+            }
+          });
+
+          xhr.addEventListener('error', () => reject(new Error('Thumbnail upload network error')));
+          xhr.open('PUT', presignedData.uploadUrl);
+          xhr.setRequestHeader('Content-Type', thumbnailFile.type);
+          xhr.send(thumbnailFile);
+        });
+      }
+
+      setUploadProgress(90);
+      setProcessingUpload(true);
+
+      // Create showreel item with metadata only (no files)
+      const payload = {
+        title,
+        description,
+        duration,
+        year,
+        videoUrl,
+        videoKey,
+        thumbnailUrl,
+        thumbnailKey,
+      };
+
+      const res = await fetch('/api/admin/showreel', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
       });
+
+      const data = await res.json();
+
+      if (!data.success) {
+        throw new Error(data.error || 'Failed to save showreel');
+      }
+
+      setUploadProgress(100);
 
       // Success - close form and refresh
       await fetchShowreels();
@@ -151,12 +237,10 @@ export default function AdminShowreelPage() {
 
   const handleSetActive = async (id: string) => {
     try {
-      const formData = new FormData();
-      formData.set('isActive', 'true');
-
       const res = await fetch(`/api/admin/showreel/${id}`, {
         method: 'PATCH',
-        body: formData,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ isActive: true }),
       });
       const data = await res.json();
       if (data.success) {

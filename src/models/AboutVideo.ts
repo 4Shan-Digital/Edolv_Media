@@ -5,7 +5,9 @@ export interface IAboutVideo {
   title: string;
   description?: string;
   videoUrl: string;
+  videoKey: string;
   thumbnailUrl: string;
+  thumbnailKey: string;
   isActive: boolean;
   createdAt?: Date;
   updatedAt?: Date;
@@ -26,9 +28,17 @@ const AboutVideoSchema = new mongoose.Schema<IAboutVideo>(
       type: String,
       required: [true, 'Video URL is required'],
     },
+    videoKey: {
+      type: String,
+      required: [true, 'Video key is required'],
+    },
     thumbnailUrl: {
       type: String,
       required: [true, 'Thumbnail URL is required'],
+    },
+    thumbnailKey: {
+      type: String,
+      required: [true, 'Thumbnail key is required'],
     },
     isActive: {
       type: Boolean,

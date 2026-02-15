@@ -15,7 +15,7 @@ export async function GET() {
 
     const aboutVideo = await AboutVideo.findOne({ isActive: true })
       .sort({ createdAt: -1 })
-      .select('-__v')
+      .select('-videoKey -thumbnailKey -__v')
       .lean();
 
     const signed = aboutVideo ? await signMediaUrls(JSON.parse(JSON.stringify(aboutVideo))) : null;
