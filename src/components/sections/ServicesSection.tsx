@@ -1,19 +1,16 @@
 'use client';
 
-import { motion, useScroll, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { useRef, useState, useEffect } from 'react';
+import { useState } from 'react';
 import { 
-  ArrowRight, 
-  Sparkles, 
-  Play, 
+  ArrowRight,
   Check,
   Film,
   Wand2,
   Palette,
   Music
 } from 'lucide-react';
-import { ScrollReveal } from '@/components/ui/Animations';
 
 const services = [
   {
@@ -23,7 +20,8 @@ const services = [
     description: 'Professional editing that transforms raw footage into compelling stories. We handle everything from basic cuts to complex narrative structures.',
     features: ['Story-driven editing', 'Multi-cam editing', 'Documentary style', 'Seamless transitions', 'Format optimization'],
     gradient: 'from-violet-500 via-purple-500 to-fuchsia-500',
-    bgGradient: 'from-violet-500/20 via-purple-500/10 to-transparent',
+    accentColor: '#8b5cf6',
+    bgImage: 'https://images.unsplash.com/photo-1492619375914-88005aa9e8fb?w=800&q=60',
     number: '01',
   },
   {
@@ -33,7 +31,8 @@ const services = [
     description: 'Eye-catching animations and visual effects that bring your content to life. From logos to full animated sequences.',
     features: ['2D/3D animation', 'Logo animation', 'Kinetic typography', 'Explainer videos', 'Social animations'],
     gradient: 'from-cyan-500 via-blue-500 to-indigo-500',
-    bgGradient: 'from-cyan-500/20 via-blue-500/10 to-transparent',
+    accentColor: '#06b6d4',
+    bgImage: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800&q=60',
     number: '02',
   },
   {
@@ -43,7 +42,8 @@ const services = [
     description: 'Cinema-quality color correction and grading that sets the perfect mood and enhances the visual appeal of your content.',
     features: ['Cinematic looks', 'Color matching', 'HDR grading', 'Custom LUTs', 'Skin tone optimization'],
     gradient: 'from-orange-500 via-amber-500 to-yellow-500',
-    bgGradient: 'from-orange-500/20 via-amber-500/10 to-transparent',
+    accentColor: '#f59e0b',
+    bgImage: 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=800&q=60',
     number: '03',
   },
   {
@@ -53,332 +53,409 @@ const services = [
     description: 'Professional audio editing, mixing, and sound design that perfectly complements your visuals and enhances viewer engagement.',
     features: ['Audio mixing', 'Sound effects', 'Music selection', 'Dialogue enhancement', 'Spatial audio'],
     gradient: 'from-emerald-500 via-teal-500 to-cyan-500',
-    bgGradient: 'from-emerald-500/20 via-teal-500/10 to-transparent',
+    accentColor: '#10b981',
+    bgImage: 'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=800&q=60',
     number: '04',
   },
 ];
 
 export default function ServicesSection() {
-  const containerRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
-  const totalServices = services.length;
-  
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"]
-  });
-
-  useEffect(() => {
-    const unsubscribe = scrollYProgress.on("change", (value) => {
-      const newIndex = Math.min(
-        Math.floor(value * totalServices),
-        totalServices - 1
-      );
-      setActiveIndex(newIndex);
-    });
-    return () => unsubscribe();
-  }, [scrollYProgress, totalServices]);
-
+  const [expandedMobile, setExpandedMobile] = useState<number | null>(null);
   const currentService = services[activeIndex];
   const IconComponent = currentService.icon;
 
+  const handleMobileToggle = (index: number) => {
+    setExpandedMobile(expandedMobile === index ? null : index);
+  };
+
   return (
-    <section 
-      ref={containerRef}
-      className="relative bg-silver-900"
-      style={{ height: `${(totalServices + 0.5) * 60}vh` }}
-    >
-      {/* Sticky container */}
-      <div className="sticky top-0 h-screen w-full overflow-hidden">
-        {/* Animated background */}
-        <div className="absolute inset-0">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeIndex}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.5 }}
-              className={`absolute inset-0 bg-gradient-to-br ${currentService.bgGradient} from-10% via-30%`}
-            />
-          </AnimatePresence>
-          
-          {/* Floating particles */}
-          <div className="absolute inset-0 overflow-hidden">
-            {[...Array(15)].map((_, i) => (
-              <motion.div
-                key={i}
-                className={`absolute w-2 h-2 rounded-full bg-gradient-to-r ${currentService.gradient} opacity-20`}
-                animate={{
-                  x: [
-                    Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 1000),
-                    Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 1000),
-                  ],
-                  y: [
-                    Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 800),
-                    Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 800),
-                  ],
-                  scale: [1, 1.5, 1],
-                  opacity: [0.1, 0.3, 0.1],
-                }}
-                transition={{
-                  duration: 10 + Math.random() * 10,
-                  repeat: Infinity,
-                  ease: "linear",
-                }}
-                style={{
-                  left: `${Math.random() * 100}%`,
-                  top: `${Math.random() * 100}%`,
-                }}
-              />
-            ))}
-          </div>
+    <section className="relative py-24 md:py-32 bg-silver-900 overflow-hidden">
+      {/* Background */}
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950" />
+        <div 
+          className="absolute inset-0 opacity-[0.03]"
+          style={{
+            backgroundImage: `linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px),
+                            linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)`,
+            backgroundSize: '60px 60px',
+          }}
+        />
+      </div>
 
-          {/* Grid pattern */}
-          <div 
-            className="absolute inset-0 opacity-[0.03]"
-            style={{
-              backgroundImage: `linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px),
-                              linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)`,
-              backgroundSize: '60px 60px',
-            }}
-          />
-        </div>
-
-        {/* Section header - fixed at top */}
-        <div className="absolute top-8 left-1/2 -translate-x-1/2 z-20 text-center">
-          {/* Spacing where badge was */}
-          <div className="mb-6 h-8" />
-          
-          <motion.h2
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-3xl md:text-4xl font-bold text-white"
+      <div className="relative z-10 px-6 sm:px-10 md:px-16 lg:px-24 xl:px-32">
+        <div className="max-w-7xl mx-auto">
+          {/* Section Header */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
           >
-            Our <span className={`bg-gradient-to-r ${currentService.gradient} bg-clip-text text-transparent`}>Services</span>
-          </motion.h2>
-        </div>
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-sm text-white/60 mb-4">
+              What We Do
+            </span>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+              Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-indigo-400">Services</span>
+            </h2>
+            <p className="text-white/50 max-w-xl mx-auto text-base md:text-lg">
+              End-to-end video production services tailored to your unique vision.
+            </p>
+          </motion.div>
 
-        {/* Progress indicators - Left side */}
-        <div className="absolute left-6 md:left-12 top-1/2 -translate-y-1/2 z-20 hidden md:flex flex-col gap-4">
-          {services.map((service, index) => (
-            <motion.button
-              key={service.id}
-              onClick={() => {
-                const progress = index / totalServices;
-                const scrollTarget = containerRef.current!.offsetTop + 
-                  (containerRef.current!.scrollHeight - window.innerHeight) * progress;
-                window.scrollTo({ top: scrollTarget, behavior: 'smooth' });
-              }}
-              className="group relative flex items-center gap-3"
-              whileHover={{ x: 5 }}
-            >
-              <motion.div
-                className={`w-3 h-3 rounded-full border-2 transition-all duration-300 ${
-                  index === activeIndex 
-                    ? `bg-gradient-to-r ${service.gradient} border-transparent scale-125` 
-                    : index < activeIndex 
-                      ? 'bg-white/50 border-white/50' 
-                      : 'bg-transparent border-white/30'
-                }`}
-              />
-              <span className={`text-xs font-medium transition-all duration-300 whitespace-nowrap ${
-                index === activeIndex ? 'opacity-100 text-white' : 'opacity-0 group-hover:opacity-70 text-white/70'
-              }`}>
-                {service.title}
-              </span>
-            </motion.button>
-          ))}
-        </div>
-
-        {/* Main content */}
-        <div className="relative h-full flex items-center justify-center pt-20">
-          <div className="container-custom">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeIndex}
-                initial={{ opacity: 0, y: 80, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -80, scale: 0.95 }}
-                transition={{ 
-                  duration: 0.5, 
-                  ease: [0.22, 1, 0.36, 1] 
-                }}
-                className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center"
-              >
-                {/* Left side - Service Info */}
-                <div className="order-2 lg:order-1 text-center lg:text-left">
-                  {/* Service number */}
-                  <motion.div
-                    initial={{ opacity: 0, x: -30 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.15, duration: 0.4 }}
-                    className="mb-4"
-                  >
-                    <span className={`text-7xl md:text-8xl font-bold bg-gradient-to-r ${currentService.gradient} bg-clip-text text-transparent opacity-25`}>
-                      {currentService.number}
-                    </span>
-                  </motion.div>
-
-                  {/* Title */}
-                  <motion.h3
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2, duration: 0.4 }}
-                    className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight"
-                  >
-                    {currentService.title}
-                  </motion.h3>
-
-                  {/* Description */}
-                  <motion.p
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.25, duration: 0.4 }}
-                    className="text-base md:text-lg text-white/70 mb-6 leading-relaxed max-w-lg"
-                  >
-                    {currentService.description}
-                  </motion.p>
-
-                  {/* Features */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3, duration: 0.4 }}
-                    className="flex flex-wrap gap-3 mb-8 justify-center lg:justify-start"
-                  >
-                    {currentService.features.map((feature, idx) => (
+          {/* Services Interactive Layout */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            {/* Desktop Layout - Hidden on Mobile */}
+            <div className="hidden lg:grid lg:grid-cols-[380px_1fr] gap-6 lg:gap-8">
+              {/* Left - Service Boxes */}
+              <div className="flex flex-col gap-3">
+                {services.map((service, index) => {
+                  const Icon = service.icon;
+                  const isActive = index === activeIndex;
+                  return (
+                    <motion.button
+                      key={service.id}
+                      onMouseEnter={() => setActiveIndex(index)}
+                      onClick={() => setActiveIndex(index)}
+                      className={`group relative w-full text-left p-5 rounded-2xl border transition-all duration-500 ${
+                        isActive 
+                          ? 'bg-white/[0.08] border-white/20 shadow-lg shadow-black/20' 
+                          : 'bg-white/[0.02] border-white/[0.06] hover:bg-white/[0.05] hover:border-white/10'
+                      }`}
+                      whileHover={{ x: 4 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      {/* Active indicator bar */}
                       <motion.div
-                        key={feature}
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 0.35 + idx * 0.05 }}
-                        className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/10"
-                      >
-                        <Check className={`w-3 h-3 text-white`} />
-                        <span className="text-xs text-white/80">{feature}</span>
-                      </motion.div>
-                    ))}
-                  </motion.div>
+                        className={`absolute left-0 top-3 bottom-3 w-[3px] rounded-full bg-gradient-to-b ${service.gradient}`}
+                        initial={false}
+                        animate={{ 
+                          opacity: isActive ? 1 : 0,
+                          scaleY: isActive ? 1 : 0.3,
+                        }}
+                        transition={{ duration: 0.3 }}
+                      />
+                      
+                      <div className="flex items-center gap-4 pl-3">
+                        {/* Icon */}
+                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-500 ${
+                          isActive 
+                            ? `bg-gradient-to-br ${service.gradient} shadow-lg`
+                            : 'bg-white/[0.06]'
+                        }`}>
+                          <Icon className={`w-5 h-5 transition-colors duration-300 ${
+                            isActive ? 'text-white' : 'text-white/50'
+                          }`} />
+                        </div>
+                        
+                        {/* Text */}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between">
+                            <h3 className={`font-semibold text-base transition-colors duration-300 ${
+                              isActive ? 'text-white' : 'text-white/70'
+                            }`}>
+                              {service.title}
+                            </h3>
+                            <span className={`text-xs font-mono transition-colors duration-300 ${
+                              isActive ? 'text-white/40' : 'text-white/20'
+                            }`}>
+                              {service.number}
+                            </span>
+                          </div>
+                          <p className={`text-xs mt-1 transition-all duration-300 line-clamp-1 ${
+                            isActive ? 'text-white/50' : 'text-white/30'
+                          }`}>
+                            {service.description}
+                          </p>
+                        </div>
+                        
+                        {/* Arrow */}
+                        <motion.div
+                          animate={{ x: isActive ? 0 : -5, opacity: isActive ? 1 : 0 }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          <ArrowRight className="w-4 h-4 text-white/40" />
+                        </motion.div>
+                      </div>
+                    </motion.button>
+                  );
+                })}
 
-                  {/* CTA Button */}
+                {/* View all link */}
+                <Link href="/services" className="mt-2">
                   <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.45, duration: 0.4 }}
-                    className="flex gap-4 justify-center lg:justify-start"
+                    whileHover={{ x: 4 }}
+                    className="flex items-center gap-2 text-sm text-white/40 hover:text-white/70 transition-colors pl-5 py-2"
                   >
-                    <Link href={`/services#${currentService.id}`}>
-                      <motion.button
-                        whileHover={{ scale: 1.05, y: -2 }}
-                        whileTap={{ scale: 0.95 }}
-                        className={`px-6 py-3 rounded-xl bg-gradient-to-r ${currentService.gradient} text-white font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center gap-2`}
-                      >
-                        Learn More
-                        <ArrowRight className="w-4 h-4" />
-                      </motion.button>
-                    </Link>
+                    View All Services
+                    <ArrowRight className="w-3.5 h-3.5" />
                   </motion.div>
-                </div>
+                </Link>
+              </div>
 
-                {/* Right side - Visual */}
-                <div className="order-1 lg:order-2 flex items-center justify-center">
+              {/* Right - Service Detail Panel */}
+              <div className="relative min-h-[420px] lg:min-h-[480px] rounded-3xl overflow-hidden">
+                <AnimatePresence mode="wait">
                   <motion.div
-                    initial={{ opacity: 0, scale: 0.6, rotateY: -20 }}
-                    animate={{ opacity: 1, scale: 1, rotateY: 0 }}
-                    transition={{ delay: 0.15, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                    key={activeIndex}
+                    initial={{ opacity: 0, scale: 1.02 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.98 }}
+                    transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                    className="absolute inset-0"
+                  >
+                    {/* Background image with overlay */}
+                    <div 
+                      className="absolute inset-0 bg-cover bg-center transition-all duration-700"
+                      style={{ backgroundImage: `url(${currentService.bgImage})` }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/80 to-slate-950/40" />
+                    <div className={`absolute inset-0 bg-gradient-to-br ${currentService.gradient} opacity-10`} />
+                    
+                    {/* Content */}
+                    <div className="absolute inset-0 flex flex-col justify-end p-8 lg:p-10">
+                      {/* Service number - large watermark */}
+                      <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.1, duration: 0.4 }}
+                        className="absolute top-6 right-8"
+                      >
+                        <span className={`text-7xl lg:text-8xl font-bold bg-gradient-to-b ${currentService.gradient} bg-clip-text text-transparent opacity-20`}>
+                          {currentService.number}
+                        </span>
+                      </motion.div>
+
+                      {/* Icon and title */}
+                      <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.1 }}
+                        className="mb-4"
+                      >
+                        <div className={`inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br ${currentService.gradient} shadow-lg mb-4`}>
+                          <IconComponent className="w-7 h-7 text-white" />
+                        </div>
+                        <h3 className="text-2xl lg:text-3xl font-bold text-white">
+                          {currentService.title}
+                        </h3>
+                      </motion.div>
+
+                      {/* Description */}
+                      <motion.p
+                        initial={{ opacity: 0, y: 15 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.15 }}
+                        className="text-white/60 text-sm lg:text-base leading-relaxed mb-6 max-w-lg"
+                      >
+                        {currentService.description}
+                      </motion.p>
+
+                      {/* Features */}
+                      <motion.div
+                        initial={{ opacity: 0, y: 15 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.2 }}
+                        className="flex flex-wrap gap-2 mb-8"
+                      >
+                        {currentService.features.map((feature, idx) => (
+                          <motion.span
+                            key={feature}
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: 0.25 + idx * 0.05 }}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/[0.08] border border-white/[0.08] text-xs text-white/70"
+                          >
+                            <Check className="w-3 h-3 text-white/50" />
+                            {feature}
+                          </motion.span>
+                        ))}
+                      </motion.div>
+
+                      {/* CTA */}
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3 }}
+                      >
+                        <Link href={`/services#${currentService.id}`}>
+                          <motion.button
+                            whileHover={{ scale: 1.03, x: 4 }}
+                            whileTap={{ scale: 0.97 }}
+                            className={`inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r ${currentService.gradient} text-white font-medium text-sm shadow-xl hover:shadow-2xl transition-shadow`}
+                          >
+                            Learn More
+                            <ArrowRight className="w-4 h-4" />
+                          </motion.button>
+                        </Link>
+                      </motion.div>
+                    </div>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+            </div>
+
+            {/* Mobile/Tablet Accordion Layout */}
+            <div className="lg:hidden flex flex-col gap-4">
+              {services.map((service, index) => {
+                const Icon = service.icon;
+                const isExpanded = expandedMobile === index;
+                return (
+                  <motion.div
+                    key={service.id}
+                    layout
                     className="relative"
                   >
-                    {/* Rotating rings */}
-                    <motion.div
-                      animate={{ rotate: 360 }}
-                      transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-                      className="absolute inset-0 -m-6 rounded-full border-2 border-dashed border-white/10"
-                    />
-                    <motion.div
-                      animate={{ rotate: -360 }}
-                      transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
-                      className="absolute inset-0 -m-12 rounded-full border border-white/5"
-                    />
-
-                    {/* Main icon container */}
-                    <motion.div
-                      animate={{ 
-                        y: [0, -8, 0],
-                        rotateZ: [0, 1, -1, 0]
-                      }}
-                      transition={{ 
-                        duration: 4, 
-                        repeat: Infinity, 
-                        ease: "easeInOut" 
-                      }}
-                      className={`relative w-48 h-48 md:w-64 md:h-64 rounded-[3rem] bg-gradient-to-br ${currentService.gradient} p-1 shadow-2xl`}
+                    {/* Service Card Header */}
+                    <motion.button
+                      onClick={() => handleMobileToggle(index)}
+                      className={`group relative w-full text-left p-5 rounded-2xl border transition-all duration-300 ${
+                        isExpanded
+                          ? 'bg-white/[0.08] border-white/20 shadow-lg shadow-black/20' 
+                          : 'bg-white/[0.02] border-white/[0.06]'
+                      }`}
+                      layout
                     >
-                      <div className="w-full h-full rounded-[2.5rem] bg-silver-900/90 backdrop-blur-xl flex items-center justify-center">
-                        <IconComponent className="w-20 h-20 md:w-28 md:h-28 text-white/90" strokeWidth={1.5} />
+                      {/* Active indicator bar */}
+                      <motion.div
+                        className={`absolute left-0 top-3 bottom-3 w-[3px] rounded-full bg-gradient-to-b ${service.gradient}`}
+                        initial={false}
+                        animate={{ 
+                          opacity: isExpanded ? 1 : 0,
+                          scaleY: isExpanded ? 1 : 0.3,
+                        }}
+                        transition={{ duration: 0.3 }}
+                      />
+                      
+                      <div className="flex items-center gap-4 pl-3">
+                        {/* Icon */}
+                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300 ${
+                          isExpanded
+                            ? `bg-gradient-to-br ${service.gradient} shadow-lg`
+                            : 'bg-white/[0.06]'
+                        }`}>
+                          <Icon className={`w-5 h-5 transition-colors duration-300 ${
+                            isExpanded ? 'text-white' : 'text-white/50'
+                          }`} />
+                        </div>
+                        
+                        {/* Text */}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between">
+                            <h3 className={`font-semibold text-base transition-colors duration-300 ${
+                              isExpanded ? 'text-white' : 'text-white/70'
+                            }`}>
+                              {service.title}
+                            </h3>
+                            <span className={`text-xs font-mono transition-colors duration-300 ${
+                              isExpanded ? 'text-white/40' : 'text-white/20'
+                            }`}>
+                              {service.number}
+                            </span>
+                          </div>
+                          {!isExpanded && (
+                            <p className="text-xs mt-1 text-white/30 line-clamp-1">
+                              {service.description}
+                            </p>
+                          )}
+                        </div>
+                        
+                        {/* Arrow */}
+                        <motion.div
+                          animate={{ rotate: isExpanded ? 90 : 0 }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          <ArrowRight className="w-4 h-4 text-white/40" />
+                        </motion.div>
                       </div>
+                    </motion.button>
 
-                      {/* Floating sparkle */}
-                      <motion.div
-                        animate={{ y: [-8, 8, -8], x: [-4, 4, -4] }}
-                        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                        className={`absolute -top-3 -right-3 w-12 h-12 rounded-xl bg-gradient-to-br ${currentService.gradient} shadow-lg flex items-center justify-center`}
-                      >
-                        <Sparkles className="w-6 h-6 text-white" />
-                      </motion.div>
+                    {/* Expanded Content */}
+                    <AnimatePresence>
+                      {isExpanded && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                          className="overflow-hidden"
+                        >
+                          <div className="pt-4">
+                            <div className="relative min-h-[360px] rounded-2xl overflow-hidden">
+                              {/* Background image with overlay */}
+                              <div 
+                                className="absolute inset-0 bg-cover bg-center"
+                                style={{ backgroundImage: `url(${service.bgImage})` }}
+                              />
+                              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/85 to-slate-950/50" />
+                              <div className={`absolute inset-0 bg-gradient-to-br ${service.gradient} opacity-10`} />
+                              
+                              {/* Content */}
+                              <div className="relative z-10 p-6">
+                                {/* Service number - watermark */}
+                                <div className="absolute top-4 right-4">
+                                  <span className={`text-6xl font-bold bg-gradient-to-b ${service.gradient} bg-clip-text text-transparent opacity-15`}>
+                                    {service.number}
+                                  </span>
+                                </div>
 
-                      {/* Play button accent */}
-                      <motion.div
-                        animate={{ y: [8, -8, 8], x: [4, -4, 4] }}
-                        transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}
-                        className="absolute -bottom-3 -left-3 w-10 h-10 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 shadow-lg flex items-center justify-center"
-                      >
-                        <Play className="w-4 h-4 text-white fill-white" />
-                      </motion.div>
-                    </motion.div>
+                                {/* Description */}
+                                <p className="text-white/60 text-sm leading-relaxed mb-6 max-w-lg">
+                                  {service.description}
+                                </p>
+
+                                {/* Features */}
+                                <div className="flex flex-wrap gap-2 mb-6">
+                                  {service.features.map((feature) => (
+                                    <span
+                                      key={feature}
+                                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/[0.08] border border-white/[0.08] text-xs text-white/70"
+                                    >
+                                      <Check className="w-3 h-3 text-white/50" />
+                                      {feature}
+                                    </span>
+                                  ))}
+                                </div>
+
+                                {/* CTA */}
+                                <Link href={`/services#${service.id}`}>
+                                  <motion.button
+                                    whileTap={{ scale: 0.97 }}
+                                    className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r ${service.gradient} text-white font-medium text-sm shadow-xl`}
+                                  >
+                                    Learn More
+                                    <ArrowRight className="w-4 h-4" />
+                                  </motion.button>
+                                </Link>
+                              </div>
+                            </div>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </motion.div>
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          </div>
+                );
+              })}
+
+              {/* View all link */}
+              <Link href="/services" className="mt-2">
+                <motion.div
+                  className="flex items-center justify-center gap-2 text-sm text-white/40 hover:text-white/70 transition-colors py-3"
+                >
+                  View All Services
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </motion.div>
+              </Link>
+            </div>
+          </motion.div>
         </div>
-
-        {/* Spacing where scroll indicator was */}
-        <div className="h-16" />
-
-        {/* Mobile indicator dots */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2 md:hidden">
-          {services.map((_, index) => (
-            <div
-              key={index}
-              className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                index === activeIndex 
-                  ? 'w-6 bg-white' 
-                  : 'bg-white/30'
-              }`}
-            />
-          ))}
-        </div>
-
-        {/* View All Services - Bottom right */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1 }}
-          className="absolute bottom-6 right-6 md:right-12 hidden md:block"
-        >
-          <Link href="/services">
-            <motion.button
-              whileHover={{ scale: 1.05, x: 5 }}
-              whileTap={{ scale: 0.95 }}
-              className="flex items-center gap-2 text-white/60 hover:text-white text-sm font-medium transition-colors"
-            >
-              View All Services
-              <ArrowRight className="w-4 h-4" />
-            </motion.button>
-          </Link>
-        </motion.div>
       </div>
     </section>
   );

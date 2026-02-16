@@ -2,8 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Link from 'next/link';
-import Image from 'next/image';
 import { 
   Briefcase, 
   MapPin, 
@@ -12,10 +10,7 @@ import {
   Heart,
   Zap,
   Users,
-  Coffee,
-  Laptop,
   Globe,
-  GraduationCap,
   Rocket,
   Target,
   TrendingUp,
@@ -46,21 +41,6 @@ const perks = [
     description: 'Comprehensive health insurance and wellness programs.',
   },
   {
-    icon: Laptop,
-    title: 'Remote Friendly',
-    description: 'Work from anywhere with flexible remote options.',
-  },
-  {
-    icon: GraduationCap,
-    title: 'Learning Budget',
-    description: 'Annual budget for courses, conferences, and growth.',
-  },
-  {
-    icon: Coffee,
-    title: 'Unlimited PTO',
-    description: 'Take the time you need to recharge and refresh.',
-  },
-  {
     icon: Zap,
     title: 'Latest Tools',
     description: 'Access to cutting-edge software and equipment.',
@@ -72,24 +52,7 @@ const perks = [
   },
 ];
 
-const cultureValues = [
-  {
-    title: 'Creativity First',
-    description: 'We encourage bold ideas and creative experimentation.',
-  },
-  {
-    title: 'Quality Obsessed',
-    description: 'We never settle for "good enough" - excellence is our standard.',
-  },
-  {
-    title: 'Team Over Ego',
-    description: 'Collaboration and support drive our success.',
-  },
-  {
-    title: 'Always Learning',
-    description: 'We invest in growth and embrace new challenges.',
-  },
-];
+const departments = ['All', 'Production', 'Creative', 'Post-Production', 'Operations'];
 
 export default function CareersPageContent() {
   const [selectedDepartment, setSelectedDepartment] = useState<string>('All');
@@ -108,8 +71,6 @@ export default function CareersPageContent() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [submitMessage, setSubmitMessage] = useState('');
-
-  const departments = ['All', 'Production', 'Creative', 'Post-Production', 'Operations'];
 
   useEffect(() => {
     async function fetchJobs() {
@@ -181,7 +142,7 @@ export default function CareersPageContent() {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden">
+      <section className="relative pt-32 pb-12 md:pt-36 md:pb-16 overflow-hidden">
         {/* Animated Background */}
         <div className="absolute inset-0 bg-gradient-to-br from-violet-50 via-white to-cyan-50" />
         
@@ -253,8 +214,8 @@ export default function CareersPageContent() {
             {/* Stats */}
             <div className="flex flex-wrap items-center justify-center gap-8 mb-10">
               {[
-                { icon: Users, label: 'Team Members', value: '50+' },
-                { icon: Target, label: 'Projects Done', value: '50000+' },
+                { icon: Users, label: 'Team Members', value: '10+' },
+                { icon: Target, label: 'Projects Done', value: '20000+' },
               ].map((stat, index) => (
                 <motion.div
                   key={stat.label}
@@ -289,7 +250,7 @@ export default function CareersPageContent() {
       </section>
 
       {/* Why Join Us */}
-      <section className="py-20 bg-gradient-to-br from-slate-50 via-white to-violet-50 relative overflow-hidden">
+      <section className="py-14 md:py-18 bg-gradient-to-br from-slate-50 via-white to-violet-50 relative overflow-hidden">
         {/* Decorative elements */}
         <div className="absolute inset-0 opacity-30">
           <motion.div
@@ -352,102 +313,8 @@ export default function CareersPageContent() {
         </div>
       </section>
 
-      {/* Culture Section */}
-      <section className="section-padding bg-white">
-        <div className="container-custom">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <ScrollReveal direction="left">
-              <span className="inline-block text-sm font-medium text-primary-600 uppercase tracking-wider mb-4">
-                Our Culture
-              </span>
-              <h2 className="heading-lg text-silver-900 mb-6">
-                A Place Where <span className="gradient-text">Creativity</span> Thrives
-              </h2>
-              <p className="text-body mb-8">
-                At Edolv Media, we've built a culture that nurtures creativity, encourages 
-                innovation, and celebrates every team member's unique contributions. We believe 
-                that great work comes from happy, supported people.
-              </p>
-              <div className="grid grid-cols-2 gap-4">
-                {cultureValues.map((value) => (
-                  <motion.div
-                    key={value.title}
-                    whileHover={{ scale: 1.02 }}
-                    className="p-4 rounded-xl bg-silver-50"
-                  >
-                    <h4 className="font-semibold text-silver-900 mb-1">{value.title}</h4>
-                    <p className="text-sm text-silver-600">{value.description}</p>
-                  </motion.div>
-                ))}
-              </div>
-            </ScrollReveal>
-
-            <ScrollReveal direction="right">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-4">
-                  <motion.div
-                    whileHover={{ scale: 1.05, rotate: 2 }}
-                    transition={{ type: "spring", stiffness: 300 }}
-                    className="aspect-square rounded-2xl overflow-hidden shadow-xl"
-                  >
-                    <Image
-                      src="/images/Carrier/Carrier1.jpg"
-                      alt="Team Culture"
-                      width={400}
-                      height={400}
-                      className="w-full h-full object-cover"
-                    />
-                  </motion.div>
-                  <motion.div
-                    whileHover={{ scale: 1.05, rotate: -2 }}
-                    transition={{ type: "spring", stiffness: 300 }}
-                    className="aspect-video rounded-2xl overflow-hidden shadow-xl"
-                  >
-                    <Image
-                      src="/images/Carrier/Carrier2.jpeg"
-                      alt="Work Environment"
-                      width={600}
-                      height={400}
-                      className="w-full h-full object-cover"
-                    />
-                  </motion.div>
-                </div>
-                <div className="space-y-4 pt-8">
-                  <motion.div
-                    whileHover={{ scale: 1.05, rotate: 2 }}
-                    transition={{ type: "spring", stiffness: 300 }}
-                    className="aspect-video rounded-2xl overflow-hidden shadow-xl"
-                  >
-                    <Image
-                      src="/images/Carrier/Carrier3.jpg"
-                      alt="Creative Space"
-                      width={600}
-                      height={400}
-                      className="w-full h-full object-cover"
-                    />
-                  </motion.div>
-                  <motion.div
-                    whileHover={{ scale: 1.05, rotate: -2 }}
-                    transition={{ type: "spring", stiffness: 300 }}
-                    className="aspect-square rounded-2xl overflow-hidden shadow-xl"
-                  >
-                    <Image
-                      src="/images/Carrier/Carrier4.jpg"
-                      alt="Team Collaboration"
-                      width={400}
-                      height={400}
-                      className="w-full h-full object-cover"
-                    />
-                  </motion.div>
-                </div>
-              </div>
-            </ScrollReveal>
-          </div>
-        </div>
-      </section>
-
       {/* Open Positions */}
-      <section id="openings" className="py-24 bg-white relative overflow-hidden">
+      <section id="openings" className="py-16 md:py-20 bg-white relative overflow-hidden">
         {/* Animated background elements */}
         <motion.div
           animate={{ 
@@ -646,20 +513,16 @@ export default function CareersPageContent() {
                 <h3 className="text-2xl font-bold text-gray-900 mb-3">
                   Don't See Your <span className="gradient-text">Perfect Role</span>?
                 </h3>
-                <p className="text-gray-600 mb-6">
+                <p className="text-gray-600 mb-4">
                   We're always interested in meeting talented people. Send us your resume and portfolio, 
                   and we'll keep you in mind for future opportunities.
                 </p>
-                <Link href="/contact">
-                  <motion.button
-                    whileHover={{ scale: 1.05, y: -2 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="btn-secondary text-lg px-8 py-3"
-                  >
-                    Send Your Resume
-                    <ArrowRight className="w-5 h-5 ml-2" />
-                  </motion.button>
-                </Link>
+                <p className="text-gray-800 font-semibold text-lg">
+                  Send your resume to{' '}
+                  <a href="mailto:connect@edolv.com" className="gradient-text hover:underline">
+                    connect@edolv.com
+                  </a>
+                </p>
               </div>
             </motion.div>
           </ScrollReveal>

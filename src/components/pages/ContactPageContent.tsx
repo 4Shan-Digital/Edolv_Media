@@ -72,7 +72,7 @@ const contactInfo = [
   {
     icon: MapPin,
     title: 'Visit Us',
-    value: 'Shop 8 Palm City market, Mohali Punjab',
+    value: 'Shop 8 Palm City market, Mohali Punjab ,140301',
     link: '#',
   },
 ];
@@ -128,8 +128,8 @@ export default function ContactPageContent() {
 
   return (
     <>
-      {/* Hero Section */}
-      <section className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden bg-white">
+      {/* Compact Header + Form & Info Combined */}
+      <section className="relative pt-32 pb-16 md:pt-36 md:pb-20 overflow-hidden bg-white">
         <div className="absolute inset-0 bg-gradient-mesh" />
         <motion.div
           animate={{ scale: [1, 1.1, 1] }}
@@ -138,38 +138,34 @@ export default function ContactPageContent() {
         />
 
         <div className="container-custom relative">
-          <ScrollReveal className="text-center max-w-4xl mx-auto">
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-50 border border-primary-100 mb-6">
+          {/* Compact heading */}
+          <ScrollReveal className="text-center mb-10">
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-50 border border-primary-100 mb-4">
               <MessageSquare className="w-4 h-4 text-primary-500" />
-              <span className="text-sm font-medium text-primary-700">Get in Touch</span>
+              <span className="text-sm font-medium text-primary-700">Contact Us</span>
             </span>
-            <h1 className="heading-xl text-silver-900 mb-6">
+            <h1 className="text-3xl md:text-4xl font-bold text-silver-900 mb-2">
               Let's <span className="gradient-text">Connect</span>
             </h1>
-            <p className="text-body text-lg max-w-2xl mx-auto">
-              Have a project in mind? We'd love to hear about it. Fill out the form below 
-              or reach out directly, and we'll get back to you within 24 hours.
+            <p className="text-silver-600 max-w-lg mx-auto text-base">
+              Have a project in mind? We'd love to hear about it.
             </p>
           </ScrollReveal>
-        </div>
-      </section>
 
-      {/* Contact Form & Info */}
-      <section className="section-padding bg-silver-50">
-        <div className="container-custom">
-          <div className="grid lg:grid-cols-5 gap-12">
+          {/* Form + Contact Info side by side */}
+          <div className="grid lg:grid-cols-3 gap-8 items-start">
             {/* Contact Form */}
-            <ScrollReveal direction="left" className="lg:col-span-3">
-              <div className="bg-white rounded-2xl p-8 md:p-10 shadow-soft">
-                <h2 className="text-2xl font-semibold text-silver-900 mb-6">
+            <div className="lg:col-span-2">
+              <div className="bg-silver-50 rounded-2xl p-6 md:p-8 shadow-soft">
+                <h2 className="text-xl font-semibold text-silver-900 mb-5">
                   Send us a Message
                 </h2>
                 
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="grid md:grid-cols-2 gap-6">
-                    {/* Name */}
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  {/* Row 1: Name + Email */}
+                  <div className="grid md:grid-cols-2 gap-4">
                     <div>
-                      <label htmlFor="name" className="block text-sm font-medium text-silver-700 mb-2">
+                      <label htmlFor="name" className="block text-sm font-medium text-silver-700 mb-1.5">
                         Full Name *
                       </label>
                       <input
@@ -178,14 +174,12 @@ export default function ContactPageContent() {
                         required
                         value={formState.name}
                         onChange={(e) => setFormState({ ...formState, name: e.target.value })}
-                        className="w-full px-4 py-3 rounded-xl border border-silver-200 bg-white text-silver-900 placeholder:text-silver-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                        className="w-full px-4 py-2.5 rounded-xl border border-silver-200 bg-white text-silver-900 placeholder:text-silver-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all text-sm"
                         placeholder="John Doe"
                       />
                     </div>
-
-                    {/* Email */}
                     <div>
-                      <label htmlFor="email" className="block text-sm font-medium text-silver-700 mb-2">
+                      <label htmlFor="email" className="block text-sm font-medium text-silver-700 mb-1.5">
                         Email Address *
                       </label>
                       <input
@@ -194,16 +188,16 @@ export default function ContactPageContent() {
                         required
                         value={formState.email}
                         onChange={(e) => setFormState({ ...formState, email: e.target.value })}
-                        className="w-full px-4 py-3 rounded-xl border border-silver-200 bg-white text-silver-900 placeholder:text-silver-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                        className="w-full px-4 py-2.5 rounded-xl border border-silver-200 bg-white text-silver-900 placeholder:text-silver-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all text-sm"
                         placeholder="john@example.com"
                       />
                     </div>
                   </div>
 
-                  <div className="grid md:grid-cols-2 gap-6">
-                    {/* Phone */}
+                  {/* Row 2: Phone + Service */}
+                  <div className="grid md:grid-cols-2 gap-4">
                     <div>
-                      <label htmlFor="phone" className="block text-sm font-medium text-silver-700 mb-2">
+                      <label htmlFor="phone" className="block text-sm font-medium text-silver-700 mb-1.5">
                         Phone Number
                       </label>
                       <input
@@ -211,14 +205,12 @@ export default function ContactPageContent() {
                         id="phone"
                         value={formState.phone}
                         onChange={(e) => setFormState({ ...formState, phone: e.target.value })}
-                        className="w-full px-4 py-3 rounded-xl border border-silver-200 bg-white text-silver-900 placeholder:text-silver-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                        className="w-full px-4 py-2.5 rounded-xl border border-silver-200 bg-white text-silver-900 placeholder:text-silver-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all text-sm"
                         placeholder="+1 (234) 567-890"
                       />
                     </div>
-
-                    {/* Service */}
                     <div>
-                      <label htmlFor="service" className="block text-sm font-medium text-silver-700 mb-2">
+                      <label htmlFor="service" className="block text-sm font-medium text-silver-700 mb-1.5">
                         Service Interested In *
                       </label>
                       <select
@@ -226,7 +218,7 @@ export default function ContactPageContent() {
                         required
                         value={formState.service}
                         onChange={(e) => setFormState({ ...formState, service: e.target.value })}
-                        className="w-full px-4 py-3 rounded-xl border border-silver-200 bg-white text-silver-900 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all appearance-none cursor-pointer"
+                        className="w-full px-4 py-2.5 rounded-xl border border-silver-200 bg-white text-silver-900 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all appearance-none cursor-pointer text-sm"
                       >
                         <option value="">Select a service</option>
                         {services.map((service) => (
@@ -238,16 +230,16 @@ export default function ContactPageContent() {
 
                   {/* Message */}
                   <div>
-                    <label htmlFor="message" className="block text-sm font-medium text-silver-700 mb-2">
+                    <label htmlFor="message" className="block text-sm font-medium text-silver-700 mb-1.5">
                       Project Details *
                     </label>
                     <textarea
                       id="message"
                       required
-                      rows={5}
+                      rows={4}
                       value={formState.message}
                       onChange={(e) => setFormState({ ...formState, message: e.target.value })}
-                      className="w-full px-4 py-3 rounded-xl border border-silver-200 bg-white text-silver-900 placeholder:text-silver-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all resize-none"
+                      className="w-full px-4 py-2.5 rounded-xl border border-silver-200 bg-white text-silver-900 placeholder:text-silver-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all resize-none text-sm"
                       placeholder="Tell us about your project, timeline, and any specific requirements..."
                     />
                   </div>
@@ -263,7 +255,7 @@ export default function ContactPageContent() {
                     disabled={isSubmitting || isSubmitted}
                     whileHover={{ scale: isSubmitting || isSubmitted ? 1 : 1.02 }}
                     whileTap={{ scale: isSubmitting || isSubmitted ? 1 : 0.98 }}
-                    className={`w-full py-4 rounded-xl font-semibold text-lg transition-all duration-300 flex items-center justify-center gap-2 ${
+                    className={`w-full py-3.5 rounded-xl font-semibold text-base transition-all duration-300 flex items-center justify-center gap-2 ${
                       isSubmitted
                         ? 'bg-green-500 text-white'
                         : 'bg-gradient-to-r from-primary-600 to-primary-500 text-white hover:shadow-glow'
@@ -288,51 +280,49 @@ export default function ContactPageContent() {
                   </motion.button>
                 </form>
               </div>
-            </ScrollReveal>
+            </div>
 
-            {/* Contact Info */}
-            <ScrollReveal direction="right" className="lg:col-span-2">
-              <div className="space-y-6">
-                {/* Contact Cards */}
-                {contactInfo.map((info) => (
-                  <motion.a
-                    key={info.title}
-                    href={info.link}
-                    whileHover={{ y: -3 }}
-                    className="block bg-white rounded-2xl p-6 shadow-soft hover:shadow-soft-lg transition-all duration-300"
-                  >
-                    <div className="flex items-start gap-4">
-                      <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-primary-100 to-indigo-100 flex items-center justify-center">
-                        <info.icon className="w-6 h-6 text-primary-600" />
-                      </div>
-                      <div>
-                        <h3 className="font-semibold text-silver-900 mb-1">{info.title}</h3>
-                        <p className="text-silver-600">{info.value}</p>
-                      </div>
+            {/* Contact Info - right column */}
+            <div className="space-y-4">
+              {/* Contact Cards */}
+              {contactInfo.map((info) => (
+                <motion.a
+                  key={info.title}
+                  href={info.link}
+                  whileHover={{ y: -2 }}
+                  className="block bg-silver-50 rounded-2xl p-5 shadow-soft hover:shadow-soft-lg transition-all duration-300"
+                >
+                  <div className="flex items-start gap-3">
+                    <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-primary-100 to-indigo-100 flex items-center justify-center">
+                      <info.icon className="w-5 h-5 text-primary-600" />
                     </div>
-                  </motion.a>
-                ))}
-
-                {/* Social Links */}
-                <div className="bg-gradient-to-br from-primary-600 to-indigo-600 rounded-2xl p-6 text-white">
-                  <h3 className="font-semibold mb-4">Follow Us</h3>
-                  <div className="flex gap-3">
-                    {socialLinks.map((social) => (
-                      <motion.a
-                        key={social.label}
-                        href={social.href}
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center hover:bg-white/30 transition-colors"
-                        aria-label={social.label}
-                      >
-                        <social.icon className="w-5 h-5" />
-                      </motion.a>
-                    ))}
+                    <div>
+                      <h3 className="font-semibold text-silver-900 text-sm mb-0.5">{info.title}</h3>
+                      <p className="text-silver-600 text-sm">{info.value}</p>
+                    </div>
                   </div>
+                </motion.a>
+              ))}
+
+              {/* Social Links */}
+              <div className="bg-gradient-to-br from-primary-600 to-indigo-600 rounded-2xl p-5 text-white">
+                <h3 className="font-semibold mb-3 text-sm">Follow Us</h3>
+                <div className="flex gap-3">
+                  {socialLinks.map((social) => (
+                    <motion.a
+                      key={social.label}
+                      href={social.href}
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center hover:bg-white/30 transition-colors"
+                      aria-label={social.label}
+                    >
+                      <social.icon className="w-5 h-5" />
+                    </motion.a>
+                  ))}
                 </div>
               </div>
-            </ScrollReveal>
+            </div>
           </div>
         </div>
       </section>

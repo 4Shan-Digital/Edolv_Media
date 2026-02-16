@@ -10,7 +10,7 @@ export const organizationSchema = {
   "@type": "Organization",
   "name": "Edolv Media",
   "url": "https://edolv.com",
-  "logo": "https://edolv.com/images/Edolv png.png",
+  "logo": "https://edolv.com/images/E logo.png",
   "description": "Transform your vision into stunning reality with Edolv Media. Premium video editing, motion graphics, color grading, and sound design services for creators and businesses worldwide.",
   "foundingDate": "2020",
   "address": {

@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     description: 'Transform your vision into stunning reality with Edolv Media. Premium video editing, motion graphics, and post-production services.',
     images: [
       {
-        url: '/og-image.jpg',
+        url: '/og-image.png',
         width: 1200,
         height: 630,
         alt: 'Edolv Media - Premium Video Editing',
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Edolv Media | Premium Video Editing Services',
     description: 'Transform your vision into stunning reality with Edolv Media.',
-    images: ['/og-image.jpg'],
+    images: ['/og-image.png'],
     creator: '@Edolvmedia',
   },
   robots: {
@@ -81,6 +81,7 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png" />
         <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#7c3aed" />
         {/* Structured Data for SEO */}
         <script
           type="application/ld+json"

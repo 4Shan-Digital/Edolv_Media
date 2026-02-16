@@ -194,7 +194,7 @@ export default function AboutPageContent() {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden bg-white">
+      <section className="relative pt-32 pb-12 md:pt-36 md:pb-16 overflow-hidden bg-white">
         <div className="absolute inset-0 bg-gradient-mesh" />
         <motion.div
           animate={{ scale: [1, 1.1, 1], rotate: [0, -5, 0] }}
@@ -203,24 +203,19 @@ export default function AboutPageContent() {
         />
 
         <div className="container-custom relative">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="grid lg:grid-cols-2 gap-10 items-center">
             <ScrollReveal direction="left">
-              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-50 border border-primary-100 mb-6">
+              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-50 border border-primary-100 mb-5">
                 <Users className="w-4 h-4 text-primary-500" />
                 <span className="text-sm font-medium text-primary-700">About Us</span>
               </span>
-              <h1 className="heading-xl text-silver-900 mb-6">
+              <h1 className="heading-xl text-silver-900 mb-5">
                 We're <span className="gradient-text">Storytellers</span> at Heart
               </h1>
-              <p className="text-body text-lg mb-6">
+              <p className="text-body text-lg mb-7">
                 Edolv Media was founded with a simple mission: to help creators and businesses 
                 tell their stories through the power of video. What started as a small team of 
                 passionate editors has grown into a full-service video production company.
-              </p>
-              <p className="text-body mb-8">
-                Today, we work with clients around the world, from startups to Fortune 500 
-                companies, content creators to filmmakers. Our commitment to quality, creativity, 
-                and client satisfaction remains at the core of everything we do.
               </p>
               <Link href="/contact">
                 <motion.button
@@ -236,7 +231,7 @@ export default function AboutPageContent() {
 
             <ScrollReveal direction="right">
               <div className="relative">
-                <div className="absolute -inset-4 bg-gradient-to-br from-primary-100 via-silver-100 to-indigo-100 rounded-3xl opacity-60" />
+                <div className="absolute -inset-3 bg-gradient-to-br from-primary-100 via-silver-100 to-indigo-100 rounded-3xl opacity-60" />
                 <div className="relative aspect-video rounded-2xl overflow-hidden bg-silver-200 shadow-soft-xl">
                   {aboutVideo ? (
                     <>
@@ -280,36 +275,36 @@ export default function AboutPageContent() {
       </section>
 
       {/* Values Section */}
-      <section className="section-padding bg-silver-50">
+      <section className="py-14 md:py-18 bg-silver-50">
         <div className="container-custom">
-          <ScrollReveal className="text-center mb-16">
-            <span className="inline-block text-sm font-medium text-primary-600 uppercase tracking-wider mb-4">
+          <ScrollReveal className="text-center mb-10">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary-50 border border-primary-100 text-sm text-primary-700 font-medium mb-3">
               Our Values
             </span>
-            <h2 className="heading-lg text-silver-900 mb-4">
+            <h2 className="heading-lg text-silver-900 mb-3">
               What <span className="gradient-text">Drives Us</span>
             </h2>
-            <p className="text-body max-w-2xl mx-auto">
-              Our core values shape how we work, collaborate, and deliver results for our clients.
+            <p className="text-body max-w-xl mx-auto">
+              Our core values shape how we work, collaborate, and deliver results.
             </p>
           </ScrollReveal>
 
-          <StaggerContainer staggerDelay={0.1} className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <StaggerContainer staggerDelay={0.1} className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
             {values.map((value) => (
               <StaggerItem key={value.title}>
                 <motion.div
-                  whileHover={{ y: -5 }}
-                  className="bg-white rounded-2xl p-8 text-center shadow-soft hover:shadow-soft-lg transition-all duration-300 h-full"
+                  whileHover={{ y: -4 }}
+                  className="bg-white rounded-2xl p-6 text-center shadow-soft hover:shadow-soft-lg transition-all duration-300 h-full"
                 >
                   <motion.div
                     whileHover={{ rotate: [0, -10, 10, 0] }}
                     transition={{ duration: 0.5 }}
-                    className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-gradient-to-br from-primary-100 to-indigo-100 mb-5"
+                    className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-primary-100 to-indigo-100 mb-4"
                   >
-                    <value.icon className="w-7 h-7 text-primary-600" />
+                    <value.icon className="w-6 h-6 text-primary-600" />
                   </motion.div>
-                  <h3 className="text-xl font-semibold text-silver-900 mb-3">{value.title}</h3>
-                  <p className="text-silver-600">{value.description}</p>
+                  <h3 className="text-lg font-semibold text-silver-900 mb-2">{value.title}</h3>
+                  <p className="text-silver-600 text-sm">{value.description}</p>
                 </motion.div>
               </StaggerItem>
             ))}
@@ -318,9 +313,9 @@ export default function AboutPageContent() {
       </section>
 
       {/* Team Section */}
-      <section className="section-padding">
+      <section className="py-14 md:py-18">
         <div className="container-custom">
-          <ScrollReveal className="text-center mb-16">
+          <ScrollReveal className="text-center mb-10">
             <span className="inline-block text-sm font-medium text-primary-600 uppercase tracking-wider mb-4">
               Our Team
             </span>
@@ -418,79 +413,78 @@ export default function AboutPageContent() {
         </div>
       </section>
 
-      {/* Timeline Section */}
-      <section className="section-padding bg-silver-50">
+      {/* Timeline Section - Zigzag Cards */}
+      <section className="py-16 md:py-20 bg-silver-50 overflow-hidden">
         <div className="container-custom">
-          <ScrollReveal className="text-center mb-16">
-            <span className="inline-block text-sm font-medium text-primary-600 uppercase tracking-wider mb-4">
+          <ScrollReveal className="text-center mb-12">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary-50 border border-primary-100 text-sm text-primary-700 font-medium mb-4">
               Our Journey
             </span>
-            <h2 className="heading-lg text-silver-900 mb-4">
+            <h2 className="heading-lg text-silver-900 mb-3">
               <span className="gradient-text">Milestones</span> Along the Way
             </h2>
           </ScrollReveal>
 
-          <div className="relative max-w-4xl mx-auto">
-            {/* Timeline line */}
-            <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary-500 via-indigo-500 to-blue-500" />
+          <div className="max-w-5xl mx-auto space-y-4 md:space-y-0">
+            {milestones.map((milestone, index) => {
+              const isEven = index % 2 === 0;
+              const colors = [
+                { bg: 'from-violet-500 to-purple-600', light: 'bg-violet-50', border: 'border-violet-200', badge: 'from-violet-500 to-purple-600' },
+                { bg: 'from-cyan-500 to-blue-600', light: 'bg-cyan-50', border: 'border-cyan-200', badge: 'from-cyan-500 to-blue-600' },
+                { bg: 'from-amber-500 to-orange-600', light: 'bg-amber-50', border: 'border-amber-200', badge: 'from-amber-500 to-orange-600' },
+                { bg: 'from-emerald-500 to-teal-600', light: 'bg-emerald-50', border: 'border-emerald-200', badge: 'from-emerald-500 to-teal-600' },
+                { bg: 'from-pink-500 to-rose-600', light: 'bg-pink-50', border: 'border-pink-200', badge: 'from-pink-500 to-rose-600' },
+                { bg: 'from-indigo-500 to-blue-600', light: 'bg-indigo-50', border: 'border-indigo-200', badge: 'from-indigo-500 to-blue-600' },
+              ];
+              const color = colors[index % colors.length];
 
-            {milestones.map((milestone, index) => (
-              <ScrollReveal
-                key={milestone.year}
-                delay={index * 0.1}
-                direction={index % 2 === 0 ? 'left' : 'right'}
-              >
-                <div className={`relative flex gap-8 mb-12 ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
-                  {/* Year badge */}
-                  <div className="hidden md:flex w-1/2 items-center justify-center">
+              return (
+                <ScrollReveal
+                  key={milestone.year}
+                  delay={index * 0.1}
+                  direction={isEven ? 'left' : 'right'}
+                >
+                  <div className={`flex flex-col md:flex-row items-stretch gap-4 md:gap-8 ${!isEven ? 'md:flex-row-reverse' : ''}`}>
+                    {/* Card */}
                     <motion.div
-                      whileHover={{ scale: 1.1 }}
-                      className="px-6 py-3 rounded-xl bg-gradient-to-br from-primary-500 to-indigo-600 text-white font-bold shadow-glow"
+                      whileHover={{ y: -3, scale: 1.01 }}
+                      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                      className={`flex-1 relative p-5 md:p-7 rounded-2xl border ${color.border} ${color.light} hover:shadow-lg transition-all`}
                     >
-                      {milestone.year}
+                      <div className="flex items-start gap-4">
+                        <motion.div
+                          whileHover={{ scale: 1.1, rotate: 5 }}
+                          className={`flex-shrink-0 px-4 py-2 rounded-xl bg-gradient-to-br ${color.badge} text-white font-bold text-sm shadow-lg`}
+                        >
+                          {milestone.year}
+                        </motion.div>
+                        <div className="flex-1">
+                          <h3 className="text-lg font-bold text-silver-900 mb-1">{milestone.title}</h3>
+                          <p className="text-silver-600 text-sm leading-relaxed">{milestone.description}</p>
+                        </div>
+                      </div>
                     </motion.div>
-                  </div>
 
-                  {/* Dot */}
-                  <div className="absolute left-4 md:left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-white border-4 border-primary-500 z-10" />
-
-                  {/* Content */}
-                  <div className="w-full md:w-1/2 pl-12 md:pl-0">
-                    <div className="bg-white rounded-2xl p-6 shadow-soft">
-                      <span className="md:hidden inline-block px-3 py-1 rounded-lg bg-gradient-to-br from-primary-500 to-indigo-600 text-white text-sm font-bold mb-3">
-                        {milestone.year}
-                      </span>
-                      <h3 className="text-xl font-semibold text-silver-900 mb-2">{milestone.title}</h3>
-                      <p className="text-silver-600">{milestone.description}</p>
-                    </div>
+                    {/* Empty spacer for zigzag */}
+                    <div className="hidden md:block flex-1" />
                   </div>
-                </div>
-              </ScrollReveal>
-            ))}
+                </ScrollReveal>
+              );
+            })}
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="relative py-24 overflow-hidden">
+      <section className="relative py-14 md:py-16 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary-600 via-primary-700 to-indigo-800" />
         <div className="container-custom relative z-10 text-center">
           <ScrollReveal>
-            <Award className="w-16 h-16 text-primary-200 mx-auto mb-6" />
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+            <Award className="w-12 h-12 text-primary-200 mx-auto mb-4" />
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
               Ready to Join Our Story?
-
-      {/* Video Modal */}
-      {aboutVideo && (
-        <VideoPlayerModal
-          isOpen={isVideoModalOpen}
-          onClose={() => setIsVideoModalOpen(false)}
-          videoUrl={aboutVideo.videoUrl}
-          title={aboutVideo.title}
-        />
-      )}
             </h2>
-            <p className="text-xl text-primary-100 max-w-2xl mx-auto mb-10">
+            <p className="text-lg text-primary-100 max-w-xl mx-auto mb-8">
               Whether you want to work with us or join our team, we'd love to hear from you.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -498,7 +492,7 @@ export default function AboutPageContent() {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="px-8 py-4 rounded-xl bg-white text-primary-700 font-semibold text-lg shadow-soft-lg hover:shadow-glow-lg transition-all duration-300 flex items-center"
+                  className="px-7 py-3.5 rounded-xl bg-white text-primary-700 font-semibold text-base shadow-soft-lg hover:shadow-glow-lg transition-all duration-300 flex items-center"
                 >
                   Start a Project
                   <ArrowRight className="w-5 h-5 ml-2" />
@@ -508,7 +502,7 @@ export default function AboutPageContent() {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="px-8 py-4 rounded-xl bg-transparent text-white font-semibold text-lg border-2 border-white/30 hover:border-white/60 hover:bg-white/10 transition-all duration-300"
+                  className="px-7 py-3.5 rounded-xl bg-transparent text-white font-semibold text-base border-2 border-white/30 hover:border-white/60 hover:bg-white/10 transition-all duration-300"
                 >
                   View Open Positions
                 </motion.button>

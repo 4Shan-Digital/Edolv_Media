@@ -136,7 +136,7 @@ const outerRing = clients.slice(13, 20);
 
 // Stats data
 const stats = [
-  { value: 2000, suffix: '+', label: 'Projects Completed' },
+  { value: 20000, suffix: '+', label: 'Projects Completed' },
   { value: 400, suffix: '+', label: 'Happy Clients' },
   { value: 3, suffix: '+', label: 'Years Experience' },
   { value: 60, suffix: 'M+', label: 'Views Generated' },

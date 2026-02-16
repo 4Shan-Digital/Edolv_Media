@@ -198,7 +198,7 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
                 className="relative w-full h-full"
               >
                 <Image
-                  src="/images/Edolv png.png"
+                  src="/images/E logo.png"
                   alt="EDOLV Media Logo"
                   fill
                   className="object-contain drop-shadow-2xl"

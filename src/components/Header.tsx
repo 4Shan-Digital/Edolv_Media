@@ -69,11 +69,11 @@ export default function Header() {
             >
               {/* Logo Image */}
               <div className={cn(
-                "relative w-10 h-10 md:w-12 md:h-12 transition-all duration-300",
+                "relative w-12 h-12 md:w-14 md:h-14 transition-all duration-300 scale-[1.8] md:scale-[2]",
                 isScrolled && "drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)]"
               )}>
                 <Image
-                  src="/images/Edolv png.png"
+                  src="/images/E logo.png"
                   alt="Edolv Media"
                   fill
                   className={cn(
@@ -84,14 +84,20 @@ export default function Header() {
                 />
               </div>
               {/* Logo Text */}
-              {/* <div className="flex flex-col">
-                <span className="text-xl md:text-2xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary-600 via-primary-500 to-indigo-500">
-                  Edolv
+              <div className="flex flex-col items-center leading-none">
+                <span className={cn(
+                  "text-xl md:text-2xl font-bold tracking-tight transition-colors duration-300",
+                  isScrolled ? "text-white" : "text-silver-800"
+                )}>
+                  EDOLV
                 </span>
-                <span className="text-[10px] md:text-xs font-medium tracking-[0.25em] text-silver-400 -mt-1">
+                <span className={cn(
+                  "text-[9px] md:text-[11px] font-medium tracking-[0.3em] mt-0 transition-colors duration-300",
+                  isScrolled ? "text-silver-300" : "text-silver-500"
+                )}>
                   MEDIA
                 </span>
-              </div> */}
+              </div>
             </motion.div>
           </Link>
 

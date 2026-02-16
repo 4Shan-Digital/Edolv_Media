@@ -10,7 +10,6 @@ import {
   Instagram, 
   Twitter, 
   Linkedin, 
-  ArrowRight,
   Heart
 } from 'lucide-react';
 
@@ -59,56 +58,29 @@ export default function Footer() {
       </div>
 
       <div className="relative container-custom pt-12 pb-6">
-        {/* Newsletter Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="relative mb-10 p-6 md:p-8 rounded-2xl bg-gradient-to-br from-primary-600/20 to-indigo-600/20 border border-white/10 backdrop-blur-sm"
-        >
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-            <div className="max-w-xl">
-              <h3 className="text-xl md:text-2xl font-bold mb-1">
-                Stay Updated with Our Latest Work
-              </h3>
-              <p className="text-silver-300 text-sm">
-                Subscribe to our newsletter for exclusive content, tips, and updates.
-              </p>
-            </div>
-            <form className="flex flex-col sm:flex-row gap-2 w-full lg:w-auto">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="flex-1 lg:w-64 px-4 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder:text-silver-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all text-sm"
-              />
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                type="submit"
-                className="px-5 py-2.5 rounded-xl bg-white text-silver-900 font-medium hover:bg-silver-100 transition-colors flex items-center justify-center gap-2 whitespace-nowrap text-sm"
-              >
-                Subscribe
-                <ArrowRight className="w-4 h-4" />
-              </motion.button>
-            </form>
-          </div>
-        </motion.div>
-
         {/* Main Footer Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-6 mb-10">
           {/* Brand Column */}
           <div className="lg:col-span-2">
             <Link href="/" className="inline-block mb-4">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
                 {/* Logo Image */}
-                <div className="relative w-10 h-10">
+                <div className="relative w-12 h-12 md:w-14 md:h-14 scale-[1.8] md:scale-[2]">
                   <Image
-                    src="/images/Edolv png.png"
+                    src="/images/E logo.png"
                     alt="Edolv Media"
                     fill
                     className="object-contain"
                   />
+                </div>
+                {/* Logo Text */}
+                <div className="flex flex-col items-center leading-none">
+                  <span className="text-xl md:text-2xl font-bold tracking-tight text-white">
+                    EDOLV
+                  </span>
+                  <span className="text-[9px] md:text-[11px] font-medium tracking-[0.3em] mt-0 text-silver-300">
+                    MEDIA
+                  </span>
                 </div>
               </div>
             </Link>
@@ -202,7 +174,7 @@ export default function Footer() {
                   <MapPin className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
                   <span>
                     Shop 8 Palm City market<br />
-                    Mohali Punjab
+                    Mohali Punjab , 140301
                   </span>
                 </div>
               </li>
