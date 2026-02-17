@@ -8,8 +8,8 @@ import {
   Check,
   Film,
   Wand2,
-  Palette,
-  Music
+  PenTool,
+  Share2
 } from 'lucide-react';
 
 const services = [
@@ -36,25 +36,25 @@ const services = [
     number: '02',
   },
   {
-    id: 'color-grading',
-    icon: Palette,
-    title: 'Color Grading',
-    description: 'Cinema-quality color correction and grading that sets the perfect mood and enhances the visual appeal of your content.',
-    features: ['Cinematic looks', 'Color matching', 'HDR grading', 'Custom LUTs', 'Skin tone optimization'],
+    id: 'graphic-design',
+    icon: PenTool,
+    title: 'Graphic Design',
+    description: 'Creative visual designs that capture attention and communicate your brand message effectively across all platforms.',
+    features: ['Brand identity', 'Poster design', 'Social graphics', 'Thumbnail design', 'Marketing materials'],
     gradient: 'from-orange-500 via-amber-500 to-yellow-500',
     accentColor: '#f59e0b',
-    bgImage: 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=800&q=60',
+    bgImage: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&q=60',
     number: '03',
   },
   {
-    id: 'sound-design',
-    icon: Music,
-    title: 'Sound Design',
-    description: 'Professional audio editing, mixing, and sound design that perfectly complements your visuals and enhances viewer engagement.',
-    features: ['Audio mixing', 'Sound effects', 'Music selection', 'Dialogue enhancement', 'Spatial audio'],
+    id: 'social-media',
+    icon: Share2,
+    title: 'Social Media Management',
+    description: 'Strategic content creation and management to grow your social media presence and engage your audience effectively.',
+    features: ['Content strategy', 'Post scheduling', 'Platform optimization', 'Analytics tracking', 'Community engagement'],
     gradient: 'from-emerald-500 via-teal-500 to-cyan-500',
     accentColor: '#10b981',
-    bgImage: 'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=800&q=60',
+    bgImage: 'https://images.unsplash.com/photo-1579869847557-1f67382cc158?q=80&w=1334&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     number: '04',
   },
 ];
@@ -70,7 +70,7 @@ export default function ServicesSection() {
   };
 
   return (
-    <section className="relative py-24 md:py-32 bg-silver-900 overflow-hidden">
+    <section className="relative py-12 md:py-16 bg-silver-900 overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950" />
@@ -94,9 +94,7 @@ export default function ServicesSection() {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-sm text-white/60 mb-4">
-              What We Do
-            </span>
+            
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
               Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-indigo-400">Services</span>
             </h2>

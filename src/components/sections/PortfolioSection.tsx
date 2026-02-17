@@ -95,10 +95,7 @@ export default function PortfolioSection() {
       <div className="container-custom relative">
         {/* Section Header */}
         <ScrollReveal className="text-center mb-14">
-          <span className="inline-flex items-center gap-2 text-sm font-medium text-primary-600 uppercase tracking-wider mb-4 px-4 py-2 rounded-full bg-primary-50 border border-primary-100">
-            <Play className="w-4 h-4" fill="currentColor" />
-            Our Portfolio
-          </span>
+          
           <h2 className="heading-lg text-silver-900 mb-4">
             Featured <span className="gradient-text">Work</span>
           </h2>

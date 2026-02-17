@@ -11,7 +11,6 @@ import {
   Clock,
   User,
   Calendar,
-  Sparkles,
 } from 'lucide-react';
 import { ScrollReveal } from '@/components/ui/Animations';
 import VideoPlayerModal from '@/components/ui/VideoPlayerModal';
@@ -117,15 +116,7 @@ export default function PortfolioPageContent() {
 
         <div className="container-custom relative">
           <ScrollReveal className="text-center max-w-4xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary-50 border border-primary-200 mb-8"
-            >
-              <Sparkles className="w-4 h-4 text-primary-500" />
-              <span className="text-sm font-medium text-primary-700 tracking-wide">Our Creative Work</span>
-            </motion.div>
+           
 
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
@@ -187,7 +178,7 @@ export default function PortfolioPageContent() {
 
           {/* Loading */}
           {isLoading ? (
-            <div className="flex flex-col items-center justify-center py-32">
+            <div className="flex flex-col items-center justify-center py-16">
               <div className="relative">
                 <div className="w-16 h-16 rounded-full border-2 border-silver-200" />
                 <Loader2 className="w-16 h-16 text-primary-500 animate-spin absolute inset-0" />
@@ -195,7 +186,7 @@ export default function PortfolioPageContent() {
               <p className="text-silver-400 mt-4 text-sm">Loading projects...</p>
             </div>
           ) : portfolioItems.length === 0 ? (
-            <div className="text-center py-32">
+            <div className="text-center py-16">
               <div className="w-20 h-20 rounded-2xl bg-silver-50 border border-silver-100 flex items-center justify-center mx-auto mb-4">
                 <Play className="w-8 h-8 text-silver-300" />
               </div>
@@ -349,7 +340,7 @@ export default function PortfolioPageContent() {
       </section>
 
       {/* CTA Section */}
-      <section className="relative py-24 bg-gradient-to-br from-primary-600 via-primary-700 to-indigo-700 overflow-hidden">
+      <section className="relative py-12 md:py-16 bg-gradient-to-br from-primary-600 via-primary-700 to-indigo-700 overflow-hidden">
         {/* Decorative elements */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />

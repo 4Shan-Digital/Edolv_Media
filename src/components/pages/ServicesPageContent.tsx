@@ -4,18 +4,17 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { useState } from 'react';
 import { 
-  Sparkles,
   ArrowRight,
   Check,
   Play,
   Film,
   Palette,
   Wand2,
-  Music,
+  PenTool,
   Zap,
   Share2,
   Building2,
-  Youtube
+  Code
 } from 'lucide-react';
 import { ScrollReveal } from '@/components/ui/Animations';
 
@@ -75,21 +74,21 @@ const services = [
     number: '03',
   },
   {
-    id: 'sound-design',
-    icon: Music,
-    title: 'Sound Design',
-    shortDesc: 'Professional audio that enhances your visual story.',
-    description: 'Great visuals need great audio. Our sound design services include mixing, sound effects, music selection, and dialogue enhancement to create an immersive audio-visual experience.',
+    id: 'graphic-design',
+    icon: PenTool,
+    title: 'Graphic Design',
+    shortDesc: 'Creative visual designs that elevate your brand.',
+    description: 'Creative visual designs that capture attention and communicate your brand message effectively across all platforms. From brand identity to marketing materials.',
     features: [
-      'Professional audio mixing',
-      'Sound effects & foley',
-      'Music selection & licensing',
-      'Dialogue enhancement',
-      'Noise reduction',
-      'Spatial audio design',
+      'Brand identity design',
+      'Poster & flyer design',
+      'Social media graphics',
+      'Thumbnail design',
+      'Marketing materials',
+      'Print & digital assets',
     ],
     gradient: 'from-emerald-500 via-teal-500 to-cyan-500',
-    bgImage: 'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=800&q=60',
+    bgImage: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&q=60',
     number: '04',
   },
   {
@@ -111,21 +110,21 @@ const services = [
     number: '05',
   },
   {
-    id: 'social-media',
+    id: 'social-media-management',
     icon: Share2,
-    title: 'Social Media',
-    shortDesc: 'Platform-optimized content that drives engagement.',
-    description: 'We create scroll-stopping content optimized for each social platform. From TikTok and Reels to YouTube and LinkedIn, we know what works and how to make your content stand out.',
+    title: 'Social Media Management',
+    shortDesc: 'Strategic social media growth and engagement.',
+    description: 'Strategic content creation and management to grow your social media presence and engage your audience effectively. We handle everything from content strategy to community engagement.',
     features: [
-      'Platform-specific editing',
-      'Vertical & square formats',
-      'Trending style adaptations',
-      'Caption & subtitle design',
-      'Thumbnail creation',
-      'Content repurposing',
+      'Content strategy',
+      'Post scheduling',
+      'Platform optimization',
+      'Analytics tracking',
+      'Community engagement',
+      'Performance reporting',
     ],
     gradient: 'from-blue-500 via-indigo-500 to-violet-500',
-    bgImage: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=60',
+    bgImage: 'https://images.unsplash.com/photo-1579869847557-1f67382cc158?q=80&w=1334&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     number: '06',
   },
   {
@@ -147,21 +146,21 @@ const services = [
     number: '07',
   },
   {
-    id: 'youtube',
-    icon: Youtube,
-    title: 'YouTube Production',
-    shortDesc: 'End-to-end YouTube content creation.',
-    description: 'We help YouTubers and brands create engaging long-form content. From editing to thumbnails, we handle everything needed to grow your channel and keep viewers watching.',
+    id: 'web-development',
+    icon: Code,
+    title: 'Web Development',
+    shortDesc: 'Custom websites that drive results.',
+    description: 'Professional web development services that bring your digital vision to life. From landing pages to full-scale web applications, we build fast, responsive, and user-friendly websites.',
     features: [
-      'Engaging long-form edits',
-      'Retention-focused pacing',
-      'Custom thumbnail design',
-      'End screen optimization',
-      'Chapter markers',
-      'SEO-optimized descriptions',
+      'Custom website development',
+      'Responsive design',
+      'E-commerce solutions',
+      'CMS integration',
+      'Performance optimization',
+      'SEO-friendly code',
     ],
     gradient: 'from-red-500 via-rose-500 to-pink-500',
-    bgImage: 'https://plus.unsplash.com/premium_photo-1683287925874-f8b46c6437ae?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    bgImage: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&q=80',
     number: '08',
   },
 ];
@@ -206,7 +205,7 @@ function InteractiveServicesSection() {
   };
 
   return (
-    <section className="relative py-20 md:py-28 bg-slate-950 overflow-hidden">
+    <section className="relative py-12 md:py-16 bg-slate-950 overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0">
         <div 
@@ -562,10 +561,7 @@ export default function ServicesPageContent() {
 
         <div className="container-custom relative">
           <ScrollReveal className="text-center max-w-4xl mx-auto">
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-50 border border-primary-100 mb-6">
-              <Sparkles className="w-4 h-4 text-primary-500" />
-              <span className="text-sm font-medium text-primary-700">Our Services</span>
-            </span>
+           
             <h1 className="heading-xl text-silver-900 mb-6">
               Comprehensive <span className="gradient-text">Video Production</span> Services
             </h1>
@@ -581,7 +577,7 @@ export default function ServicesPageContent() {
       <InteractiveServicesSection />
 
       {/* Process Section - Zigzag Layout */}
-      <section className="py-16 md:py-20 bg-white overflow-hidden">
+      <section className="py-10 md:py-12 bg-white overflow-hidden">
         <div className="container-custom">
           <ScrollReveal className="text-center mb-12">
             <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary-50 border border-primary-100 text-sm text-primary-700 font-medium mb-4">
@@ -667,7 +663,7 @@ export default function ServicesPageContent() {
       </section>
 
       {/* CTA Section */}
-      <section className="relative py-24 overflow-hidden">
+      <section className="relative py-12 md:py-16 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary-600 via-primary-700 to-indigo-800" />
         <div className="absolute inset-0 opacity-10">
           <div className="absolute inset-0" style={{

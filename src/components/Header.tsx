@@ -18,18 +18,28 @@ const navLinks = [
 ];
 
 export default function Header() {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
+  const isHomePage = pathname === '/';
+  const [isScrolled, setIsScrolled] = useState(isHomePage);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      if (isHomePage) {
+        // On home page, navbar is always in scrolled state
+        setIsScrolled(true);
+      } else {
+        // On other pages, normal scroll behavior
+        setIsScrolled(window.scrollY > 20);
+      }
     };
+
+    // Set initial state
+    handleScroll();
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [isHomePage]);
 
   useEffect(() => {
     setIsMobileMenuOpen(false);

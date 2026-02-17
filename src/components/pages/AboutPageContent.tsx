@@ -10,9 +10,6 @@ import {
   Zap,
   Award,
   ArrowRight,
-  Linkedin,
-  Twitter,
-  Instagram,
   Play
 } from 'lucide-react';
 import { ScrollReveal, StaggerContainer, StaggerItem } from '@/components/ui/Animations';
@@ -63,6 +60,7 @@ const values = [
   },
 ];
 
+/* Team data - Commented out since Team section is disabled
 const team: TeamMember[] = [
   {
     _id: 'fallback-1',
@@ -143,6 +141,7 @@ const team: TeamMember[] = [
     },
   },
 ];
+*/
 
 const milestones = [
   { year: '2014', title: 'Founded', description: 'Edolv Media was born in a small studio with a big vision.' },
@@ -155,7 +154,7 @@ const milestones = [
 
 export default function AboutPageContent() {
   const [aboutVideo, setAboutVideo] = useState<AboutVideo | null>(null);
-  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+  // const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]); // Commented out - Team section disabled
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
 
   useEffect(() => {
@@ -172,8 +171,8 @@ export default function AboutPageContent() {
       }
     };
 
-    // Fetch team members
-    const fetchTeamMembers = async () => {
+    // Fetch team members - Commented out since Team section is disabled
+    /* const fetchTeamMembers = async () => {
       try {
         const res = await fetch('/api/team');
         const data = await res.json();
@@ -185,10 +184,10 @@ export default function AboutPageContent() {
       } catch (err) {
         console.error('Failed to fetch team members:', err);
       }
-    };
+    }; */
 
     fetchAboutVideo();
-    fetchTeamMembers();
+    // fetchTeamMembers(); // Commented out - Team section disabled
   }, []);
 
   return (
@@ -275,7 +274,7 @@ export default function AboutPageContent() {
       </section>
 
       {/* Values Section */}
-      <section className="py-14 md:py-18 bg-silver-50">
+      <section className="py-10 md:py-12 bg-silver-50">
         <div className="container-custom">
           <ScrollReveal className="text-center mb-10">
             <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary-50 border border-primary-100 text-sm text-primary-700 font-medium mb-3">
@@ -312,7 +311,7 @@ export default function AboutPageContent() {
         </div>
       </section>
 
-      {/* Team Section */}
+      {/* Team Section - Commented out for now
       <section className="py-14 md:py-18">
         <div className="container-custom">
           <ScrollReveal className="text-center mb-10">
@@ -337,7 +336,6 @@ export default function AboutPageContent() {
                   whileHover={{ y: -5 }}
                   className="group bg-silver-50 rounded-2xl p-6 hover:bg-white hover:shadow-soft-lg transition-all duration-300"
                 >
-                  {/* Avatar */}
                   <div className="relative mb-5 overflow-hidden rounded-xl aspect-square bg-silver-200">
                     {member.imageUrl ? (
                       <img
@@ -356,7 +354,6 @@ export default function AboutPageContent() {
                     <div className={member.imageUrl ? "absolute inset-0 bg-gradient-to-br from-primary-400/20 to-indigo-400/20 items-center justify-center hidden" : "absolute inset-0 bg-gradient-to-br from-primary-400/20 to-indigo-400/20 flex items-center justify-center"}>
                       <span className="text-6xl font-bold text-white/50">{member.name.charAt(0)}</span>
                     </div>
-                    {/* Social overlay on hover */}
                     {member.social && (member.social.linkedin || member.social.twitter || member.social.instagram) && (
                       <motion.div
                         initial={{ opacity: 0 }}
@@ -399,7 +396,6 @@ export default function AboutPageContent() {
                     )}
                   </div>
 
-                  {/* Info */}
                   <h3 className="text-lg font-semibold text-silver-900 mb-1 group-hover:text-primary-600 transition-colors">
                     {member.name}
                   </h3>
@@ -412,9 +408,10 @@ export default function AboutPageContent() {
           </StaggerContainer>
         </div>
       </section>
+      */}
 
       {/* Timeline Section - Zigzag Cards */}
-      <section className="py-16 md:py-20 bg-silver-50 overflow-hidden">
+      <section className="py-10 md:py-12 bg-silver-50 overflow-hidden">
         <div className="container-custom">
           <ScrollReveal className="text-center mb-12">
             <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary-50 border border-primary-100 text-sm text-primary-700 font-medium mb-4">
@@ -476,7 +473,7 @@ export default function AboutPageContent() {
       </section>
 
       {/* CTA Section */}
-      <section className="relative py-14 md:py-16 overflow-hidden">
+      <section className="relative py-10 md:py-12 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary-600 via-primary-700 to-indigo-800" />
         <div className="container-custom relative z-10 text-center">
           <ScrollReveal>

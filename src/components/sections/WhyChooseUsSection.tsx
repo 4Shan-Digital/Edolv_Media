@@ -82,9 +82,7 @@ export default function WhyChooseUsSection() {
       <div className="container-custom relative">
         {/* Section Header */}
         <ScrollReveal className="text-center mb-16">
-          <span className="inline-block text-sm font-medium text-primary-400 uppercase tracking-wider mb-4 px-4 py-2 rounded-full bg-primary-500/10 border border-primary-500/20">
-            Why Choose Us
-          </span>
+          
           <h2 className="heading-lg text-white mb-4">
             What Makes Us <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-indigo-400">Different</span>
           </h2>

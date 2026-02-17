@@ -250,7 +250,7 @@ export default function CareersPageContent() {
       </section>
 
       {/* Why Join Us */}
-      <section className="py-14 md:py-18 bg-gradient-to-br from-slate-50 via-white to-violet-50 relative overflow-hidden">
+      <section className="py-10 md:py-12 bg-gradient-to-br from-slate-50 via-white to-violet-50 relative overflow-hidden">
         {/* Decorative elements */}
         <div className="absolute inset-0 opacity-30">
           <motion.div
@@ -314,7 +314,7 @@ export default function CareersPageContent() {
       </section>
 
       {/* Open Positions */}
-      <section id="openings" className="py-16 md:py-20 bg-white relative overflow-hidden">
+      <section id="openings" className="py-10 md:py-12 bg-white relative overflow-hidden">
         {/* Animated background elements */}
         <motion.div
           animate={{ 
@@ -373,7 +373,7 @@ export default function CareersPageContent() {
 
           {/* Jobs Grid */}
           {isLoading ? (
-            <div className="flex items-center justify-center py-20">
+            <div className="flex items-center justify-center py-12">
               <Loader2 className="w-8 h-8 animate-spin text-primary-500" />
             </div>
           ) : (
@@ -488,7 +488,7 @@ export default function CareersPageContent() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-center py-16"
+              className="text-center py-10"
             >
               <div className="w-20 h-20 mx-auto mb-4 rounded-2xl bg-gray-100 flex items-center justify-center">
                 <Briefcase className="w-10 h-10 text-gray-400" />

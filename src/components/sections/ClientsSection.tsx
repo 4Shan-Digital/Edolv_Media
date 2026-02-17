@@ -312,7 +312,7 @@ export default function ClientsSection() {
       </section>
 
       {/* Clients Section - Light Background */}
-      <section className="relative py-24 md:py-32 overflow-hidden bg-gradient-to-b from-silver-50 via-white to-silver-100">
+      <section className="relative py-12 md:py-16 overflow-hidden bg-gradient-to-b from-silver-50 via-white to-silver-100">
         {/* Background decorations */}
           <div className="absolute inset-0">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-radial from-primary-100/60 via-transparent to-transparent rounded-full blur-3xl" />

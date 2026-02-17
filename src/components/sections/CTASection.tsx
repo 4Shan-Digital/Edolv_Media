@@ -7,7 +7,7 @@ import { ScrollReveal } from '@/components/ui/Animations';
 
 export default function CTASection() {
   return (
-    <section className="relative py-24 md:py-32 overflow-hidden">
+    <section className="relative py-12 md:py-16 overflow-hidden">
       {/* Gradient background */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary-600 via-primary-700 to-indigo-800" />
 
