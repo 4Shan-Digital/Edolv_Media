@@ -185,8 +185,8 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-silver-500">
           <p className="flex items-center gap-1">
-            © {currentYear} Edolv Media. Made with 
-            <Heart className="w-3 h-3 text-primary-400 fill-primary-400" />
+            © {currentYear} 
+            
             All rights reserved.
           </p>
           <div className="flex items-center gap-4">
