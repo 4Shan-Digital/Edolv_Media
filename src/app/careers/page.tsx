@@ -5,7 +5,11 @@ import CareersPageContent from '@/components/pages/CareersPageContent';
 export const metadata: Metadata = {
   title: 'Careers',
   description: 'Join the Edolv Media team. Explore open positions and be part of a creative team that produces stunning video content.',
+  alternates: {
+    canonical: 'https://edolv.com/careers',
+  },
   openGraph: {
+    url: 'https://edolv.com/careers',
     title: 'Careers | Edolv Media',
     description: 'Join our team of creative professionals at Edolv Media.',
   },

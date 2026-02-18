@@ -1,5 +1,25 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Redirects for old URLs
+  async redirects() {
+    return [
+      {
+        source: '/work/:path*',
+        destination: '/portfolio',
+        permanent: true,
+      },
+      {
+        source: '/get-editor',
+        destination: '/contact',
+        permanent: true,
+      },
+      {
+        source: '/auth',
+        destination: '/admin/login',
+        permanent: true,
+      },
+    ];
+  },
   // Security headers
   async headers() {
     return [
