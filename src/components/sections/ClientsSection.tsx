@@ -59,7 +59,7 @@ const clients = [
     name: 'Mystic 69',
     logo: '/images/Clients_logo/Mystic 69.jpg',
     type: 'Gaming',
-    subscribers: '23.6+',
+    subscribers: '23.6k+',
   },
   {
     name: 'Piyush',
@@ -89,13 +89,13 @@ const clients = [
     name: 'Sharmila',
     logo: '/images/Clients_logo/Sharmila .jpg',
     type: 'Lifestyle',
-    subscribers: '920K+',
+    subscribers: '188K+',
   },
   {
     name: 'Souvik',
     logo: '/images/Clients_logo/Souvik.jpg',
     type: 'Travel Vlogger',
-    subscribers: '668kM+',
+    subscribers: '668k+',
   },
   {
     name: 'Mamba',
@@ -125,7 +125,7 @@ const clients = [
     name: 'Yassine',
     logo: '/images/Clients_logo/Yassine.jpg',
     type: 'Fitness',
-    subscribers: '3.6M+',
+    subscribers: '300k+',
   },
 ];
 
