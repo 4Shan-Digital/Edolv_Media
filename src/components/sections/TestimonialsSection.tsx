@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { motion, useMotionValue, useTransform, useSpring } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Quote, Star, ArrowRight } from 'lucide-react';
 import { ScrollReveal } from '@/components/ui/Animations';
 
@@ -136,95 +136,72 @@ const testimonials = [
   },
 ];
 
-// Testimonial card component
+// Position configurations for 5-card layout
+const positionConfigs = {
+  'far-left': {
+    scale: 0.6,
+    opacity: 0.3,
+    x: -70,
+    y: 40,
+    blur: 2,
+    zIndex: 1,
+  },
+  left: {
+    scale: 0.8,
+    opacity: 0.6,
+    x: -38,
+    y: 20,
+    blur: 0.5,
+    zIndex: 5,
+  },
+  center: {
+    scale: 1,
+    opacity: 1,
+    x: 0,
+    y: 0,
+    blur: 0,
+    zIndex: 10,
+  },
+  right: {
+    scale: 0.8,
+    opacity: 0.6,
+    x: 38,
+    y: 20,
+    blur: 0.5,
+    zIndex: 5,
+  },
+  'far-right': {
+    scale: 0.6,
+    opacity: 0.3,
+    x: 70,
+    y: 40,
+    blur: 2,
+    zIndex: 1,
+  },
+} as const;
+
+// Testimonial card component - optimized: removed mouse-tracking 3D, spring animations, floating orbs
 function TestimonialCard({
   testimonial,
   position,
   onClick,
+  onMouseEnter,
+  onMouseLeave,
 }: {
   testimonial: typeof testimonials[0];
   position: 'far-left' | 'left' | 'center' | 'right' | 'far-right';
   onClick?: () => void;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
 }) {
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-
-  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [3, -3]), {
-    damping: 20,
-    stiffness: 200,
-  });
-  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-3, 3]), {
-    damping: 20,
-    stiffness: 200,
-  });
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (position !== 'center') return;
-    const rect = e.currentTarget.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-    mouseX.set((e.clientX - centerX) / rect.width);
-    mouseY.set((e.clientY - centerY) / rect.height);
-  };
-
-  const handleMouseLeave = () => {
-    mouseX.set(0);
-    mouseY.set(0);
-  };
-
   const isCenter = position === 'center';
-
-  // Position configurations for 5-card layout
-  const configs = {
-    'far-left': {
-      scale: 0.6,
-      opacity: 0.3,
-      x: -70,
-      y: 40,
-      blur: 2,
-      zIndex: 1,
-    },
-    left: {
-      scale: 0.8,
-      opacity: 0.6,
-      x: -38,
-      y: 20,
-      blur: 0.5,
-      zIndex: 5,
-    },
-    center: {
-      scale: 1,
-      opacity: 1,
-      x: 0,
-      y: 0,
-      blur: 0,
-      zIndex: 10,
-    },
-    right: {
-      scale: 0.8,
-      opacity: 0.6,
-      x: 38,
-      y: 20,
-      blur: 0.5,
-      zIndex: 5,
-    },
-    'far-right': {
-      scale: 0.6,
-      opacity: 0.3,
-      x: 70,
-      y: 40,
-      blur: 2,
-      zIndex: 1,
-    },
-  };
-
-  const config = configs[position];
+  const config = positionConfigs[position];
 
   return (
     <motion.div
       onClick={onClick}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
       animate={{
         scale: config.scale,
         opacity: config.opacity,
@@ -232,10 +209,6 @@ function TestimonialCard({
         y: config.y,
         zIndex: config.zIndex,
         filter: `blur(${config.blur}px)`,
-      }}
-      style={{
-        rotateX: isCenter ? rotateX : 0,
-        rotateY: isCenter ? rotateY : 0,
       }}
       transition={{
         duration: 1,
@@ -256,33 +229,14 @@ function TestimonialCard({
 
           {/* Content */}
           <div className="relative p-8 flex flex-col h-full">
-            {/* Floating orb */}
-            <motion.div
-              animate={{
-                scale: [1, 1.2, 1],
-                opacity: [0.3, 0.5, 0.3],
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                ease: 'easeInOut',
-              }}
-              className={`absolute -top-10 -right-10 w-32 h-32 rounded-full bg-gradient-to-br ${testimonial.color} blur-3xl`}
+            {/* Static gradient orb (no animation) */}
+            <div
+              className={`absolute -top-10 -right-10 w-32 h-32 rounded-full bg-gradient-to-br ${testimonial.color} blur-3xl opacity-30`}
             />
 
             <div className="flex items-center gap-4 mb-6">
-              {/* Profile image */}
-              <motion.div
-                animate={{
-                  y: isCenter ? [0, -10, 0] : 0,
-                }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  ease: 'easeInOut',
-                }}
-                className="relative flex-shrink-0"
-              >
+              {/* Profile image - static (no floating animation) */}
+              <div className="relative flex-shrink-0">
                 <div
                   className={`absolute inset-0 rounded-full bg-gradient-to-br ${testimonial.color} blur-lg opacity-50`}
                 />
@@ -300,7 +254,7 @@ function TestimonialCard({
                 >
                   <Quote className="w-4 h-4 text-white" />
                 </div>
-              </motion.div>
+              </div>
 
               {/* Channel name and subscribers */}
               <div className="flex-1 min-w-0">
@@ -318,27 +272,16 @@ function TestimonialCard({
               </div>
             </div>
 
-            {/* 5 Star Rating */}
+            {/* 5 Star Rating - static (no spring animations) */}
             <div className="flex items-center gap-1 mb-4">
               {[...Array(5)].map((_, i) => (
-                <motion.div
+                <Star
                   key={i}
-                  initial={{ scale: 0, rotate: -180 }}
-                  animate={{ scale: 1, rotate: 0 }}
-                  transition={{
-                    delay: i * 0.1,
-                    type: 'spring',
-                    stiffness: 200,
-                    damping: 12,
-                  }}
-                >
-                  <Star
-                    className={`w-5 h-5 ${
-                      isCenter ? 'text-amber-400' : 'text-amber-300'
-                    }`}
-                    fill="currentColor"
-                  />
-                </motion.div>
+                  className={`w-5 h-5 ${
+                    isCenter ? 'text-amber-400' : 'text-amber-300'
+                  }`}
+                  fill="currentColor"
+                />
               ))}
             </div>
 
@@ -349,14 +292,9 @@ function TestimonialCard({
 
             {/* Center indicator */}
             {isCenter && (
-              <motion.div
-                initial={{ scale: 0, rotate: -180 }}
-                animate={{ scale: 1, rotate: 0 }}
-                transition={{ type: 'spring', stiffness: 200, damping: 15 }}
-                className="absolute top-4 right-4 w-10 h-10 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-lg"
-              >
+              <div className="absolute top-4 right-4 w-10 h-10 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-lg">
                 <Star className="w-5 h-5 text-white" fill="currentColor" />
-              </motion.div>
+              </div>
             )}
           </div>
         </div>
@@ -420,69 +358,11 @@ export default function TestimonialsSection() {
 
   return (
     <section className="section-padding relative overflow-hidden bg-gradient-to-b from-gray-50 via-white to-gray-50">
-      {/* Animated background elements */}
+      {/* Static background elements (no framer-motion animations) */}
       <div className="absolute inset-0 overflow-hidden">
-        {/* Floating orbs */}
-        <motion.div
-          animate={{
-            x: [0, 100, 0],
-            y: [0, -100, 0],
-            scale: [1, 1.2, 1],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-          className="absolute top-20 left-10 w-96 h-96 bg-gradient-to-br from-violet-300/30 to-purple-300/30 rounded-full blur-3xl"
-        />
-        <motion.div
-          animate={{
-            x: [0, -100, 0],
-            y: [0, 100, 0],
-            scale: [1, 1.3, 1],
-          }}
-          transition={{
-            duration: 25,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-          className="absolute bottom-20 right-10 w-96 h-96 bg-gradient-to-br from-blue-300/30 to-cyan-300/30 rounded-full blur-3xl"
-        />
-        <motion.div
-          animate={{
-            x: [0, 50, 0],
-            y: [0, -50, 0],
-          }}
-          transition={{
-            duration: 15,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-br from-pink-300/20 to-rose-300/20 rounded-full blur-3xl"
-        />
-
-        {/* Sparkles */}
-        {[...Array(20)].map((_, i) => (
-          <motion.div
-            key={i}
-            animate={{
-              opacity: [0, 1, 0],
-              scale: [0, 1, 0],
-            }}
-            transition={{
-              duration: 3,
-              repeat: Infinity,
-              delay: i * 0.2,
-              ease: 'easeInOut',
-            }}
-            className="absolute w-1 h-1 bg-gradient-to-r from-violet-400 to-purple-500 rounded-full"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-          />
-        ))}
+        <div className="absolute top-20 left-10 w-96 h-96 bg-gradient-to-br from-violet-300/30 to-purple-300/30 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-gradient-to-br from-blue-300/30 to-cyan-300/30 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-br from-pink-300/20 to-rose-300/20 rounded-full blur-3xl" />
       </div>
 
       <div className="container-custom relative">
@@ -500,11 +380,7 @@ export default function TestimonialsSection() {
         </ScrollReveal>
 
         {/* 5-Card Carousel */}
-        <div
-          className="relative max-w-6xl mx-auto"
-          onMouseEnter={() => setIsPaused(true)}
-          onMouseLeave={() => setIsPaused(false)}
-        >
+        <div className="relative max-w-6xl mx-auto">
           <div
             className="relative h-[550px] flex items-center justify-center"
             style={{ perspective: '2000px' }}
@@ -520,75 +396,54 @@ export default function TestimonialsSection() {
                       ? handlePrev
                       : handleNext
                     : undefined
-                }  
+                }
+                onMouseEnter={card.position === 'center' ? () => setIsPaused(true) : undefined}
+                onMouseLeave={card.position === 'center' ? () => setIsPaused(false) : undefined}
               />
             ))}
           </div>
 
-          {/* Navigation arrows */}
+          {/* Navigation arrows - simplified */}
           <div className="absolute top-1/2 -translate-y-1/2 left-4 right-4 flex justify-between pointer-events-none">
-            <motion.button
-              whileHover={{ scale: 1.1, x: -5 }}
-              whileTap={{ scale: 0.9 }}
+            <button
               onClick={handlePrev}
-              className="pointer-events-auto w-12 h-12 rounded-full bg-white/90 backdrop-blur-sm border border-gray-200 flex items-center justify-center text-gray-600 hover:text-primary-600 hover:border-primary-300 hover:shadow-xl transition-all shadow-lg"
+              className="pointer-events-auto w-12 h-12 rounded-full bg-white/90 backdrop-blur-sm border border-gray-200 flex items-center justify-center text-gray-600 hover:text-primary-600 hover:border-primary-300 hover:shadow-xl transition-all shadow-lg active:scale-90"
             >
-              <motion.div
-                animate={{ x: [-2, 0, -2] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
-              >
-                <ArrowRight className="w-5 h-5 rotate-180" />
-              </motion.div>
-            </motion.button>
-            <motion.button
-              whileHover={{ scale: 1.1, x: 5 }}
-              whileTap={{ scale: 0.9 }}
+              <ArrowRight className="w-5 h-5 rotate-180" />
+            </button>
+            <button
               onClick={handleNext}
-              className="pointer-events-auto w-12 h-12 rounded-full bg-white/90 backdrop-blur-sm border border-gray-200 flex items-center justify-center text-gray-600 hover:text-primary-600 hover:border-primary-300 hover:shadow-xl transition-all shadow-lg"
+              className="pointer-events-auto w-12 h-12 rounded-full bg-white/90 backdrop-blur-sm border border-gray-200 flex items-center justify-center text-gray-600 hover:text-primary-600 hover:border-primary-300 hover:shadow-xl transition-all shadow-lg active:scale-90"
             >
-              <motion.div
-                animate={{ x: [0, 2, 0] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
-              >
-                <ArrowRight className="w-5 h-5" />
-              </motion.div>
-            </motion.button>
+              <ArrowRight className="w-5 h-5" />
+            </button>
           </div>
 
-          {/* Interactive progress dots */}
+          {/* Interactive progress dots - simplified */}
           <div className="flex items-center justify-center gap-3 mt-8">
             {testimonials.map((testimonial, index) => {
               const isCurrent = index === currentIndex;
               return (
-                <motion.button
+                <button
                   key={testimonial.id}
                   onClick={() => setCurrentIndex(index)}
                   className="relative group"
-                  whileHover={{ scale: 1.2 }}
-                  whileTap={{ scale: 0.9 }}
                 >
-                  <motion.div
-                    animate={{
-                      width: isCurrent ? 48 : 12,
-                      height: 12,
-                    }}
+                  <div
                     className={`rounded-full transition-all duration-300 overflow-hidden ${
                       isCurrent
-                        ? `bg-gradient-to-r ${testimonial.color}`
-                        : 'bg-gray-300 group-hover:bg-gray-400'
+                        ? `h-3 w-12 bg-gradient-to-r ${testimonial.color}`
+                        : 'h-3 w-3 bg-gray-300 group-hover:bg-gray-400'
                     }`}
                   >
-                    {isCurrent && (
-                      <motion.div
-                        className="h-full bg-white/30 rounded-full"
-                        initial={{ width: '0%'}}
-                        animate={{ width: isPaused ? '0%' : '100%' }}
-                        transition={{ duration: 3, ease: 'linear' }}
+                    {isCurrent && !isPaused && (
+                      <div
+                        className="h-full bg-white/30 rounded-full animate-[progressFill_3s_linear]"
                         key={currentIndex}
                       />
                     )}
-                  </motion.div>
-                </motion.button>
+                  </div>
+                </button>
               );
             })}
           </div>

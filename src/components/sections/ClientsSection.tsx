@@ -235,42 +235,10 @@ export default function ClientsSection() {
           </svg>
         </div>
 
-        {/* Floating shapes */}
-        <motion.div
-          animate={{
-            y: [-20, 20, -20],
-            rotate: [0, 180, 360],
-          }}
-          transition={{
-            duration: 15,
-            repeat: Infinity,
-            ease: 'linear',
-          }}
-          className="absolute top-20 left-[10%] w-24 h-24 rounded-xl bg-white/5 backdrop-blur-sm"
-        />
-        <motion.div
-          animate={{
-            y: [20, -20, 20],
-            rotate: [360, 180, 0],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: 'linear',
-          }}
-          className="absolute bottom-20 right-[15%] w-32 h-32 rounded-full bg-white/5 backdrop-blur-sm"
-        />
-        <motion.div
-          animate={{
-            y: [-10, 10, -10],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-          className="absolute top-1/2 right-[5%] w-16 h-16 rounded-lg bg-white/5 backdrop-blur-sm hidden lg:block"
-        />
+        {/* Floating shapes - CSS only for performance */}
+        <div className="absolute top-20 left-[10%] w-24 h-24 rounded-xl bg-white/5 animate-[float1_15s_linear_infinite]" />
+        <div className="absolute bottom-20 right-[15%] w-32 h-32 rounded-full bg-white/5 animate-[float2_20s_linear_infinite]" />
+        <div className="absolute top-1/2 right-[5%] w-16 h-16 rounded-lg bg-white/5 hidden lg:block animate-[floatY_8s_ease-in-out_infinite]" />
 
         <div className="container-custom relative z-10">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
@@ -350,16 +318,8 @@ export default function ClientsSection() {
               transition={{ duration: 0.6, delay: 0.3 }}
               className="absolute z-20 w-36 h-36 md:w-44 md:h-44 rounded-full bg-gradient-to-br from-primary-600 via-indigo-600 to-violet-700 p-1 shadow-2xl shadow-primary-500/40"
             >
-              <motion.div
-                className="absolute -inset-6 rounded-full bg-primary-500/20 blur-2xl"
-                animate={{ opacity: [0.4, 0.75, 0.4], scale: [0.95, 1.08, 0.95] }}
-                transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
-              />
-              <motion.div
-                className="absolute -inset-2 rounded-full border border-primary-300/60"
-                animate={{ opacity: [0.4, 0.9, 0.4], scale: [0.98, 1.05, 0.98] }}
-                transition={{ duration: 2.8, repeat: Infinity, ease: 'easeInOut' }}
-              />
+              <div className="absolute -inset-6 rounded-full bg-primary-500/20 blur-2xl animate-[pulse_3.5s_ease-in-out_infinite]" />
+              <div className="absolute -inset-2 rounded-full border border-primary-300/60 animate-[pulse_2.8s_ease-in-out_infinite]" />
               <div className="w-full h-full rounded-full bg-white flex flex-col items-center justify-center gap-1">
                 <span className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary-600 via-indigo-600 to-violet-600 bg-clip-text text-transparent">400+</span>
                 <span className="text-xs md:text-sm text-silver-700 font-semibold tracking-wide">Happy Clients</span>
@@ -403,29 +363,19 @@ export default function ClientsSection() {
                         whileHover={{ scale: 1.28, zIndex: 40 }}
                         transition={{ scale: { type: "spring", stiffness: 300, damping: 20 } }}
                         onClick={() => handleClientToggle(client.name, 'inner')}
-                        onHoverStart={() => {
+                        onMouseEnter={() => {
                           setIsOrbitPaused(true);
                           setHoveredRing('inner');
                           setHoveredClient(client.name);
                         }}
-                        onHoverEnd={() => {
+                        onMouseLeave={() => {
                           setIsOrbitPaused(false);
                           setHoveredRing(null);
                           setHoveredClient(null);
                         }}
                       >
-                        {/* Animated ring on hover */}
-                        <motion.div
-                          className="absolute inset-0 rounded-full border border-primary-500 opacity-0 group-hover:opacity-100"
-                          animate={{
-                            rotate: 360,
-                            scale: [1, 1.1, 1],
-                          }}
-                          transition={{
-                            rotate: { duration: 2, repeat: Infinity, ease: "linear" },
-                            scale: { duration: 1.5, repeat: Infinity, ease: "easeInOut" },
-                          }}
-                        />
+                        {/* Hover ring */}
+                        <div className="absolute -inset-1 rounded-full border border-primary-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                         <div className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-silver-800 to-silver-900 shadow-xl border-2 border-silver-700 overflow-hidden cursor-pointer p-0.5 transition-shadow duration-300 group-hover:shadow-[0_0_18px_rgba(99,102,241,0.45)]">
                           <div className="w-full h-full rounded-full overflow-hidden bg-white">
                             <Image
@@ -503,29 +453,19 @@ export default function ClientsSection() {
                         whileHover={{ scale: 1.18, zIndex: 30 }}
                         transition={{ scale: { type: "spring", stiffness: 300, damping: 20 } }}
                         onClick={() => handleClientToggle(client.name, 'middle')}
-                        onHoverStart={() => {
+                        onMouseEnter={() => {
                           setIsOrbitPaused(true);
                           setHoveredRing('middle');
                           setHoveredClient(client.name);
                         }}
-                        onHoverEnd={() => {
+                        onMouseLeave={() => {
                           setIsOrbitPaused(false);
                           setHoveredRing(null);
                           setHoveredClient(null);
                         }}
                       >
-                        {/* Animated ring on hover */}
-                        <motion.div
-                          className="absolute inset-0 rounded-full border border-indigo-500 opacity-0 group-hover:opacity-100"
-                          animate={{
-                            rotate: 360,
-                            scale: [1, 1.1, 1],
-                          }}
-                          transition={{
-                            rotate: { duration: 2, repeat: Infinity, ease: "linear" },
-                            scale: { duration: 1.5, repeat: Infinity, ease: "easeInOut" },
-                          }}
-                        />
+                        {/* Hover ring */}
+                        <div className="absolute -inset-1 rounded-full border border-indigo-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                         <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-gradient-to-br from-silver-800 to-silver-900 shadow-xl border-2 border-silver-700 overflow-hidden cursor-pointer p-0.5 transition-shadow duration-300 group-hover:shadow-[0_0_20px_rgba(79,70,229,0.45)]">
                           <div className="w-full h-full rounded-full overflow-hidden bg-white">
                             <Image
@@ -606,29 +546,19 @@ export default function ClientsSection() {
                         whileHover={{ scale: 1.12, zIndex: 20 }}
                         transition={{ scale: { type: "spring", stiffness: 300, damping: 20 } }}
                         onClick={() => handleClientToggle(client.name, 'outer')}
-                        onHoverStart={() => {
+                        onMouseEnter={() => {
                           setIsOrbitPaused(true);
                           setHoveredRing('outer');
                           setHoveredClient(client.name);
                         }}
-                        onHoverEnd={() => {
+                        onMouseLeave={() => {
                           setIsOrbitPaused(false);
                           setHoveredRing(null);
                           setHoveredClient(null);
                         }}
                       >
-                        {/* Animated ring on hover */}
-                        <motion.div
-                          className="absolute inset-0 rounded-full border border-violet-500 opacity-0 group-hover:opacity-100"
-                          animate={{
-                            rotate: 360,
-                            scale: [1, 1.1, 1],
-                          }}
-                          transition={{
-                            rotate: { duration: 2, repeat: Infinity, ease: "linear" },
-                            scale: { duration: 1.5, repeat: Infinity, ease: "easeInOut" },
-                          }}
-                        />
+                        {/* Hover ring */}
+                        <div className="absolute -inset-1 rounded-full border border-violet-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                         <div className="w-14 h-14 md:w-18 md:h-18 lg:w-20 lg:h-20 rounded-full bg-gradient-to-br from-silver-800 to-silver-900 shadow-xl border-2 border-silver-700 overflow-hidden cursor-pointer p-0.5 transition-shadow duration-300 group-hover:shadow-[0_0_18px_rgba(124,58,237,0.45)]">
                           <div className="w-full h-full rounded-full overflow-hidden bg-white">
                             <Image
@@ -672,27 +602,19 @@ export default function ClientsSection() {
               </motion.div>
             </motion.div>
 
-            {/* Decorative sparkles */}
-            {[...Array(8)].map((_, i) => (
-              <motion.div
+            {/* Decorative sparkles - CSS only, reduced count */}
+            {[...Array(4)].map((_, i) => (
+              <div
                 key={i}
-                animate={{
-                  scale: [1, 1.5, 1],
-                  opacity: [0.3, 0.7, 0.3],
-                }}
-                transition={{
-                  duration: 2 + Math.random() * 2,
-                  repeat: Infinity,
-                  delay: Math.random() * 2,
-                }}
-                className="absolute"
+                className="absolute animate-[sparkle_3s_ease-in-out_infinite]"
                 style={{
-                  left: `${20 + Math.random() * 60}%`,
-                  top: `${20 + Math.random() * 60}%`,
+                  left: `${25 + i * 15}%`,
+                  top: `${25 + i * 12}%`,
+                  animationDelay: `${i * 0.5}s`,
                 }}
               >
                 <Sparkles className="w-4 h-4 text-primary-400/40" />
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>

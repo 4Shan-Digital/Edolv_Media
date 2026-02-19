@@ -193,7 +193,7 @@ export default function ShowreelSection() {
                     className="absolute top-1/2 left-1/2 -translate-x-1/2 translate-y-20 text-white/60 text-sm flex items-center gap-2"
                   >
                     <span className="w-2 h-2 rounded-full bg-primary-400 animate-pulse" />
-                    Click to Play
+                    
                   </motion.div>
                 </>
               ) : null}

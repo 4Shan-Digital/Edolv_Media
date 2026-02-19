@@ -306,30 +306,25 @@ export default function ServicesSection() {
                 const Icon = service.icon;
                 const isExpanded = expandedMobile === index;
                 return (
-                  <motion.div
+                  <div
                     key={service.id}
-                    layout
                     className="relative"
                   >
                     {/* Service Card Header */}
-                    <motion.button
+                    <button
                       onClick={() => handleMobileToggle(index)}
                       className={`group relative w-full text-left p-5 rounded-2xl border transition-all duration-300 ${
                         isExpanded
                           ? 'bg-white/[0.08] border-white/20 shadow-lg shadow-black/20' 
                           : 'bg-white/[0.02] border-white/[0.06]'
                       }`}
-                      layout
                     >
                       {/* Active indicator bar */}
-                      <motion.div
-                        className={`absolute left-0 top-3 bottom-3 w-[3px] rounded-full bg-gradient-to-b ${service.gradient}`}
-                        initial={false}
-                        animate={{ 
-                          opacity: isExpanded ? 1 : 0,
-                          scaleY: isExpanded ? 1 : 0.3,
-                        }}
-                        transition={{ duration: 0.3 }}
+                      <div
+                        className={`absolute left-0 top-3 bottom-3 w-[3px] rounded-full bg-gradient-to-b ${service.gradient} transition-all duration-300 ${
+                          isExpanded ? 'opacity-100 scale-y-100' : 'opacity-0 scale-y-[0.3]'
+                        }`}
+                        style={{ transformOrigin: 'center' }}
                       />
                       
                       <div className="flex items-center gap-4 pl-3">
@@ -366,14 +361,13 @@ export default function ServicesSection() {
                         </div>
                         
                         {/* Arrow */}
-                        <motion.div
-                          animate={{ rotate: isExpanded ? 90 : 0 }}
-                          transition={{ duration: 0.3 }}
+                        <div
+                          className={`transition-transform duration-300 ${isExpanded ? 'rotate-90' : 'rotate-0'}`}
                         >
                           <ArrowRight className="w-4 h-4 text-white/40" />
-                        </motion.div>
+                        </div>
                       </div>
-                    </motion.button>
+                    </button>
 
                     {/* Expanded Content */}
                     <AnimatePresence>
@@ -438,7 +432,7 @@ export default function ServicesSection() {
                         </motion.div>
                       )}
                     </AnimatePresence>
-                  </motion.div>
+                  </div>
                 );
               })}
 
