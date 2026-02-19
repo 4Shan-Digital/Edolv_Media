@@ -236,6 +236,15 @@ html {
 }
 
 /* Marquee animation for hero scrolling text */
+@keyframes headerSlideDown {
+  from { transform: translateY(-100%); }
+  to   { transform: translateY(0); }
+}
+
+.animate-header-slide-down {
+  animation: headerSlideDown 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
 @keyframes marquee {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }

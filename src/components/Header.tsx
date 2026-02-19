@@ -58,12 +58,9 @@ export default function Header() {
 
   return (
     <>
-      <motion.header
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      <header
         className={cn(
-          'fixed top-0 left-0 right-0 z-50 transition-all duration-500',
+          'fixed top-0 left-0 right-0 z-50 transition-all duration-500 animate-header-slide-down',
           isScrolled
             ? 'py-3 bg-gradient-to-r from-slate-950/95 via-slate-900/90 to-slate-700/80 backdrop-blur-xl shadow-soft border-b border-white/10'
             : 'py-5 bg-transparent'
@@ -185,7 +182,7 @@ export default function Header() {
             </AnimatePresence>
           </motion.button>
         </nav>
-      </motion.header>
+      </header>
 
       {/* Mobile Menu */}
       <AnimatePresence>

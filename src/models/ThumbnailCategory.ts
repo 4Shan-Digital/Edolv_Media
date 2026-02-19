@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
 
-export interface ICategory extends Document {
+export interface IThumbnailCategory extends Document {
   name: string;
   slug: string;
   isActive: boolean;
@@ -9,7 +9,7 @@ export interface ICategory extends Document {
   updatedAt: Date;
 }
 
-const categorySchema = new Schema<ICategory>(
+const thumbnailCategorySchema = new Schema<IThumbnailCategory>(
   {
     name: { type: String, required: true, trim: true, maxlength: 100, unique: true },
     slug: { type: String, required: true, trim: true, lowercase: true },
@@ -21,10 +21,10 @@ const categorySchema = new Schema<ICategory>(
   }
 );
 
-categorySchema.index({ isActive: 1, order: 1 });
-categorySchema.index({ slug: 1 }, { unique: true });
+thumbnailCategorySchema.index({ isActive: 1, order: 1 });
+thumbnailCategorySchema.index({ slug: 1 }, { unique: true });
 
-const Category: Model<ICategory> =
-  mongoose.models.Category || mongoose.model<ICategory>('Category', categorySchema);
+const ThumbnailCategory: Model<IThumbnailCategory> =
+  mongoose.models.ThumbnailCategory || mongoose.model<IThumbnailCategory>('ThumbnailCategory', thumbnailCategorySchema);
 
-export default Category;
+export default ThumbnailCategory;

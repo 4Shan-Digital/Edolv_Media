@@ -156,3 +156,38 @@ export const updateCategorySchema = z.object({
 
 export type CreateCategoryInput = z.infer<typeof createCategorySchema>;
 export type UpdateCategoryInput = z.infer<typeof updateCategorySchema>;
+
+// ============================================
+// Thumbnail Categories
+// ============================================
+
+export const createThumbnailCategorySchema = z.object({
+  name: z.string().min(1, 'Category name is required').max(100),
+});
+
+export const updateThumbnailCategorySchema = z.object({
+  name: z.string().min(1, 'Category name is required').max(100).optional(),
+  isActive: z.boolean().optional(),
+  order: z.number().int().min(0).optional(),
+});
+
+export type CreateThumbnailCategoryInput = z.infer<typeof createThumbnailCategorySchema>;
+export type UpdateThumbnailCategoryInput = z.infer<typeof updateThumbnailCategorySchema>;
+
+// ============================================
+// Thumbnails
+// ============================================
+
+export const createThumbnailSchema = z.object({
+  title: z.string().min(1, 'Title is required').max(200),
+  category: z.string().min(1, 'Category is required').max(100),
+  imageUrl: z.string().url().optional(),
+  imageKey: z.string().optional(),
+});
+
+export const updateThumbnailSchema = createThumbnailSchema.partial().extend({
+  isActive: z.boolean().optional(),
+});
+
+export type CreateThumbnailInput = z.infer<typeof createThumbnailSchema>;
+export type UpdateThumbnailInput = z.infer<typeof updateThumbnailSchema>;

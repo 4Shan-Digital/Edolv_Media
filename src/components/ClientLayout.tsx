@@ -11,6 +11,12 @@ interface ClientLayoutProps {
   children: React.ReactNode;
 }
 
+/** Skip splash on mobile / small-screen devices to avoid lag */
+function isMobileDevice() {
+  if (typeof window === 'undefined') return false;
+  return window.innerWidth < 768 || /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+}
+
 export default function ClientLayout({ children }: ClientLayoutProps) {
   const pathname = usePathname();
   const [showSplash, setShowSplash] = useState<boolean | null>(() => {
@@ -18,7 +24,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
       return pathname === '/';
     }
 
-    if (pathname !== '/') {
+    if (pathname !== '/' || isMobileDevice()) {
       return false;
     }
 
@@ -34,7 +40,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
-    if (pathname !== '/') {
+    if (pathname !== '/' || isMobileDevice()) {
       setShowSplash(false);
       return;
     }
