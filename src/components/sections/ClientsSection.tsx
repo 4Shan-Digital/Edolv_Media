@@ -332,7 +332,7 @@ export default function ClientsSection() {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="absolute w-[280px] h-[280px] md:w-[340px] md:h-[340px] rounded-full"
+              className="absolute w-[280px] h-[280px] md:w-[340px] md:h-[340px] rounded-full pointer-events-none"
               style={{ zIndex: getRingZIndex('inner') }}
             >
               {/* Ring border */}
@@ -340,7 +340,7 @@ export default function ClientsSection() {
               
               <motion.div
                 style={{ rotate: innerOrbitRotate }}
-                className="relative w-full h-full"
+                className="relative w-full h-full pointer-events-none"
               >
                 {innerRing.map((client, index) => {
                   const angle = (index * 360) / innerRing.length;
@@ -358,7 +358,7 @@ export default function ClientsSection() {
                       }}
                     >
                       <motion.div
-                        className="group relative z-10"
+                        className="group relative z-10 pointer-events-auto"
                         style={{ rotate: innerLogoRotate }}
                         whileHover={{ scale: 1.28, zIndex: 40 }}
                         transition={{ scale: { type: "spring", stiffness: 300, damping: 20 } }}
@@ -422,7 +422,7 @@ export default function ClientsSection() {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.5 }}
-              className="absolute w-[420px] h-[420px] md:w-[500px] md:h-[500px] rounded-full"
+              className="absolute w-[420px] h-[420px] md:w-[500px] md:h-[500px] rounded-full pointer-events-none"
               style={{ zIndex: getRingZIndex('middle') }}
             >
               {/* Ring border */}
@@ -430,7 +430,7 @@ export default function ClientsSection() {
               
               <motion.div
                 style={{ rotate: middleOrbitRotate }}
-                className="relative w-full h-full"
+                className="relative w-full h-full pointer-events-none"
               >
                 {middleRing.map((client, index) => {
                   const angle = (index * 360) / middleRing.length + 22.5;
@@ -448,7 +448,7 @@ export default function ClientsSection() {
                       }}
                     >
                       <motion.div
-                        className="group relative z-10"
+                        className="group relative z-10 pointer-events-auto"
                         style={{ rotate: middleLogoRotate }}
                         whileHover={{ scale: 1.18, zIndex: 30 }}
                         transition={{ scale: { type: "spring", stiffness: 300, damping: 20 } }}
@@ -515,7 +515,7 @@ export default function ClientsSection() {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.6 }}
-              className="absolute w-[560px] h-[560px] md:w-[660px] md:h-[660px] rounded-full"
+              className="absolute w-[560px] h-[560px] md:w-[660px] md:h-[660px] rounded-full pointer-events-none"
               style={{ zIndex: getRingZIndex('outer') }}
             >
               {/* Ring border */}
@@ -523,7 +523,7 @@ export default function ClientsSection() {
               
               <motion.div
                 style={{ rotate: outerOrbitRotate }}
-                className="relative w-full h-full"
+                className="relative w-full h-full pointer-events-none"
               >
                 {outerRing.map((client, index) => {
                   const angle = (index * 360) / outerRing.length + 45;
@@ -541,7 +541,7 @@ export default function ClientsSection() {
                       }}
                     >
                       <motion.div
-                        className="group relative z-10"
+                        className="group relative z-10 pointer-events-auto"
                         style={{ rotate: outerLogoRotate }}
                         whileHover={{ scale: 1.12, zIndex: 20 }}
                         transition={{ scale: { type: "spring", stiffness: 300, damping: 20 } }}

@@ -79,7 +79,7 @@ export default function AdminShell({ children }: AdminShellProps) {
 
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 z-50 h-full w-64 bg-slate-900 border-r border-slate-800 transform transition-transform duration-200 lg:translate-x-0 ${
+        className={`fixed top-0 left-0 z-50 h-full w-64 bg-slate-900 border-r border-slate-800 flex flex-col transform transition-transform duration-200 lg:translate-x-0 ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
@@ -97,7 +97,7 @@ export default function AdminShell({ children }: AdminShellProps) {
           </button>
         </div>
 
-        <nav className="p-4 space-y-1">
+        <nav className="flex-1 overflow-y-auto p-4 space-y-1">
           {navItems.map((item) => {
             const Icon = item.icon;
             const active = isActive(item.href);
@@ -120,7 +120,7 @@ export default function AdminShell({ children }: AdminShellProps) {
           })}
         </nav>
 
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-slate-800">
+        <div className="p-4 border-t border-slate-800 shrink-0">
           <button
             onClick={handleLogout}
             disabled={loggingOut}
