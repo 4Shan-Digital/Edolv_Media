@@ -19,6 +19,7 @@ import {
   UserCog,
   ImageIcon,
   FolderOpen,
+  Video,
 } from 'lucide-react';
 
 interface AdminShellProps {
@@ -29,6 +30,7 @@ const navItems = [
   { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/admin/portfolio', label: 'Portfolio', icon: Film },
   { href: '/admin/thumbnails', label: 'Thumbnails', icon: ImageIcon },
+  { href: '/admin/reels', label: 'Reels', icon: Video },
   { href: '/admin/showreel', label: 'Showreel', icon: Clapperboard },
   { href: '/admin/about-video', label: 'About Video', icon: Play },
   { href: '/admin/team', label: 'Team Members', icon: UserCog },

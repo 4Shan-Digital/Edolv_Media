@@ -191,3 +191,23 @@ export const updateThumbnailSchema = createThumbnailSchema.partial().extend({
 
 export type CreateThumbnailInput = z.infer<typeof createThumbnailSchema>;
 export type UpdateThumbnailInput = z.infer<typeof updateThumbnailSchema>;
+
+// ============================================
+// Reels
+// ============================================
+
+export const createReelSchema = z.object({
+  title: z.string().min(1, 'Title is required').max(200),
+  videoUrl: z.string().url().optional(),
+  videoKey: z.string().optional(),
+  thumbnailUrl: z.string().url().optional(),
+  thumbnailKey: z.string().optional(),
+});
+
+export const updateReelSchema = createReelSchema.partial().extend({
+  isActive: z.boolean().optional(),
+  order: z.number().int().min(0).optional(),
+});
+
+export type CreateReelInput = z.infer<typeof createReelSchema>;
+export type UpdateReelInput = z.infer<typeof updateReelSchema>;

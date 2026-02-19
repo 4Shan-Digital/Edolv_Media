@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic';
 const presignedUrlSchema = z.object({
   fileName: z.string().min(1),
   contentType: z.string().min(1),
-  folder: z.enum(['portfolio', 'showreel', 'thumbnails', 'resumes', 'about-video', 'team']),
+  folder: z.enum(['portfolio', 'showreel', 'thumbnails', 'resumes', 'about-video', 'team', 'reels']),
 });
 
 /**

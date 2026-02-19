@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     description: 'Transform your vision into stunning reality with Edolv Media. Premium video editing, motion graphics, and post-production services.',
     images: [
       {
-        url: '/og-image.png',
+        url: 'https://edolv.com/og-image.png',
         width: 1200,
         height: 630,
         alt: 'Edolv Media - Premium Video Editing',
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Edolv Media | Premium Video Editing Services',
     description: 'Transform your vision into stunning reality with Edolv Media.',
-    images: ['/og-image.png'],
+    images: ['https://edolv.com/og-image.png'],
     creator: '@Edolvmedia',
   },
   robots: {

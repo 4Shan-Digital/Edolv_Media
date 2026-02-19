@@ -26,7 +26,7 @@ const r2Client = new S3Client({
   },
 });
 
-export type UploadFolder = 'portfolio' | 'showreel' | 'thumbnails' | 'resumes' | 'about-video' | 'team';
+export type UploadFolder = 'portfolio' | 'showreel' | 'thumbnails' | 'resumes' | 'about-video' | 'team' | 'reels';
 
 /**
  * Upload a file to R2.
