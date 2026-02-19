@@ -130,15 +130,12 @@ export default function PortfolioSection() {
               <p className="text-silver-500">No portfolio items yet.</p>
             </div>
           ) : (
-            <motion.div layout className="grid md:grid-cols-2 lg:grid-cols-3 gap-7">
-              <AnimatePresence mode="popLayout">
-                {portfolioItems.map((item, index) => (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-7">
+              {portfolioItems.map((item, index) => (
                   <motion.div
                     key={item._id}
-                    layout
                     initial={{ opacity: 0, y: 24 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
                     transition={{ duration: 0.45, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
                     className="group relative rounded-2xl overflow-hidden cursor-pointer bg-white border border-silver-100 shadow-soft hover:shadow-soft-lg transition-all duration-500 hover:-translate-y-1"
                     onMouseEnter={() => setHoveredItem(item._id)}
@@ -186,8 +183,7 @@ export default function PortfolioSection() {
                     <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: hoveredItem === item._id ? 1 : 0 }} transition={{ duration: 0.35 }} className="absolute bottom-0 left-0 right-0 h-[3px] bg-gradient-to-r from-primary-500 via-purple-500 to-indigo-500 origin-left" />
                   </motion.div>
                 ))}
-              </AnimatePresence>
-            </motion.div>
+            </div>
           )
         ) : activeTab === 'thumbnails' ? (
           thumbnailItems.length === 0 ? (
@@ -196,15 +192,12 @@ export default function PortfolioSection() {
               <p className="text-silver-500">No thumbnails yet.</p>
             </div>
           ) : (
-            <motion.div layout className="grid grid-cols-2 md:grid-cols-3 gap-7">
-              <AnimatePresence mode="popLayout">
-                {thumbnailItems.map((item, index) => (
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-7">
+              {thumbnailItems.map((item, index) => (
                   <motion.div
                     key={item._id}
-                    layout
                     initial={{ opacity: 0, y: 24 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
                     transition={{ duration: 0.45, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
                     className="group relative rounded-2xl overflow-hidden cursor-pointer bg-white border border-silver-100 shadow-soft hover:shadow-soft-lg transition-all duration-500 hover:-translate-y-1"
                     onClick={() => setLightboxImage(item)}
@@ -219,17 +212,10 @@ export default function PortfolioSection() {
                         </div>
                       )}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
-                      <div className="absolute top-3 left-3 z-10">
-                        <span className="px-3 py-1 rounded-full text-xs font-medium bg-white/90 text-primary-700 backdrop-blur-sm shadow-sm">{item.category}</span>
-                      </div>
-                    </div>
-                    <div className="p-4">
-                      <h3 className="text-silver-900 font-semibold text-base group-hover:text-primary-600 transition-colors line-clamp-1">{item.title}</h3>
                     </div>
                   </motion.div>
                 ))}
-              </AnimatePresence>
-            </motion.div>
+            </div>
           )
         ) : (
           /* REELS */
@@ -239,15 +225,12 @@ export default function PortfolioSection() {
               <p className="text-silver-500">No reels yet.</p>
             </div>
           ) : (
-            <motion.div layout className="grid grid-cols-2 md:grid-cols-3 gap-7">
-              <AnimatePresence mode="popLayout">
-                {reelItems.map((item, index) => (
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-7">
+              {reelItems.map((item, index) => (
                   <motion.div
                     key={item._id}
-                    layout
                     initial={{ opacity: 0, y: 24 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
                     transition={{ duration: 0.45, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
                     className="group relative rounded-2xl overflow-hidden cursor-pointer bg-white border border-silver-100 shadow-soft hover:shadow-soft-lg transition-all duration-500 hover:-translate-y-1"
                     onMouseEnter={() => setHoveredItem(item._id)}
@@ -284,8 +267,7 @@ export default function PortfolioSection() {
                     <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: hoveredItem === item._id ? 1 : 0 }} transition={{ duration: 0.35 }} className="absolute bottom-0 left-0 right-0 h-[3px] bg-gradient-to-r from-primary-500 via-purple-500 to-indigo-500 origin-left" />
                   </motion.div>
                 ))}
-              </AnimatePresence>
-            </motion.div>
+            </div>
           )
         )}
 

@@ -343,7 +343,7 @@ export default function AdminReelsPage() {
                 {/* Thumbnail Upload (optional) */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Cover Image <span className="text-gray-400">(optional)</span>
+                    Cover Image <span className="text-gray-400"></span>
                   </label>
                   <label className="flex items-center gap-3 p-3 border-2 border-dashed border-gray-200 rounded-xl cursor-pointer hover:border-purple-400 transition">
                     {thumbPreview ? (
@@ -353,7 +353,7 @@ export default function AdminReelsPage() {
                       <Film className="w-6 h-6 text-gray-400" />
                     )}
                     <span className="text-sm text-gray-500">
-                      {thumbFile ? thumbFile.name : 'Click to select cover image (optional)'}
+                      {thumbFile ? thumbFile.name : 'Click to select cover image'}
                     </span>
                     <input
                       type="file"
