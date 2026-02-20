@@ -173,8 +173,8 @@ export default function Footer() {
                 <div className="flex items-start gap-2 text-silver-400 text-xs">
                   <MapPin className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
                   <span>
-                    Shop 8 Palm City market<br />
-                    Mohali Punjab , 140301
+                    Shop no 8, First Floor Office, Palm City Market,<br />
+                    Mohali Punjab, India 140301
                   </span>
                 </div>
               </li>

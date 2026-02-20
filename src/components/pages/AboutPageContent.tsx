@@ -155,10 +155,13 @@ const milestones = [
   { year: 'Dec 2025', title: 'Official Office', description: 'First official Office in Mohali, Punjab' },
 ];
 
+const TEAM_PAGE_SIZE = 6;
+
 export default function AboutPageContent() {
   const [aboutVideo, setAboutVideo] = useState<AboutVideo | null>(null);
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
+  const [visibleTeamCount, setVisibleTeamCount] = useState(TEAM_PAGE_SIZE);
 
   useEffect(() => {
     // Fetch about video
@@ -328,7 +331,7 @@ export default function AboutPageContent() {
           </ScrollReveal>
 
           <StaggerContainer staggerDelay={0.1} className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {teamMembers.map((member) => (
+            {teamMembers.slice(0, visibleTeamCount).map((member) => (
               <StaggerItem key={member._id}>
                 <motion.div
                   whileHover={{ y: -5 }}
@@ -398,6 +401,24 @@ export default function AboutPageContent() {
               </StaggerItem>
             ))}
           </StaggerContainer>
+
+          {/* Show More button */}
+          {teamMembers.length > visibleTeamCount && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex justify-center mt-10"
+            >
+              <motion.button
+                whileHover={{ scale: 1.04, y: -2 }}
+                whileTap={{ scale: 0.97 }}
+                onClick={() => setVisibleTeamCount((c) => c + TEAM_PAGE_SIZE)}
+                className="btn-primary px-8 py-3 text-base"
+              >
+                Show More Members
+              </motion.button>
+            </motion.div>
+          )}
         </div>
       </section>
       )}

@@ -72,7 +72,7 @@ const contactInfo = [
   {
     icon: MapPin,
     title: 'Visit Us',
-    value: 'Shop 8 Palm City market, Mohali Punjab ,140301',
+    value: 'Shop no 8, First Floor Office, Palm City Market, Mohali Punjab, India 140301',
     link: '#',
   },
 ];

@@ -590,14 +590,13 @@ export default function CareersPageContent() {
               />
               <div className="relative">
                 <h3 className="text-2xl font-bold text-gray-900 mb-3">
-                  Don't See Your <span className="gradient-text">Perfect Role</span>?
+                  Don't see the <span className="gradient-text">Perfect Role</span> for You?
                 </h3>
                 <p className="text-gray-600 mb-4">
-                  We're always interested in meeting talented people. Send us your resume and portfolio, 
-                  and we'll keep you in mind for future opportunities.
+                  We're always excited to connect with talented individuals. Share your resume and portfolio with us, and we'll consider you for future opportunities.
                 </p>
                 <p className="text-gray-800 font-semibold text-lg">
-                  Send your resume to{' '}
+                  Email your details to:{' '}
                   <a href="mailto:connect@edolv.com" className="gradient-text hover:underline">
                     connect@edolv.com
                   </a>
