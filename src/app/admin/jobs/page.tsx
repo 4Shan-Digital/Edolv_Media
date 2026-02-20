@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import AdminShell from '@/components/admin/AdminShell';
-import { Plus, Edit, Trash2, Eye, EyeOff, X, Briefcase } from 'lucide-react';
+import { Plus, Edit, Trash2, Eye, EyeOff, X, Briefcase, AlertCircle, ArrowUp, ArrowDown } from 'lucide-react';
 
 interface JobItem {
   _id: string;
@@ -14,6 +14,8 @@ interface JobItem {
   requirements: string[];
   responsibilities: string[];
   isActive: boolean;
+  isUrgent: boolean;
+  priority: number;
   createdAt: string;
 }
 
@@ -35,6 +37,8 @@ export default function AdminJobsPage() {
   const [description, setDescription] = useState('');
   const [requirements, setRequirements] = useState<string[]>(['']);
   const [responsibilities, setResponsibilities] = useState<string[]>(['']);
+  const [priority, setPriority] = useState<number>(0);
+  const [isUrgent, setIsUrgent] = useState<boolean>(false);
 
   const fetchJobs = useCallback(async () => {
     try {
@@ -60,6 +64,8 @@ export default function AdminJobsPage() {
     setDescription('');
     setRequirements(['']);
     setResponsibilities(['']);
+    setPriority(0);
+    setIsUrgent(false);
     setEditing(null);
     setError('');
   };
@@ -73,6 +79,8 @@ export default function AdminJobsPage() {
     setDescription(item.description);
     setRequirements(item.requirements.length ? item.requirements : ['']);
     setResponsibilities(item.responsibilities.length ? item.responsibilities : ['']);
+    setPriority(item.priority ?? 0);
+    setIsUrgent(item.isUrgent ?? false);
     setShowForm(true);
     setError('');
   };
@@ -91,6 +99,8 @@ export default function AdminJobsPage() {
         description,
         requirements: requirements.filter((r) => r.trim()),
         responsibilities: responsibilities.filter((r) => r.trim()),
+        priority,
+        isUrgent,
       };
 
       if (editing) {
@@ -130,6 +140,45 @@ export default function AdminJobsPage() {
       if (data.success) setItems((prev) => prev.filter((item) => item._id !== id));
     } catch (err) {
       console.error('Failed to delete:', err);
+    }
+  };
+
+  const handleToggleUrgent = async (item: JobItem) => {
+    try {
+      const res = await fetch(`/api/admin/jobs/${item._id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ isUrgent: !item.isUrgent }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setItems((prev) =>
+          prev.map((i) => (i._id === item._id ? { ...i, isUrgent: !i.isUrgent } : i))
+        );
+      }
+    } catch (err) {
+      console.error('Failed to toggle urgent:', err);
+    }
+  };
+
+  const handleChangePriority = async (item: JobItem, delta: number) => {
+    const newPriority = Math.max(0, (item.priority ?? 0) + delta);
+    try {
+      const res = await fetch(`/api/admin/jobs/${item._id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ priority: newPriority }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setItems((prev) =>
+          prev
+            .map((i) => (i._id === item._id ? { ...i, priority: newPriority } : i))
+            .sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0))
+        );
+      }
+    } catch (err) {
+      console.error('Failed to change priority:', err);
     }
   };
 
@@ -271,6 +320,40 @@ export default function AdminJobsPage() {
                   />
                 </div>
 
+                {/* Priority & Urgent */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-300 mb-1.5">
+                      Priority
+                      <span className="ml-1 text-slate-500 font-normal">(higher = shows first)</span>
+                    </label>
+                    <input
+                      type="number"
+                      min="0"
+                      max="100"
+                      value={priority}
+                      onChange={(e) => setPriority(Number(e.target.value))}
+                      className="w-full px-4 py-2.5 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500 text-sm"
+                      placeholder="0"
+                    />
+                  </div>
+                  <div className="flex flex-col justify-end">
+                    <label className="block text-sm font-medium text-slate-300 mb-1.5">Urgent Hiring</label>
+                    <button
+                      type="button"
+                      onClick={() => setIsUrgent((v) => !v)}
+                      className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border text-sm font-medium transition ${
+                        isUrgent
+                          ? 'bg-red-500/20 border-red-500/50 text-red-400'
+                          : 'bg-slate-800 border-slate-700 text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      <AlertCircle className="w-4 h-4" />
+                      {isUrgent ? 'Marked as Urgent' : 'Mark as Urgent'}
+                    </button>
+                  </div>
+                </div>
+
                 {/* Requirements */}
                 <div>
                   <label className="block text-sm font-medium text-slate-300 mb-1.5">Requirements</label>
@@ -385,26 +468,68 @@ export default function AdminJobsPage() {
                 }`}
               >
                 <div className="flex items-start justify-between">
-                  <div>
-                    <div className="flex items-center gap-2 flex-wrap">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap mb-1">
                       <h3 className="text-base font-semibold text-white">{item.title}</h3>
+                      {item.isUrgent && (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-red-500/20 border border-red-500/30 text-red-400 text-xs rounded-lg font-semibold">
+                          <AlertCircle className="w-3 h-3" /> Urgent
+                        </span>
+                      )}
+                      {(item.priority ?? 0) > 0 && (
+                        <span className="px-2 py-0.5 bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs rounded-lg">
+                          Priority: {item.priority}
+                        </span>
+                      )}
                       {!item.isActive && (
-                        <span className="px-2 py-0.5 bg-red-500/20 text-red-400 text-xs rounded-lg">
+                        <span className="px-2 py-0.5 bg-slate-700 text-slate-400 text-xs rounded-lg">
                           Inactive
                         </span>
                       )}
                     </div>
-                    <div className="flex items-center gap-3 mt-1 text-sm text-slate-400">
+                    <div className="flex items-center gap-3 mt-0.5 text-xs text-slate-400">
                       <span>{item.department}</span>
                       <span>•</span>
                       <span>{item.location}</span>
                       <span>•</span>
                       <span>{item.type}</span>
                     </div>
-                    <p className="text-sm text-slate-500 mt-2 line-clamp-2">{item.description}</p>
-                    <p className="text-xs text-slate-600 mt-2">
+                    <p className="text-sm text-slate-500 mt-1.5 line-clamp-2">{item.description}</p>
+                    <p className="text-xs text-slate-600 mt-1.5">
                       {item.requirements.length} requirements • {item.responsibilities.length} responsibilities
                     </p>
+                    {/* Quick Priority Controls */}
+                    <div className="flex items-center gap-2 mt-2">
+                      <span className="text-xs text-slate-500">Priority:</span>
+                      <button
+                        onClick={() => handleChangePriority(item, -1)}
+                        disabled={(item.priority ?? 0) <= 0}
+                        className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white disabled:opacity-30 transition"
+                        title="Lower priority"
+                      >
+                        <ArrowDown className="w-3 h-3" />
+                      </button>
+                      <span className="text-xs text-white font-mono w-5 text-center">{item.priority ?? 0}</span>
+                      <button
+                        onClick={() => handleChangePriority(item, 1)}
+                        className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition"
+                        title="Raise priority"
+                      >
+                        <ArrowUp className="w-3 h-3" />
+                      </button>
+                      <button
+                        onClick={() => handleToggleUrgent(item)}
+                        className={`ml-2 flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium transition ${
+                          item.isUrgent
+                            ? 'bg-red-500/20 text-red-400 hover:bg-red-500/30'
+                            : 'bg-slate-800 text-slate-400 hover:text-orange-400'
+                        }`}
+                        title={item.isUrgent ? 'Remove urgent' : 'Mark as urgent'}
+                      >
+                        <AlertCircle className="w-3 h-3" />
+                        {item.isUrgent ? 'Remove Urgent' : 'Mark Urgent'}
+                      </button>
+                    </div>
                   </div>
 
                   <div className="flex items-center gap-1 ml-4 flex-shrink-0">

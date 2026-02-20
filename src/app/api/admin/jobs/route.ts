@@ -17,7 +17,7 @@ export async function GET() {
 
     await connectDB();
 
-    const jobs = await Job.find().sort({ createdAt: -1 }).lean();
+    const jobs = await Job.find().sort({ priority: -1, createdAt: -1 }).lean();
     return apiSuccess(jobs);
   } catch (error) {
     return handleApiError(error);

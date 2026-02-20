@@ -231,7 +231,7 @@ export default function AboutPageContent() {
             <ScrollReveal direction="right">
               <div className="relative">
                 <div className="absolute -inset-3 bg-gradient-to-br from-primary-100 via-silver-100 to-indigo-100 rounded-3xl opacity-60" />
-                <div className="relative aspect-video rounded-2xl overflow-hidden bg-silver-200 shadow-soft-xl">
+                <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-silver-200 shadow-soft-xl">
                   {aboutVideo ? (
                     <>
                       <img

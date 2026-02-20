@@ -9,6 +9,8 @@ export interface IJob extends Document {
   requirements: string[];
   responsibilities: string[];
   isActive: boolean;
+  isUrgent: boolean;
+  priority: number;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -31,6 +33,8 @@ const jobSchema = new Schema<IJob>(
     requirements: [{ type: String, required: true, trim: true }],
     responsibilities: [{ type: String, required: true, trim: true }],
     isActive: { type: Boolean, default: true },
+    isUrgent: { type: Boolean, default: false },
+    priority: { type: Number, default: 0 },
   },
   {
     timestamps: true,
@@ -38,7 +42,7 @@ const jobSchema = new Schema<IJob>(
 );
 
 jobSchema.index({ department: 1, isActive: 1 });
-jobSchema.index({ isActive: 1, createdAt: -1 });
+jobSchema.index({ isActive: 1, isUrgent: -1, priority: -1, createdAt: -1 });
 
 const Job: Model<IJob> =
   mongoose.models.Job || mongoose.model<IJob>('Job', jobSchema);

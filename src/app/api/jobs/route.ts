@@ -22,7 +22,7 @@ export async function GET(request: Request) {
     }
 
     const jobs = await Job.find(filter)
-      .sort({ createdAt: -1 })
+      .sort({ isUrgent: -1, priority: -1, createdAt: -1 })
       .select('-__v')
       .lean();
 

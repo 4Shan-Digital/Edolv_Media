@@ -19,7 +19,10 @@ import {
   X,
   Check,
   Upload,
-  FileText
+  FileText,
+  AlertCircle,
+  CheckCircle2,
+  ListChecks
 } from 'lucide-react';
 import { ScrollReveal } from '@/components/ui/Animations';
 
@@ -32,6 +35,8 @@ interface Job {
   description: string;
   requirements: string[];
   responsibilities: string[];
+  isUrgent?: boolean;
+  priority?: number;
 }
 
 const perks = [
@@ -52,14 +57,12 @@ const perks = [
   },
 ];
 
-const departments = ['All', 'Production', 'Creative', 'Post-Production', 'Operations'];
-
 export default function CareersPageContent() {
-  const [selectedDepartment, setSelectedDepartment] = useState<string>('All');
   const [hoveredJob, setHoveredJob] = useState<string | null>(null);
   const [jobs, setJobs] = useState<Job[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [applyingJob, setApplyingJob] = useState<Job | null>(null);
+  const [viewingJob, setViewingJob] = useState<Job | null>(null);
   const [applicationForm, setApplicationForm] = useState({
     name: '',
     email: '',
@@ -75,12 +78,20 @@ export default function CareersPageContent() {
   useEffect(() => {
     async function fetchJobs() {
       try {
-        const params = new URLSearchParams();
-        if (selectedDepartment !== 'All') params.set('department', selectedDepartment);
-        const res = await fetch(`/api/jobs?${params.toString()}`);
+        const res = await fetch('/api/jobs');
         const data = await res.json();
         if (data.success) {
-          setJobs(data.data);
+          // Enforce correct order client-side as a safeguard:
+          // 1. urgent jobs first, 2. higher priority first, 3. newest first
+          const sorted = [...data.data].sort((a: Job, b: Job) => {
+            if (a.isUrgent && !b.isUrgent) return -1;
+            if (!a.isUrgent && b.isUrgent) return 1;
+            const pa = a.priority ?? 0;
+            const pb = b.priority ?? 0;
+            if (pb !== pa) return pb - pa;
+            return 0;
+          });
+          setJobs(sorted);
         }
       } catch (error) {
         console.error('Failed to fetch jobs:', error);
@@ -90,9 +101,7 @@ export default function CareersPageContent() {
     }
     setIsLoading(true);
     fetchJobs();
-  }, [selectedDepartment]);
-
-  const filteredJobs = jobs;
+  }, []);
 
   const handleApplicationSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -368,7 +377,7 @@ export default function CareersPageContent() {
         />
 
         <div className="container-custom relative">
-          <ScrollReveal className="text-center mb-12">
+          <ScrollReveal className="text-center mb-8">
             <motion.div
               initial={{ scale: 0, rotate: -180 }}
               whileInView={{ scale: 1, rotate: 0 }}
@@ -378,31 +387,12 @@ export default function CareersPageContent() {
             >
               <Briefcase className="w-8 h-8 text-white" />
             </motion.div>
-            <h2 className="heading-lg text-gray-900 mb-6">
+            <h2 className="heading-lg text-gray-900 mb-4">
               Open Your Next <span className="gradient-text">Chapter</span>
             </h2>
-            <p className="text-body max-w-2xl mx-auto mb-8">
+            <p className="text-body max-w-2xl mx-auto">
               Ready to make an impact? Explore our open positions and find your perfect role.
             </p>
-            
-            {/* Department Filter */}
-            <div className="flex flex-wrap justify-center gap-3">
-              {departments.map((dept) => (
-                <motion.button
-                  key={dept}
-                  onClick={() => setSelectedDepartment(dept)}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className={`px-6 py-2.5 rounded-full font-medium transition-all ${
-                    selectedDepartment === dept
-                      ? 'bg-gradient-to-r from-primary-500 to-indigo-600 text-white shadow-lg shadow-primary-500/30'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                  }`}
-                >
-                  {dept}
-                </motion.button>
-              ))}
-            </div>
           </ScrollReveal>
 
           {/* Jobs Grid */}
@@ -413,10 +403,10 @@ export default function CareersPageContent() {
           ) : (
           <motion.div 
             layout
-            className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12"
+            className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6"
           >
             <AnimatePresence mode="popLayout">
-              {filteredJobs.map((job, index) => (
+              {jobs.map((job, index) => (
                 <motion.div
                   key={job._id}
                   layout
@@ -449,57 +439,112 @@ export default function CareersPageContent() {
                     {/* Corner decoration */}
                     <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-primary-100/20 to-transparent rounded-bl-full" />
                     
-                    <div className="relative">
-                      {/* Department Badge */}
-                      <motion.div
-                        whileHover={{ scale: 1.1, rotate: 5 }}
-                        className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-primary-500 to-indigo-600 text-white text-xs font-medium mb-4 shadow-lg shadow-primary-500/30"
-                      >
-                        <Briefcase className="w-3.5 h-3.5" />
-                        {job.department}
-                      </motion.div>
+                    <div className="relative flex flex-col h-full">
+                      {/* Top badges row */}
+                      <div className="flex items-center gap-2 flex-wrap mb-4">
+                        <motion.div
+                          whileHover={{ scale: 1.1, rotate: 5 }}
+                          className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-primary-500 to-indigo-600 text-white text-xs font-medium shadow-lg shadow-primary-500/30"
+                        >
+                          <Briefcase className="w-3.5 h-3.5" />
+                          {job.department}
+                        </motion.div>
+                        {job.isUrgent && (
+                          <motion.div
+                            animate={{ scale: [1, 1.05, 1] }}
+                            transition={{ duration: 1.5, repeat: Infinity }}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-red-500 to-orange-500 text-white text-xs font-bold shadow-lg shadow-red-500/40"
+                          >
+                            <AlertCircle className="w-3.5 h-3.5" />
+                            Urgent Hiring
+                          </motion.div>
+                        )}
+                      </div>
 
                       {/* Job Title */}
-                      <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:gradient-text transition-all">
+                      <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:gradient-text transition-all">
                         {job.title}
                       </h3>
+
+                      {/* Meta Info */}
+                      <div className="flex flex-wrap gap-x-4 gap-y-1 mb-3">
+                        <div className="flex items-center gap-1.5 text-xs text-gray-500">
+                          <MapPin className="w-3.5 h-3.5 text-primary-500" />
+                          {job.location}
+                        </div>
+                        <div className="flex items-center gap-1.5 text-xs text-gray-500">
+                          <Clock className="w-3.5 h-3.5 text-primary-500" />
+                          {job.type}
+                        </div>
+                      </div>
 
                       {/* Description */}
                       <p className="text-sm text-gray-600 mb-4 line-clamp-2">
                         {job.description}
                       </p>
 
-                      {/* Meta Info */}
-                      <div className="space-y-2 mb-6">
-                        <div className="flex items-center gap-2 text-sm text-gray-500">
-                          <MapPin className="w-4 h-4 text-primary-500" />
-                          {job.location}
+                      {/* Requirements */}
+                      {job.requirements && job.requirements.length > 0 && (
+                        <div className="mb-3">
+                          <div className="flex items-center gap-1.5 mb-1.5">
+                            <ListChecks className="w-3.5 h-3.5 text-violet-500" />
+                            <span className="text-xs font-semibold text-gray-700 uppercase tracking-wide">Requirements</span>
+                          </div>
+                          <ul className="space-y-1">
+                            {job.requirements.slice(0, 3).map((req, i) => (
+                              <li key={i} className="flex items-start gap-1.5 text-xs text-gray-600">
+                                <span className="mt-0.5 w-1.5 h-1.5 rounded-full bg-violet-400 flex-shrink-0" />
+                                <span className="line-clamp-1">{req}</span>
+                              </li>
+                            ))}
+                            {job.requirements.length > 3 && (
+                              <li className="text-xs text-violet-500 font-medium pl-3">+{job.requirements.length - 3} more</li>
+                            )}
+                          </ul>
                         </div>
-                        <div className="flex items-center gap-2 text-sm text-gray-500">
-                          <Clock className="w-4 h-4 text-primary-500" />
-                          {job.type}
+                      )}
+
+                      {/* Responsibilities */}
+                      {job.responsibilities && job.responsibilities.length > 0 && (
+                        <div className="mb-4">
+                          <div className="flex items-center gap-1.5 mb-1.5">
+                            <CheckCircle2 className="w-3.5 h-3.5 text-indigo-500" />
+                            <span className="text-xs font-semibold text-gray-700 uppercase tracking-wide">Responsibilities</span>
+                          </div>
+                          <ul className="space-y-1">
+                            {job.responsibilities.slice(0, 3).map((resp, i) => (
+                              <li key={i} className="flex items-start gap-1.5 text-xs text-gray-600">
+                                <span className="mt-0.5 w-1.5 h-1.5 rounded-full bg-indigo-400 flex-shrink-0" />
+                                <span className="line-clamp-1">{resp}</span>
+                              </li>
+                            ))}
+                            {job.responsibilities.length > 3 && (
+                              <li className="text-xs text-indigo-500 font-medium pl-3">+{job.responsibilities.length - 3} more</li>
+                            )}
+                          </ul>
                         </div>
-                      </div>
+                      )}
 
-                      {/* View Details Button */}
-                      <motion.button
-                        onClick={() => setApplyingJob(job)}
-                        whileHover={{ scale: 1.02, x: 5 }}
-                        whileTap={{ scale: 0.98 }}
-                        className="w-full flex items-center justify-between px-5 py-3 rounded-xl bg-gradient-to-r from-primary-500 to-indigo-600 text-white font-medium shadow-lg shadow-primary-500/30 hover:shadow-xl hover:shadow-primary-500/40 transition-all"
-                      >
-                        <span>Apply Now</span>
-                        <ArrowRight className="w-5 h-5" />
-                      </motion.button>
-
-                      {/* Quick Info Pills */}
-                      <div className="flex flex-wrap gap-2 mt-4">
-                        <span className="px-3 py-1 rounded-full bg-violet-100 text-violet-700 text-xs font-medium">
-                          {job.requirements.length} Requirements
-                        </span>
-                        <span className="px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 text-xs font-medium">
-                          {job.responsibilities.length} Responsibilities
-                        </span>
+                      {/* Buttons Row */}
+                      <div className="flex gap-2 mt-auto">
+                        <motion.button
+                          onClick={() => setViewingJob(job)}
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                          className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border-2 border-primary-500/40 text-primary-600 font-medium text-sm hover:bg-primary-50 transition-all"
+                        >
+                          <FileText className="w-4 h-4" />
+                          View Full JD
+                        </motion.button>
+                        <motion.button
+                          onClick={() => setApplyingJob(job)}
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                          className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-primary-500 to-indigo-600 text-white font-medium text-sm shadow-lg shadow-primary-500/30 hover:shadow-xl hover:shadow-primary-500/40 transition-all"
+                        >
+                          Apply Now
+                          <ArrowRight className="w-4 h-4" />
+                        </motion.button>
                       </div>
                     </div>
 
@@ -518,7 +563,7 @@ export default function CareersPageContent() {
           )}
 
           {/* No results message */}
-          {filteredJobs.length === 0 && (
+          {jobs.length === 0 && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -562,6 +607,123 @@ export default function CareersPageContent() {
           </ScrollReveal>
         </div>
       </section>
+
+      {/* Full JD Modal */}
+      <AnimatePresence>
+        {viewingJob && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+            onClick={() => setViewingJob(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              transition={{ type: 'spring', damping: 25 }}
+              className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-white rounded-2xl shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Header */}
+              <div className="sticky top-0 z-10 bg-white border-b border-gray-100 px-6 py-4 flex items-start justify-between rounded-t-2xl">
+                <div className="flex-1 pr-4">
+                  <div className="flex items-center gap-2 flex-wrap mb-1">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-primary-500 to-indigo-600 text-white text-xs font-medium">
+                      <Briefcase className="w-3 h-3" />
+                      {viewingJob.department}
+                    </span>
+                    {viewingJob.isUrgent && (
+                      <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-gradient-to-r from-red-500 to-orange-500 text-white text-xs font-bold">
+                        <AlertCircle className="w-3 h-3" />
+                        Urgent Hiring
+                      </span>
+                    )}
+                  </div>
+                  <h2 className="text-xl font-bold text-gray-900 mt-1">{viewingJob.title}</h2>
+                  <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1">
+                    <span className="flex items-center gap-1.5 text-xs text-gray-500">
+                      <MapPin className="w-3.5 h-3.5 text-primary-500" />{viewingJob.location}
+                    </span>
+                    <span className="flex items-center gap-1.5 text-xs text-gray-500">
+                      <Clock className="w-3.5 h-3.5 text-primary-500" />{viewingJob.type}
+                    </span>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setViewingJob(null)}
+                  className="flex-shrink-0 w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
+                >
+                  <X className="w-4 h-4 text-gray-600" />
+                </button>
+              </div>
+
+              {/* Body */}
+              <div className="px-6 py-5 space-y-6">
+                {/* Description */}
+                <div>
+                  <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-2">About the Role</h3>
+                  <p className="text-sm text-gray-600 leading-relaxed">{viewingJob.description}</p>
+                </div>
+
+                {/* Requirements */}
+                {viewingJob.requirements && viewingJob.requirements.length > 0 && (
+                  <div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="w-6 h-6 rounded-lg bg-violet-100 flex items-center justify-center flex-shrink-0">
+                        <ListChecks className="w-3.5 h-3.5 text-violet-600" />
+                      </div>
+                      <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider">Requirements</h3>
+                    </div>
+                    <ul className="space-y-2">
+                      {viewingJob.requirements.map((req, i) => (
+                        <li key={i} className="flex items-start gap-2.5 text-sm text-gray-700">
+                          <span className="mt-1.5 w-2 h-2 rounded-full bg-violet-400 flex-shrink-0" />
+                          {req}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* Responsibilities */}
+                {viewingJob.responsibilities && viewingJob.responsibilities.length > 0 && (
+                  <div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="w-6 h-6 rounded-lg bg-indigo-100 flex items-center justify-center flex-shrink-0">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-indigo-600" />
+                      </div>
+                      <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider">Responsibilities</h3>
+                    </div>
+                    <ul className="space-y-2">
+                      {viewingJob.responsibilities.map((resp, i) => (
+                        <li key={i} className="flex items-start gap-2.5 text-sm text-gray-700">
+                          <span className="mt-1.5 w-2 h-2 rounded-full bg-indigo-400 flex-shrink-0" />
+                          {resp}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+
+              {/* Footer CTA */}
+              <div className="sticky bottom-0 bg-white border-t border-gray-100 px-6 py-4 rounded-b-2xl">
+                <motion.button
+                  onClick={() => { setViewingJob(null); setApplyingJob(viewingJob); }}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-gradient-to-r from-primary-500 to-indigo-600 text-white font-semibold shadow-lg shadow-primary-500/30 hover:shadow-xl transition-all"
+                >
+                  Apply for this Role
+                  <ArrowRight className="w-5 h-5" />
+                </motion.button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Application Modal */}
       <AnimatePresence>

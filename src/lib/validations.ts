@@ -50,6 +50,8 @@ export const createJobSchema = z.object({
   requirements: z.array(z.string().min(1)).min(1, 'At least one requirement is needed'),
   responsibilities: z.array(z.string().min(1)).min(1, 'At least one responsibility is needed'),
   isActive: z.boolean().default(true),
+  isUrgent: z.boolean().default(false).optional(),
+  priority: z.number().int().min(0).max(100).default(0).optional(),
 });
 
 export const updateJobSchema = createJobSchema.partial();
