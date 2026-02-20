@@ -10,7 +10,10 @@ import {
   Zap,
   Award,
   ArrowRight,
-  Play
+  Play,
+  Linkedin,
+  Twitter,
+  Instagram
 } from 'lucide-react';
 import { ScrollReveal, StaggerContainer, StaggerItem } from '@/components/ui/Animations';
 import VideoPlayerModal from '@/components/ui/VideoPlayerModal';
@@ -144,17 +147,17 @@ const team: TeamMember[] = [
 */
 
 const milestones = [
-  { year: '2014', title: 'Founded', description: 'Edolv Media was born in a small studio with a big vision.' },
-  { year: '2016', title: 'First Major Client', description: 'Landed our first Fortune 500 client and expanded our team.' },
-  { year: '2018', title: 'Award Winning', description: 'Won our first industry award for documentary editing.' },
-  { year: '2020', title: 'Global Expansion', description: 'Expanded to serve clients across 20+ countries.' },
-  { year: '2022', title: '500+ Projects', description: 'Celebrated completion of over 500 successful projects.' },
-  { year: '2024', title: 'Industry Leader', description: 'Recognized as a leader in premium video production.' },
+  { year: 'Nov 2023', title: 'Founded', description: 'Edolv Media was born in a small studio with a big vision.' },
+  { year: 'June 2024', title: '100th Client', description: 'Completed onboarding for 100th Client' },
+  { year: 'Dec 2024', title: 'Offline Presence', description: 'First offline presence in Gurgaon' },
+  { year: 'May 2025', title: 'Global Expansion', description: ' Global Expansion, serving clients from 5+ countries.' },
+  { year: 'June 2025', title: 'Major Client', description: 'Got our first Major Client and expanded our team' },
+  { year: 'Dec 2025', title: 'Official Office', description: 'First official Office in Mohali, Punjab' },
 ];
 
 export default function AboutPageContent() {
   const [aboutVideo, setAboutVideo] = useState<AboutVideo | null>(null);
-  // const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]); // Commented out - Team section disabled
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
 
   useEffect(() => {
@@ -171,23 +174,20 @@ export default function AboutPageContent() {
       }
     };
 
-    // Fetch team members - Commented out since Team section is disabled
-    /* const fetchTeamMembers = async () => {
+    const fetchTeamMembers = async () => {
       try {
         const res = await fetch('/api/team');
         const data = await res.json();
-        console.log('Team API Response:', data);
         if (data.success && data.data) {
-          console.log('Setting team members:', data.data);
           setTeamMembers(data.data);
         }
       } catch (err) {
         console.error('Failed to fetch team members:', err);
       }
-    }; */
+    };
 
     fetchAboutVideo();
-    // fetchTeamMembers(); // Commented out - Team section disabled
+    fetchTeamMembers();
   }, []);
 
   return (
@@ -311,11 +311,12 @@ export default function AboutPageContent() {
         </div>
       </section>
 
-      {/* Team Section - Commented out for now
+      {/* Team Section */}
+      {teamMembers.length > 0 && (
       <section className="py-14 md:py-18">
         <div className="container-custom">
           <ScrollReveal className="text-center mb-10">
-            <span className="inline-block text-sm font-medium text-primary-600 uppercase tracking-wider mb-4">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary-50 border border-primary-100 text-sm text-primary-700 font-medium mb-3">
               Our Team
             </span>
             <h2 className="heading-lg text-silver-900 mb-4">
@@ -327,11 +328,8 @@ export default function AboutPageContent() {
           </ScrollReveal>
 
           <StaggerContainer staggerDelay={0.1} className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {(() => {
-              const displayTeam = teamMembers.length > 0 ? teamMembers : team;
-              console.log('Displaying team:', displayTeam.length, 'members', displayTeam.map(m => ({ name: m.name, imageUrl: m.imageUrl })));
-              return displayTeam.map((member) => (
-              <StaggerItem key={member._id || member.name}>
+            {teamMembers.map((member) => (
+              <StaggerItem key={member._id}>
                 <motion.div
                   whileHover={{ y: -5 }}
                   className="group bg-silver-50 rounded-2xl p-6 hover:bg-white hover:shadow-soft-lg transition-all duration-300"
@@ -347,7 +345,6 @@ export default function AboutPageContent() {
                           target.style.display = 'none';
                           const fallback = target.nextElementSibling as HTMLElement;
                           if (fallback) fallback.style.display = 'flex';
-                          console.log('Failed to load team member image for', member.name, ':', member.imageUrl);
                         }}
                       />
                     ) : null}
@@ -355,11 +352,7 @@ export default function AboutPageContent() {
                       <span className="text-6xl font-bold text-white/50">{member.name.charAt(0)}</span>
                     </div>
                     {member.social && (member.social.linkedin || member.social.twitter || member.social.instagram) && (
-                      <motion.div
-                        initial={{ opacity: 0 }}
-                        whileHover={{ opacity: 1 }}
-                        className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end justify-center pb-4 opacity-0 group-hover:opacity-100 transition-opacity"
-                      >
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end justify-center pb-4 opacity-0 group-hover:opacity-100 transition-opacity">
                         <div className="flex gap-2">
                           {member.social.linkedin && (
                             <a
@@ -392,7 +385,7 @@ export default function AboutPageContent() {
                             </a>
                           )}
                         </div>
-                      </motion.div>
+                      </div>
                     )}
                   </div>
 
@@ -403,12 +396,11 @@ export default function AboutPageContent() {
                   <p className="text-silver-600 text-sm">{member.bio}</p>
                 </motion.div>
               </StaggerItem>
-            ));
-            })()}
+            ))}
           </StaggerContainer>
         </div>
       </section>
-      */}
+      )}
 
       {/* Timeline Section - Zigzag Cards */}
       <section className="py-10 md:py-12 bg-silver-50 overflow-hidden">
