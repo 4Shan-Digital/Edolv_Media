@@ -57,15 +57,15 @@ export default function Footer() {
         <div className="absolute -bottom-1/2 -left-1/4 w-96 h-96 bg-indigo-500/5 rounded-full blur-3xl" />
       </div>
 
-      <div className="relative container-custom pt-12 pb-6">
+      <div className="relative container-custom pt-6 md:pt-12 pb-3 md:pb-6">
         {/* Main Footer Content */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-6 mb-10">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-5 gap-4 md:gap-6 mb-5 md:mb-10">
           {/* Brand Column */}
-          <div className="lg:col-span-2">
-            <Link href="/" className="inline-block mb-4">
+          <div className="col-span-2 lg:col-span-2">
+            <Link href="/" className="inline-block mb-2 md:mb-4">
               <div className="flex items-center gap-2">
                 {/* Logo Image */}
-                <div className="relative w-12 h-12 md:w-14 md:h-14 scale-[1.8] md:scale-[2]">
+                <div className="relative w-10 h-10 md:w-14 md:h-14 scale-[1.5] md:scale-[2]">
                   <Image
                     src="/images/E logo.png"
                     alt="Edolv Media"
@@ -84,7 +84,7 @@ export default function Footer() {
                 </div>
               </div>
             </Link>
-            <p className="text-silver-400 max-w-sm mb-4 leading-relaxed text-sm">
+            <p className="text-silver-400 max-w-sm mb-2 md:mb-4 leading-relaxed text-xs md:text-sm">
               We craft compelling visual stories that captivate audiences and elevate brands. 
               Premium video editing services for creators and businesses worldwide.
             </p>
@@ -109,10 +109,10 @@ export default function Footer() {
 
           {/* Services */}
           <div>
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-white mb-3">
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-white mb-1.5 md:mb-3">
               Services
             </h4>
-            <ul className="space-y-2">
+            <ul className="space-y-1 md:space-y-2">
               {footerLinks.services.map((link) => (
                 <li key={link.label}>
                   <Link
@@ -128,10 +128,10 @@ export default function Footer() {
 
           {/* Company */}
           <div>
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-white mb-3">
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-white mb-1.5 md:mb-3">
               Company
             </h4>
-            <ul className="space-y-2">
+            <ul className="space-y-1 md:space-y-2">
               {footerLinks.company.map((link) => (
                 <li key={link.label}>
                   <Link
@@ -146,11 +146,11 @@ export default function Footer() {
           </div>
 
           {/* Contact Info */}
-          <div>
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-white mb-3">
+          <div className="col-span-2 md:col-span-1">
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-white mb-1.5 md:mb-3">
               Contact
             </h4>
-            <ul className="space-y-2">
+            <ul className="space-y-1.5 md:space-y-2">
               <li>
                 <a
                   href="mailto:connect@edolv.com"
@@ -183,7 +183,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-silver-500">
+        <div className="pt-3 md:pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-2 md:gap-3 text-xs text-silver-500">
           <p className="flex items-center gap-1">
             © {currentYear} 
             

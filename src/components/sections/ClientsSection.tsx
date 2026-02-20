@@ -181,6 +181,7 @@ export default function ClientsSection() {
   const [activeRing, setActiveRing] = useState<'inner' | 'middle' | 'outer' | null>(null);
   const [hoveredClient, setHoveredClient] = useState<string | null>(null);
   const [hoveredRing, setHoveredRing] = useState<'inner' | 'middle' | 'outer' | null>(null);
+  const [mobileActiveClient, setMobileActiveClient] = useState<string | null>(null);
   const innerOrbitRotate = useMotionValue(0);
   const innerLogoRotate = useMotionValue(0);
   const middleOrbitRotate = useMotionValue(0);
@@ -219,7 +220,7 @@ export default function ClientsSection() {
   return (
     <>
       {/* Stats Section - Creative Gradient Shape */}
-      <section className="relative py-24 overflow-hidden">
+      <section className="relative py-14 md:py-24 overflow-hidden">
         {/* Gradient background */}
         <div className="absolute inset-0 bg-gradient-to-br from-primary-600 via-primary-700 to-indigo-700" />
         
@@ -236,12 +237,12 @@ export default function ClientsSection() {
         </div>
 
         {/* Floating shapes - CSS only for performance */}
-        <div className="absolute top-20 left-[10%] w-24 h-24 rounded-xl bg-white/5 animate-[float1_15s_linear_infinite]" />
-        <div className="absolute bottom-20 right-[15%] w-32 h-32 rounded-full bg-white/5 animate-[float2_20s_linear_infinite]" />
+        <div className="absolute top-20 left-[10%] w-24 h-24 rounded-xl bg-white/5 animate-[float1_15s_linear_infinite] hidden md:block" />
+        <div className="absolute bottom-20 right-[15%] w-32 h-32 rounded-full bg-white/5 animate-[float2_20s_linear_infinite] hidden md:block" />
         <div className="absolute top-1/2 right-[5%] w-16 h-16 rounded-lg bg-white/5 hidden lg:block animate-[floatY_8s_ease-in-out_infinite]" />
 
         <div className="container-custom relative z-10">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 lg:gap-12">
             {stats.map((stat, index) => (
               <motion.div
                 key={stat.label}
@@ -251,10 +252,10 @@ export default function ClientsSection() {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="text-center"
               >
-                <div className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-2">
+                <div className="text-3xl sm:text-5xl lg:text-6xl font-bold text-white mb-1 md:mb-2">
                   <AnimatedCounter value={stat.value} suffix={stat.suffix} />
                 </div>
-                <p className="text-primary-200 text-sm sm:text-base font-medium">
+                <p className="text-primary-200 text-xs sm:text-base font-medium">
                   {stat.label}
                 </p>
               </motion.div>
@@ -280,7 +281,7 @@ export default function ClientsSection() {
       </section>
 
       {/* Clients Section - Light Background */}
-      <section className="relative py-12 md:py-16 overflow-hidden bg-gradient-to-b from-silver-50 via-white to-silver-100">
+      <section className="relative py-10 md:py-16 overflow-hidden bg-gradient-to-b from-silver-50 via-white to-silver-100">
         {/* Background decorations */}
           <div className="absolute inset-0">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-radial from-primary-100/60 via-transparent to-transparent rounded-full blur-3xl" />
@@ -289,13 +290,13 @@ export default function ClientsSection() {
         </div>
 
         <div className="container-custom relative z-10">
-          {/* Section Header - Now First */}
+          {/* Section Header */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-center mb-16 md:mb-20"
+            className="text-center mb-8 md:mb-20"
           >
             
             
@@ -308,8 +309,98 @@ export default function ClientsSection() {
             </p>
           </motion.div>
 
-          {/* Rotating Orbits */}
-          <div className="relative h-[500px] md:h-[600px] lg:h-[700px] flex items-center justify-center">
+          {/* Mobile: Simple grid (no animations) */}
+          <div className="md:hidden">
+            {/* 400+ Happy Clients badge */}
+            <div className="flex items-center justify-center mb-6">
+              <div className="inline-flex items-center gap-3 bg-gradient-to-r from-primary-600 via-indigo-600 to-violet-600 rounded-2xl px-6 py-3 shadow-lg shadow-primary-500/30">
+                <div className="flex flex-col items-center leading-none">
+                  <span className="text-3xl font-extrabold text-white tracking-tight">400+</span>
+                  <span className="text-[11px] font-semibold text-primary-100 tracking-widest uppercase mt-0.5">Happy Clients</span>
+                </div>
+                <div className="w-px h-10 bg-white/30" />
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-[11px] text-primary-100 font-medium">Trusted by creators</span>
+                  <span className="text-[11px] text-primary-100 font-medium">&amp; brands worldwide</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Selected client detail card */}
+            {mobileActiveClient && (() => {
+              const found = clients.find(c => c.name === mobileActiveClient);
+              if (!found) return null;
+              return (
+                <motion.div
+                  initial={{ opacity: 0, y: -8, scale: 0.97 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -8, scale: 0.97 }}
+                  className="mb-4 mx-auto max-w-xs"
+                >
+                  <div className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white rounded-2xl shadow-2xl border border-slate-700/50 overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary-500/20 to-indigo-500/20" />
+                    <div className="relative px-4 py-3 flex items-center gap-3">
+                      <div className="w-11 h-11 rounded-full overflow-hidden border-2 border-primary-400/60 flex-shrink-0">
+                        <Image src={found.logo} alt={found.name} width={44} height={44} className="w-full h-full object-cover" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-1.5 mb-0.5">
+                          <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse flex-shrink-0" />
+                          <p className="font-bold text-sm text-white truncate">{found.name}</p>
+                        </div>
+                        <div className="flex items-center justify-between gap-2 text-xs">
+                          <span className="text-slate-300">{found.type}</span>
+                          <span className="font-semibold text-primary-300">{found.subscribers}</span>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => setMobileActiveClient(null)}
+                        className="text-slate-400 hover:text-white transition-colors flex-shrink-0 text-lg leading-none"
+                      >
+                        ×
+                      </button>
+                    </div>
+                    <div className="h-0.5 bg-gradient-to-r from-primary-500 via-indigo-500 to-violet-500" />
+                  </div>
+                </motion.div>
+              );
+            })()}
+
+            <div className="grid grid-cols-4 gap-3">
+              {clients.slice(0, 16).map((client) => (
+                <div
+                  key={client.name}
+                  className="flex flex-col items-center cursor-pointer"
+                  onClick={() => setMobileActiveClient(prev => prev === client.name ? null : client.name)}
+                >
+                  <div className={`w-14 h-14 rounded-full bg-white shadow-md border-2 overflow-hidden p-0.5 transition-all duration-200 ${
+                    mobileActiveClient === client.name
+                      ? 'border-primary-500 shadow-primary-300/50 shadow-lg scale-110'
+                      : 'border-silver-100'
+                  }`}>
+                    <div className="w-full h-full rounded-full overflow-hidden">
+                      <Image
+                        src={client.logo}
+                        alt={client.name}
+                        width={56}
+                        height={56}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  </div>
+                  <span className="text-[10px] text-silver-600 mt-1.5 text-center leading-tight line-clamp-1">{client.name}</span>
+                </div>
+              ))}
+            </div>
+            {clients.length > 16 && (
+              <p className="text-center text-xs text-silver-500 mt-4">
+                ...and {clients.length - 16}+ more creators
+              </p>
+            )}
+          </div>
+
+          {/* Desktop: Rotating Orbits */}
+          <div className="hidden md:flex relative h-[600px] lg:h-[700px] items-center justify-center">
             {/* Center element */}
             <motion.div
               initial={{ scale: 0 }}

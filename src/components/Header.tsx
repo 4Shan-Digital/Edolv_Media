@@ -19,27 +19,8 @@ const navLinks = [
 
 export default function Header() {
   const pathname = usePathname();
-  const isHomePage = pathname === '/';
-  const [isScrolled, setIsScrolled] = useState(isHomePage);
+  const isScrolled = true; // Always use dark navbar style on all pages
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (isHomePage) {
-        // On home page, navbar is always in scrolled state
-        setIsScrolled(true);
-      } else {
-        // On other pages, normal scroll behavior
-        setIsScrolled(window.scrollY > 20);
-      }
-    };
-
-    // Set initial state
-    handleScroll();
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [isHomePage]);
 
   useEffect(() => {
     setIsMobileMenuOpen(false);
@@ -115,7 +96,7 @@ export default function Header() {
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  'relative px-4 py-2 text-sm font-medium transition-colors duration-300 rounded-lg',
+                  'relative px-4 py-2 text-[15px] font-medium transition-colors duration-300 rounded-lg',
                   pathname === link.href
                     ? (isScrolled ? 'text-white' : 'text-primary-600')
                     : (isScrolled ? 'text-slate-200 hover:text-white' : 'text-silver-600 hover:text-primary-600')

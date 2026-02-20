@@ -93,7 +93,7 @@ export default function WhyChooseUsSection() {
         </ScrollReveal>
 
         {/* Features Grid */}
-        <StaggerContainer staggerDelay={0.1} className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <StaggerContainer staggerDelay={0.1} className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
           {features.map((feature) => (
             <StaggerItem key={feature.title}>
               <motion.div
@@ -102,7 +102,7 @@ export default function WhyChooseUsSection() {
                 className="relative group h-full"
               >
                 {/* Card */}
-                <div className="relative bg-white/5 backdrop-blur-sm rounded-2xl p-8 h-full border border-white/10 hover:border-white/20 transition-all duration-500 overflow-hidden">
+                <div className="relative bg-white/5 backdrop-blur-sm rounded-2xl p-4 md:p-8 h-full border border-white/10 hover:border-white/20 transition-all duration-500 overflow-hidden">
                   {/* Gradient background on hover */}
                   <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500`} />
                   
@@ -112,38 +112,38 @@ export default function WhyChooseUsSection() {
                   {/* Content */}
                   <div className="relative z-10">
                     {/* Icon & Stat Row */}
-                    <div className="flex items-start justify-between mb-6">
+                    <div className="flex items-start justify-between mb-3 md:mb-6">
                       <motion.div
                         whileHover={{ rotate: [0, -10, 10, 0], scale: 1.1 }}
                         transition={{ duration: 0.5 }}
-                        className={`inline-flex items-center justify-center w-14 h-14 rounded-xl bg-gradient-to-br ${feature.gradient} shadow-lg`}
+                        className={`inline-flex items-center justify-center w-10 h-10 md:w-14 md:h-14 rounded-xl bg-gradient-to-br ${feature.gradient} shadow-lg`}
                       >
-                        <feature.icon className="w-7 h-7 text-white" />
+                        <feature.icon className="w-5 h-5 md:w-7 md:h-7 text-white" />
                       </motion.div>
                       
                       {/* Stat badge */}
                       <div className="text-right">
-                        <span className={`block text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r ${feature.gradient}`}>
+                        <span className={`block text-lg md:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r ${feature.gradient}`}>
                           {feature.stat}
                         </span>
-                        <span className="text-xs text-silver-500 uppercase tracking-wider">
+                        <span className="text-[10px] md:text-xs text-silver-500 uppercase tracking-wider">
                           {feature.statLabel}
                         </span>
                       </div>
                     </div>
 
                     {/* Title */}
-                    <h3 className="text-xl font-bold text-white mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-silver-300 transition-all duration-300">
+                    <h3 className="text-sm md:text-xl font-bold text-white mb-1 md:mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-silver-300 transition-all duration-300">
                       {feature.title}
                     </h3>
 
                     {/* Description */}
-                    <p className="text-silver-400 text-sm leading-relaxed mb-6">
+                    <p className="text-silver-400 text-xs md:text-sm leading-relaxed mb-3 md:mb-6 hidden sm:block">
                       {feature.description}
                     </p>
 
                     {/* Check mark row */}
-                    <div className="flex items-center gap-2 text-sm text-silver-500">
+                    <div className="hidden sm:flex items-center gap-2 text-sm text-silver-500">
                       <CheckCircle2 className={`w-4 h-4 text-transparent bg-clip-text bg-gradient-to-r ${feature.gradient}`} style={{ color: 'currentColor' }} />
                       <span>Trusted by 150+ clients</span>
                     </div>

@@ -367,7 +367,7 @@ export default function TestimonialsSection() {
 
       <div className="container-custom relative">
         {/* Section Header */}
-        <ScrollReveal className="text-center mb-8">
+        <ScrollReveal className="text-center mb-4 md:mb-8">
         
 
           <h2 className="heading-lg text-gray-900 mb-4">
@@ -382,7 +382,7 @@ export default function TestimonialsSection() {
         {/* 5-Card Carousel */}
         <div className="relative max-w-6xl mx-auto">
           <div
-            className="relative h-[550px] flex items-center justify-center"
+            className="relative h-[440px] md:h-[550px] flex items-center justify-center"
             style={{ perspective: '2000px' }}
           >
             {visibleCards.map((card) => (
@@ -419,8 +419,8 @@ export default function TestimonialsSection() {
             </button>
           </div>
 
-          {/* Interactive progress dots - simplified */}
-          <div className="flex items-center justify-center gap-3 mt-8">
+          {/* Interactive progress dots - hidden on mobile */}
+          <div className="hidden md:flex items-center justify-center gap-3 mt-8">
             {testimonials.map((testimonial, index) => {
               const isCurrent = index === currentIndex;
               return (

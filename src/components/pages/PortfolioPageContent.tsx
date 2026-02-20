@@ -143,8 +143,8 @@ export default function PortfolioPageContent() {
 
         <div className="container-custom relative">
           {/* Tab Switcher */}
-          <ScrollReveal className="flex justify-center mb-10 pt-4">
-            <div className="inline-flex items-center bg-white rounded-full border border-silver-200 p-1 shadow-sm">
+          <ScrollReveal className="flex justify-center mb-10 pt-4 px-4">
+            <div className="inline-flex items-center bg-white rounded-full border border-silver-200 p-1 shadow-sm max-w-[calc(100vw-3rem)]">
               {(['reels', 'videos', 'thumbnails'] as const).map((tab) => {
                 const Icon = tab === 'reels' ? Video : tab === 'videos' ? Film : ImageIcon;
                 const label = tab.charAt(0).toUpperCase() + tab.slice(1);
@@ -152,13 +152,13 @@ export default function PortfolioPageContent() {
                   <button
                     key={tab}
                     onClick={() => handleTabSwitch(tab)}
-                    className={`flex items-center gap-2 px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ${
+                    className={`flex items-center gap-1.5 px-3 sm:px-6 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 ${
                       activeTab === tab
                         ? 'bg-gradient-to-r from-primary-600 to-indigo-600 text-white shadow-lg shadow-primary-500/25'
                         : 'text-silver-600 hover:text-primary-600'
                     }`}
                   >
-                    <Icon className="w-4 h-4" />
+                    <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                     {label}
                   </button>
                 );

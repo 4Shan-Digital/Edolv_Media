@@ -330,14 +330,14 @@ export default function AboutPageContent() {
             </p>
           </ScrollReveal>
 
-          <StaggerContainer staggerDelay={0.1} className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <StaggerContainer staggerDelay={0.1} className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {teamMembers.slice(0, visibleTeamCount).map((member) => (
               <StaggerItem key={member._id}>
                 <motion.div
                   whileHover={{ y: -5 }}
-                  className="group bg-silver-50 rounded-2xl p-6 hover:bg-white hover:shadow-soft-lg transition-all duration-300"
+                  className="group bg-silver-50 rounded-2xl p-3 md:p-6 hover:bg-white hover:shadow-soft-lg transition-all duration-300"
                 >
-                  <div className="relative mb-5 overflow-hidden rounded-xl aspect-square bg-silver-200">
+                  <div className="relative mb-3 md:mb-5 overflow-hidden rounded-xl aspect-square bg-silver-200">
                     {member.imageUrl ? (
                       <img
                         src={member.imageUrl}
@@ -392,11 +392,11 @@ export default function AboutPageContent() {
                     )}
                   </div>
 
-                  <h3 className="text-lg font-semibold text-silver-900 mb-1 group-hover:text-primary-600 transition-colors">
+                  <h3 className="text-sm md:text-lg font-semibold text-silver-900 mb-1 group-hover:text-primary-600 transition-colors">
                     {member.name}
                   </h3>
-                  <p className="text-sm text-primary-600 font-medium mb-3">{member.role}</p>
-                  <p className="text-silver-600 text-sm">{member.bio}</p>
+                  <p className="text-xs md:text-sm text-primary-600 font-medium mb-1 md:mb-3">{member.role}</p>
+                  <p className="text-silver-600 text-xs md:text-sm hidden sm:block">{member.bio}</p>
                 </motion.div>
               </StaggerItem>
             ))}

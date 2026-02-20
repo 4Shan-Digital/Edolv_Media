@@ -92,32 +92,40 @@ export async function POST(request: Request) {
       console.error('❌ EMAIL_FROM is not set!');
     }
     
-    Promise.allSettled([
-      sendApplicationAcknowledgment(
-        validatedData.name,
-        validatedData.email,
-        job.title
-      ),
-      sendApplicationNotificationToAdmin({
-        applicantName: validatedData.name,
-        applicantEmail: validatedData.email,
-        applicantPhone: validatedData.phone,
-        jobTitle: job.title,
-        jobDepartment: job.department,
-        coverLetter: validatedData.coverLetter,
-        resumeUrl,
-        portfolioUrl: validatedData.portfolioUrl,
-      }),
-    ]).then((results) => {
-      results.forEach((result, index) => {
-        const emailType = index === 0 ? 'Applicant acknowledgment' : 'Admin notification';
-        if (result.status === 'rejected') {
-          console.error(`❌ ${emailType} email failed:`, result.reason);
-        } else {
-          console.log(`✅ ${emailType} email sent successfully`);
-        }
-      });
-    }).catch((error) => {
+    // Send emails sequentially with delay to respect Resend free tier rate limit (2 req/sec)
+    (async () => {
+      try {
+        // Send applicant acknowledgment first
+        await sendApplicationAcknowledgment(
+          validatedData.name,
+          validatedData.email,
+          job.title
+        );
+        console.log('✅ Applicant acknowledgment email sent successfully');
+      } catch (error) {
+        console.error('❌ Applicant acknowledgment email failed:', error);
+      }
+
+      // Wait 1.5 seconds to stay within Resend free tier rate limit (2 req/sec)
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
+      try {
+        // Then send admin notification
+        await sendApplicationNotificationToAdmin({
+          applicantName: validatedData.name,
+          applicantEmail: validatedData.email,
+          applicantPhone: validatedData.phone,
+          jobTitle: job.title,
+          jobDepartment: job.department,
+          coverLetter: validatedData.coverLetter,
+          resumeUrl,
+          portfolioUrl: validatedData.portfolioUrl,
+        });
+        console.log('✅ Admin notification email sent successfully');
+      } catch (error) {
+        console.error('❌ Admin notification email failed:', error);
+      }
+    })().catch((error) => {
       console.error('❌ Unexpected error sending application emails:', error);
     });
 

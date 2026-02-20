@@ -29,20 +29,25 @@ export async function POST(request: Request) {
       message: validatedData.message,
     };
 
-    // Send emails in the background with detailed logging
-    Promise.allSettled([
-      sendContactAcknowledgment(emailData),
-      sendContactNotificationToAdmin(emailData),
-    ]).then((results) => {
-      results.forEach((result, index) => {
-        const emailType = index === 0 ? 'User acknowledgment' : 'Admin notification';
-        if (result.status === 'rejected') {
-          console.error(`❌ ${emailType} email failed:`, result.reason);
-        } else {
-          console.log(`✅ ${emailType} email sent successfully`);
-        }
-      });
-    }).catch((error) => {
+    // Send emails sequentially with delay to respect Resend free tier rate limit (2 req/sec)
+    (async () => {
+      try {
+        await sendContactAcknowledgment(emailData);
+        console.log('✅ User acknowledgment email sent successfully');
+      } catch (error) {
+        console.error('❌ User acknowledgment email failed:', error);
+      }
+
+      // Wait 1.5 seconds to stay within Resend free tier rate limit
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
+      try {
+        await sendContactNotificationToAdmin(emailData);
+        console.log('✅ Admin notification email sent successfully');
+      } catch (error) {
+        console.error('❌ Admin notification email failed:', error);
+      }
+    })().catch((error) => {
       console.error('❌ Unexpected error sending emails:', error);
     });
 
