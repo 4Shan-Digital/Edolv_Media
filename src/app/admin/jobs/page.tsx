@@ -19,7 +19,6 @@ interface JobItem {
   createdAt: string;
 }
 
-const departments = ['Production', 'Creative', 'Post-Production', 'Operations'];
 const jobTypes = ['Full-time', 'Part-time', 'Contract', 'Internship'];
 
 export default function AdminJobsPage() {
@@ -31,7 +30,7 @@ export default function AdminJobsPage() {
   const [error, setError] = useState('');
 
   const [title, setTitle] = useState('');
-  const [department, setDepartment] = useState(departments[0]);
+  const [department, setDepartment] = useState('');
   const [location, setLocation] = useState('');
   const [type, setType] = useState(jobTypes[0]);
   const [description, setDescription] = useState('');
@@ -58,7 +57,7 @@ export default function AdminJobsPage() {
 
   const resetForm = () => {
     setTitle('');
-    setDepartment(departments[0]);
+    setDepartment('');
     setLocation('');
     setType(jobTypes[0]);
     setDescription('');
@@ -270,15 +269,14 @@ export default function AdminJobsPage() {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-slate-300 mb-1.5">Department</label>
-                    <select
+                    <input
+                      type="text"
                       value={department}
                       onChange={(e) => setDepartment(e.target.value)}
-                      className="w-full px-4 py-2.5 bg-slate-800 border border-slate-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-violet-500 text-sm"
-                    >
-                      {departments.map((d) => (
-                        <option key={d} value={d}>{d}</option>
-                      ))}
-                    </select>
+                      required
+                      placeholder="e.g. Production, Creative, Design…"
+                      className="w-full px-4 py-2.5 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500 text-sm"
+                    />
                   </div>
                 </div>
 

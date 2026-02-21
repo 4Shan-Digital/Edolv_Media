@@ -21,7 +21,8 @@ const jobSchema = new Schema<IJob>(
     department: {
       type: String,
       required: true,
-      enum: ['Production', 'Creative', 'Post-Production', 'Operations'],
+      trim: true,
+      maxlength: 200,
     },
     location: { type: String, required: true, trim: true, maxlength: 200 },
     type: {
@@ -43,6 +44,11 @@ const jobSchema = new Schema<IJob>(
 
 jobSchema.index({ department: 1, isActive: 1 });
 jobSchema.index({ isActive: 1, isUrgent: -1, priority: -1, createdAt: -1 });
+
+// In development, always re-register to pick up schema changes without a full restart
+if (process.env.NODE_ENV === 'development' && mongoose.models.Job) {
+  delete (mongoose.models as Record<string, unknown>).Job;
+}
 
 const Job: Model<IJob> =
   mongoose.models.Job || mongoose.model<IJob>('Job', jobSchema);

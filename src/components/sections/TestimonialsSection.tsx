@@ -379,10 +379,77 @@ export default function TestimonialsSection() {
           </p>
         </ScrollReveal>
 
-        {/* 5-Card Carousel */}
-        <div className="relative max-w-6xl mx-auto">
+        {/* ── Mobile: single card with prev / next ── */}
+        <div className="md:hidden">
+          {(() => {
+            const t = testimonials[currentIndex];
+            return (
+              <div className="relative bg-white rounded-2xl border border-gray-200 shadow-lg overflow-hidden">
+                {/* top colour strip */}
+                <div className={`h-1.5 w-full bg-gradient-to-r ${t.color}`} />
+
+                <div className="p-5">
+                  {/* header row */}
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className={`relative w-14 h-14 rounded-full bg-gradient-to-br ${t.color} p-[3px] flex-shrink-0`}>
+                      <div
+                        className="w-full h-full rounded-full bg-cover bg-center border-2 border-white"
+                        style={{ backgroundImage: `url(${t.image})` }}
+                      />
+                    </div>
+                    <div>
+                      <h4 className="text-base font-bold text-gray-900 leading-tight">{t.name}</h4>
+                      <p className={`text-xs font-semibold bg-gradient-to-r ${t.color} bg-clip-text text-transparent flex items-center gap-1 mt-0.5`}>
+                        <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                        </svg>
+                        {t.subscribers}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* stars */}
+                  <div className="flex items-center gap-0.5 mb-3">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-4 h-4 text-amber-400" fill="currentColor" />
+                    ))}
+                  </div>
+
+                  {/* content */}
+                  <blockquote className="text-gray-700 text-sm leading-relaxed">
+                    &ldquo;{t.content}&rdquo;
+                  </blockquote>
+                </div>
+              </div>
+            );
+          })()}
+
+          {/* Prev / Next buttons */}
+          <div className="flex items-center justify-between mt-5 px-1">
+            <button
+              onClick={handlePrev}
+              className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-white border border-gray-200 shadow text-sm font-medium text-gray-700 active:scale-95 transition-transform"
+            >
+              <ArrowRight className="w-4 h-4 rotate-180" />
+              Previous
+            </button>
+            <span className="text-xs text-gray-400 font-medium">
+              {currentIndex + 1} / {testimonials.length}
+            </span>
+            <button
+              onClick={handleNext}
+              className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-white border border-gray-200 shadow text-sm font-medium text-gray-700 active:scale-95 transition-transform"
+            >
+              Next
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+
+        {/* ── Desktop: 5-card carousel ── */}
+        <div className="hidden md:block relative max-w-6xl mx-auto">
           <div
-            className="relative h-[440px] md:h-[550px] flex items-center justify-center"
+            className="relative h-[550px] flex items-center justify-center"
             style={{ perspective: '2000px' }}
           >
             {visibleCards.map((card) => (
@@ -403,7 +470,7 @@ export default function TestimonialsSection() {
             ))}
           </div>
 
-          {/* Navigation arrows - simplified */}
+          {/* Navigation arrows */}
           <div className="absolute top-1/2 -translate-y-1/2 left-4 right-4 flex justify-between pointer-events-none">
             <button
               onClick={handlePrev}
@@ -419,8 +486,8 @@ export default function TestimonialsSection() {
             </button>
           </div>
 
-          {/* Interactive progress dots - hidden on mobile */}
-          <div className="hidden md:flex items-center justify-center gap-3 mt-8">
+          {/* Progress dots */}
+          <div className="flex items-center justify-center gap-3 mt-8">
             {testimonials.map((testimonial, index) => {
               const isCurrent = index === currentIndex;
               return (

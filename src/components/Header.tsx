@@ -21,6 +21,13 @@ export default function Header() {
   const pathname = usePathname();
   const isScrolled = true; // Always use dark navbar style on all pages
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isSafari, setIsSafari] = useState(false);
+
+  useEffect(() => {
+    // Detect Safari (excludes Chrome, Edge, Firefox which also carry WebKit UA)
+    const ua = navigator.userAgent;
+    setIsSafari(/^((?!chrome|android|crios|fxios).)*safari/i.test(ua));
+  }, []);
 
   useEffect(() => {
     setIsMobileMenuOpen(false);
@@ -57,19 +64,35 @@ export default function Header() {
             >
               {/* Logo Image */}
               <div className={cn(
-                "relative w-12 h-12 md:w-14 md:h-14 transition-all duration-300 scale-[1.8] md:scale-[2]",
+                "relative w-12 h-12 md:w-14 md:h-14 overflow-visible transition-all duration-300",
                 isScrolled && "drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)]"
               )}>
-                <Image
-                  src="/images/E logo.png"
-                  alt="Edolv Media"
-                  fill
-                  className={cn(
-                    "object-contain transition-all duration-300",
-                    isScrolled && "[filter:drop-shadow(0_0_2px_rgba(0,0,0,0.75))]"
-                  )}
-                  priority
-                />
+                {isSafari ? (
+                  // Safari: absolute-positioned image — no scale() so no black patch
+                  <Image
+                    src="/images/E logo.png"
+                    alt="Edolv Media"
+                    width={112}
+                    height={112}
+                    className={cn(
+                      "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80px] h-[80px] md:w-[100px] md:h-[100px] object-contain transition-all duration-300",
+                      isScrolled && "[filter:drop-shadow(0_0_2px_rgba(0,0,0,0.75))]"
+                    )}
+                    priority
+                  />
+                ) : (
+                  // All other browsers: original scale approach — exact original logo size
+                  <Image
+                    src="/images/E logo.png"
+                    alt="Edolv Media"
+                    fill
+                    className={cn(
+                      "object-contain transition-all duration-300 scale-[1.8] md:scale-[2]",
+                      isScrolled && "[filter:drop-shadow(0_0_2px_rgba(0,0,0,0.75))]"
+                    )}
+                    priority
+                  />
+                )}
               </div>
               {/* Logo Text */}
               <div className="flex flex-col items-center leading-none">

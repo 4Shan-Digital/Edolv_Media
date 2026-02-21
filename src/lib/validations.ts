@@ -43,7 +43,7 @@ export const jobTypes = [
 
 export const createJobSchema = z.object({
   title: z.string().min(1, 'Title is required').max(200),
-  department: z.enum(jobDepartments, { message: 'Invalid department' }),
+  department: z.string().min(1, 'Department is required').max(200),
   location: z.string().min(1, 'Location is required').max(200),
   type: z.enum(jobTypes, { message: 'Invalid job type' }),
   description: z.string().min(1, 'Description is required').max(5000),
