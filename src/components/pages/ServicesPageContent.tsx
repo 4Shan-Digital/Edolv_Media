@@ -627,9 +627,8 @@ export default function ServicesPageContent() {
                       </div>
                     </motion.div>
 
-                    {/* Connector - visible on md+ */}
-                    {index < processSteps.length - 1 && (
-                      <div className="hidden md:flex items-center justify-center w-10 flex-shrink-0">
+                    {/* Connector dot - visible on md+ */}
+                    <div className="hidden md:flex items-center justify-center w-10 flex-shrink-0">
                         <motion.div
                           initial={{ scale: 0 }}
                           whileInView={{ scale: 1 }}
@@ -637,7 +636,6 @@ export default function ServicesPageContent() {
                           className={`w-3 h-3 rounded-full bg-gradient-to-br ${color.bg}`}
                         />
                       </div>
-                    )}
 
                     {/* Spacer for zigzag alignment */}
                     <div className="hidden md:block flex-1" />

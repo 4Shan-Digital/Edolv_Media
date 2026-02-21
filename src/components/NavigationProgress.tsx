@@ -1,20 +1,38 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
+
+const MIN_DISPLAY_MS = 400;
 
 /**
  * Instant navigation loader — fires on link click (event delegation).
- * Uses pure CSS animations (no framer-motion) so it renders before
- * any JS chunk has been downloaded for the target route.
+ * Shows for at least MIN_DISPLAY_MS before hiding, even if the page
+ * loads faster. Uses pure CSS animations (no framer-motion).
  */
 export default function NavigationProgress() {
   const pathname = usePathname();
   const [isNavigating, setIsNavigating] = useState(false);
+  const startTimeRef = useRef<number | null>(null);
+  const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Navigation complete → hide loader
+  // Navigation complete → hide after minimum display time
   useEffect(() => {
-    setIsNavigating(false);
+    if (!isNavigating) return;
+
+    const elapsed = startTimeRef.current ? Date.now() - startTimeRef.current : MIN_DISPLAY_MS;
+    const remaining = Math.max(0, MIN_DISPLAY_MS - elapsed);
+
+    if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
+    hideTimerRef.current = setTimeout(() => {
+      setIsNavigating(false);
+      startTimeRef.current = null;
+    }, remaining);
+
+    return () => {
+      if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
   // Intercept internal link clicks for immediate feedback
@@ -46,6 +64,7 @@ export default function NavigationProgress() {
       if (targetPath === currentPath) return;
 
       setIsNavigating(true);
+      startTimeRef.current = Date.now();
     };
 
     // Capture phase → fires before Next.js link handler

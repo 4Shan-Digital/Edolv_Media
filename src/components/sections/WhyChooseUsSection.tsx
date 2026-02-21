@@ -34,7 +34,7 @@ const features = [
     title: 'Dedicated Team',
     description: 'A skilled team of editors, animators, and colorists working on your project.',
     gradient: 'from-blue-500 to-indigo-600',
-    stat: '25+',
+    stat: '10+',
     statLabel: 'Experts',
   },
   {

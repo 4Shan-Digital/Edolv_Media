@@ -8,10 +8,10 @@ import { Sparkles } from 'lucide-react';
 // Real client data from Edolve Media
 const clients = [
   {
-    name: 'Aayush',
-    logo: '/images/Clients_logo/AAYUSH LOGO.jpg',
-    type: 'Content Creator',
-    subscribers: '2.5M+',
+    name: 'funmolll',
+    logo: '/images/Clients_logo/funmolll.png',
+    type: 'Influencer',
+    subscribers: '14.7k+',
   },
   {
     name: 'Anshika',
@@ -28,20 +28,20 @@ const clients = [
   {
     name: 'Bandookbaaz',
     logo: '/images/Clients_logo/Bandookbaaz.jpg',
-    type: 'Entertainment',
+    type: 'Gamer',
     subscribers: '2.3M+',
   },
   {
     name: 'Bixi',
     logo: '/images/Clients_logo/Bixi.jpg',
-    type: 'Lifestyle',
+    type: 'Gamer',
     subscribers: '889K+',
   },
   {
     name: 'Ipreet',
     logo: '/images/Clients_logo/Ipreet.jpg',
-    type: 'Vlogger',
-    subscribers: '429+',
+    type: 'Streamer',
+    subscribers: '492k+',
   },
   {
     name: 'Knickknack',
@@ -64,68 +64,68 @@ const clients = [
   {
     name: 'Piyush',
     logo: '/images/Clients_logo/Piyush.jpg',
-    type: 'Tech Reviewer',
+    type: 'Podcast',
     subscribers: '1.27k+',
   },
   {
     name: 'Prateek',
     logo: '/images/Clients_logo/Prateek.jpg',
-    type: 'Filmmaker',
+    type: 'Travel Vlogger',
     subscribers: '780K+',
   },
   {
     name: 'Qayzer',
     logo: '/images/Clients_logo/Qayzer.jpg',
-    type: 'Music Artist',
+    type: 'Gamer',
     subscribers: '107k+',
   },
   {
     name: 'Raghav',
     logo: '/images/Clients_logo/Raghav.jpg',
     type: 'Content Creator',
-    subscribers: '1.6M+',
+    subscribers: '592+',
   },
   {
     name: 'Sharmila',
     logo: '/images/Clients_logo/Sharmila .jpg',
-    type: 'Lifestyle',
-    subscribers: '188K+',
+    type: 'Doctor',
+    subscribers: '12.4K+',
   },
   {
     name: 'Souvik',
     logo: '/images/Clients_logo/Souvik.jpg',
-    type: 'Travel Vlogger',
+    type: 'Gamer',
     subscribers: '668k+',
   },
   {
     name: 'Mamba',
     logo: '/images/Clients_logo/unnamed.jpg',
-    type: 'Creator',
+    type: 'Streamer',
     subscribers: '1.5M+',
   },
   {
-    name: 'Varinder Healthcare',
-    logo: '/images/Clients_logo/Varinder health care.jpg',
-    type: 'Health Brand',
-    subscribers: '450K+',
+    name: 'Antaryami Gaming',
+    logo: '/images/Clients_logo/Antaryami.jpeg',
+    type: 'Streamer',
+    subscribers: '4.05M+',
   },
   {
     name: 'Varun Keshwani',
-    logo: '/images/Clients_logo/Varun keshwani.jpg',
-    type: 'Entrepreneur',
+    logo: '/images/Clients_logo/Varun keshwani.png',
+    type: 'Vlogger',
     subscribers: '265k+',
   },
   {
     name: 'Xyaa',
     logo: '/images/Clients_logo/Xyaa.jpg',
-    type: 'Fashion',
-    subscribers: '659k+',
+    type: 'Streamer',
+    subscribers: '660k+',
   },
   {
     name: 'Yassine',
     logo: '/images/Clients_logo/Yassine.jpg',
-    type: 'Fitness',
-    subscribers: '300k+',
+    type: 'Doctor',
+    subscribers: '188k+',
   },
 ];
 
@@ -309,8 +309,8 @@ export default function ClientsSection() {
             </p>
           </motion.div>
 
-          {/* Mobile: Simple grid (no animations) */}
-          <div className="md:hidden">
+          {/* Mobile + Tablet: Simple grid (no animations) */}
+          <div className="lg:hidden">
             {/* 400+ Happy Clients badge */}
             <div className="flex items-center justify-center mb-6">
               <div className="inline-flex items-center gap-3 bg-gradient-to-r from-primary-600 via-indigo-600 to-violet-600 rounded-2xl px-6 py-3 shadow-lg shadow-primary-500/30">
@@ -394,13 +394,13 @@ export default function ClientsSection() {
             </div>
             {clients.length > 16 && (
               <p className="text-center text-xs text-silver-500 mt-4">
-                ...and {clients.length - 16}+ more creators
+                
               </p>
             )}
           </div>
 
-          {/* Desktop: Rotating Orbits */}
-          <div className="hidden md:flex relative h-[600px] lg:h-[700px] items-center justify-center">
+          {/* Desktop only: Rotating Orbits */}
+          <div className="hidden lg:flex relative h-[700px] items-center justify-center">
             {/* Center element */}
             <motion.div
               initial={{ scale: 0 }}

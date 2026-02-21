@@ -132,36 +132,17 @@ export default function Header() {
           </div>
 
           {/* Mobile Menu Button */}
-          <motion.button
-            whileTap={{ scale: 0.9 }}
+          <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="lg:hidden relative z-10 p-2 -mr-2"
             aria-label="Toggle menu"
           >
-            <AnimatePresence mode="wait">
-              {isMobileMenuOpen ? (
-                <motion.div
-                  key="close"
-                  initial={{ rotate: -90, opacity: 0 }}
-                  animate={{ rotate: 0, opacity: 1 }}
-                  exit={{ rotate: 90, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <X className={cn('w-6 h-6', isScrolled ? 'text-white' : 'text-silver-700')} />
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="menu"
-                  initial={{ rotate: 90, opacity: 0 }}
-                  animate={{ rotate: 0, opacity: 1 }}
-                  exit={{ rotate: -90, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <Menu className={cn('w-6 h-6', isScrolled ? 'text-white' : 'text-silver-700')} />
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </motion.button>
+            {isMobileMenuOpen ? (
+              <X className={cn('w-6 h-6', isScrolled ? 'text-white' : 'text-silver-700')} />
+            ) : (
+              <Menu className={cn('w-6 h-6', isScrolled ? 'text-white' : 'text-silver-700')} />
+            )}
+          </button>
         </nav>
       </header>
 
@@ -172,14 +153,11 @@ export default function Header() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: 0.15 }}
             className="fixed inset-0 z-40 lg:hidden"
           >
             {/* Backdrop */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+            <div
               className="absolute inset-0 bg-black/20 backdrop-blur-sm"
               onClick={() => setIsMobileMenuOpen(false)}
             />
@@ -189,23 +167,18 @@ export default function Header() {
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+              transition={{ duration: 0.2, ease: 'easeOut' }}
               className="absolute top-0 right-0 bottom-0 w-full max-w-sm bg-white shadow-soft-xl"
             >
               <div className="flex flex-col h-full pt-24 pb-8 px-6">
                 {/* Nav Links */}
                 <nav className="flex-1 space-y-1">
-                  {navLinks.map((link, index) => (
-                    <motion.div
-                      key={link.href}
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.05 + 0.1 }}
-                    >
+                  {navLinks.map((link) => (
+                    <div key={link.href}>
                       <Link
                         href={link.href}
                         className={cn(
-                          'flex items-center justify-between py-4 px-4 rounded-xl text-lg font-medium transition-all duration-300',
+                          'flex items-center justify-between py-4 px-4 rounded-xl text-lg font-medium transition-colors duration-150',
                           pathname === link.href
                             ? 'text-primary-600 bg-primary-50'
                             : 'text-silver-700 hover:text-primary-600 hover:bg-silver-50'
@@ -213,28 +186,23 @@ export default function Header() {
                       >
                         {link.label}
                         <ChevronRight className={cn(
-                          'w-5 h-5 transition-transform duration-300',
+                          'w-5 h-5',
                           pathname === link.href ? 'text-primary-400' : 'text-silver-300'
                         )} />
                       </Link>
-                    </motion.div>
+                    </div>
                   ))}
                 </nav>
 
                 {/* Mobile CTA */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4 }}
-                  className="pt-6 border-t border-silver-100"
-                >
+                <div className="pt-6 border-t border-silver-100">
                   <Link href="/contact" className="block">
                     <button className="w-full btn-primary py-4 text-lg">
                       Get Started
                       <ChevronRight className="w-5 h-5 ml-2" />
                     </button>
                   </Link>
-                </motion.div>
+                </div>
               </div>
             </motion.div>
           </motion.div>
