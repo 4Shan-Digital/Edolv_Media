@@ -241,6 +241,14 @@ export default function PortfolioSection() {
                       {item.thumbnailUrl ? (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img src={item.thumbnailUrl} alt={item.title} className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" loading="eager" decoding="async" />
+                      ) : item.videoUrl ? (
+                        <video
+                          src={item.videoUrl}
+                          className="w-full h-full object-cover"
+                          muted
+                          preload="metadata"
+                          playsInline
+                        />
                       ) : (
                         <div className="w-full h-full bg-gradient-to-br from-primary-100 via-silver-100 to-indigo-100 flex items-center justify-center">
                           <Video className="w-10 h-10 text-silver-300" />
@@ -316,11 +324,7 @@ export default function PortfolioSection() {
               onClick={(e) => e.stopPropagation()}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={lightboxImage.imageUrl} alt={lightboxImage.title} className="w-full h-auto max-h-[85vh] object-contain rounded-xl" />
-              <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent rounded-b-xl">
-                <h3 className="text-white text-lg font-semibold">{lightboxImage.title}</h3>
-                <p className="text-white/60 text-sm">{lightboxImage.category}</p>
-              </div>
+              <img src={lightboxImage.imageUrl} alt="Thumbnail" className="w-full h-auto max-h-[85vh] object-contain rounded-xl" />
               <button onClick={() => setLightboxImage(null)} className="absolute top-3 right-3 w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm text-white flex items-center justify-center hover:bg-black/70 transition">
                 &#10005;
               </button>

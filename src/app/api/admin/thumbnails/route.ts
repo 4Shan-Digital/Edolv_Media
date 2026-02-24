@@ -47,9 +47,15 @@ export async function POST(request: Request) {
       return apiError('Image URL and key are required', 400);
     }
 
+    // Auto-derive a display title from the file key if none provided
+    const autoTitle =
+      validatedData.title ||
+      validatedData.imageKey.split('/').pop()?.replace(/\.[^/.]+$/, '') ||
+      'untitled';
+
     const thumbnail = await Thumbnail.create({
-      title: validatedData.title,
-      category: validatedData.category,
+      title: autoTitle,
+      category: validatedData.category || '',
       imageUrl: validatedData.imageUrl,
       imageKey: validatedData.imageKey,
     });

@@ -181,8 +181,8 @@ export type UpdateThumbnailCategoryInput = z.infer<typeof updateThumbnailCategor
 // ============================================
 
 export const createThumbnailSchema = z.object({
-  title: z.string().min(1, 'Title is required').max(200),
-  category: z.string().min(1, 'Category is required').max(100),
+  title: z.string().max(200).optional().default(''),
+  category: z.string().max(100).optional().default(''),
   imageUrl: z.string().url().optional(),
   imageKey: z.string().optional(),
 });
@@ -202,7 +202,7 @@ export const createReelSchema = z.object({
   title: z.string().min(1, 'Title is required').max(200),
   videoUrl: z.string().url().optional(),
   videoKey: z.string().optional(),
-  thumbnailUrl: z.string().url().optional(),
+  thumbnailUrl: z.union([z.string().url(), z.literal('')]).optional(),
   thumbnailKey: z.string().optional(),
 });
 

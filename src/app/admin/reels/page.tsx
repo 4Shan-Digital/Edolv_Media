@@ -343,8 +343,9 @@ export default function AdminReelsPage() {
                 {/* Thumbnail Upload (optional) */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Cover Image <span className="text-gray-400"></span>
+                    Cover Image <span className="text-gray-400 font-normal">(Optional)</span>
                   </label>
+                  <p className="text-xs text-gray-400 mb-2">If left blank, the first frame of the video will be shown as the cover.</p>
                   <label className="flex items-center gap-3 p-3 border-2 border-dashed border-gray-200 rounded-xl cursor-pointer hover:border-purple-400 transition">
                     {thumbPreview ? (
                       // eslint-disable-next-line @next/next/no-img-element
@@ -429,6 +430,14 @@ export default function AdminReelsPage() {
                       src={item.thumbnailUrl}
                       alt={item.title}
                       className="w-full h-full object-cover"
+                    />
+                  ) : item.videoUrl ? (
+                    <video
+                      src={item.videoUrl}
+                      className="w-full h-full object-cover"
+                      muted
+                      preload="metadata"
+                      playsInline
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">

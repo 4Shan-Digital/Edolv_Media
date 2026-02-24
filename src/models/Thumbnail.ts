@@ -1,8 +1,8 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
 
 export interface IThumbnail extends Document {
-  title: string;
-  category: string;
+  title?: string;
+  category?: string;
   imageUrl: string;
   imageKey: string;
   order: number;
@@ -13,8 +13,8 @@ export interface IThumbnail extends Document {
 
 const thumbnailSchema = new Schema<IThumbnail>(
   {
-    title: { type: String, required: true, trim: true, maxlength: 200 },
-    category: { type: String, required: true, trim: true, maxlength: 100 },
+    title: { type: String, required: false, trim: true, maxlength: 200, default: '' },
+    category: { type: String, required: false, trim: true, maxlength: 100, default: '' },
     imageUrl: { type: String, required: true },
     imageKey: { type: String, required: true },
     order: { type: Number, default: 0 },
