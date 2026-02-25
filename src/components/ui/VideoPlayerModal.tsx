@@ -13,6 +13,8 @@ import {
   SkipBack,
   SkipForward,
   Loader2,
+  ChevronLeft,
+  ChevronRight,
 } from 'lucide-react';
 
 interface VideoPlayerModalProps {
@@ -25,6 +27,10 @@ interface VideoPlayerModalProps {
   duration?: string;
   year?: string;
   description?: string;
+  onNext?: () => void;
+  onPrevious?: () => void;
+  hasNext?: boolean;
+  hasPrevious?: boolean;
 }
 
 export default function VideoPlayerModal({
@@ -37,6 +43,10 @@ export default function VideoPlayerModal({
   duration,
   year,
   description,
+  onNext,
+  onPrevious,
+  hasNext = false,
+  hasPrevious = false,
 }: VideoPlayerModalProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -172,13 +182,21 @@ export default function VideoPlayerModal({
         case 'Escape':
           onClose();
           break;
+        case 'n':
+        case 'N':
+          if (hasNext && onNext) onNext();
+          break;
+        case 'p':
+        case 'P':
+          if (hasPrevious && onPrevious) onPrevious();
+          break;
       }
       showControlsTemporarily();
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen, handlePlayPause]);
+  }, [isOpen, handlePlayPause, hasNext, hasPrevious, onNext, onPrevious]);
 
   // Auto-play when modal opens
   useEffect(() => {
@@ -231,6 +249,36 @@ export default function VideoPlayerModal({
           <div className="w-[80%] h-[60%] bg-gradient-to-br from-violet-600/10 via-transparent to-indigo-600/10 rounded-3xl blur-3xl" />
         </div>
 
+        {/* Previous button */}
+        {hasPrevious && onPrevious && (
+          <motion.button
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ delay: 0.4 }}
+            onClick={(e) => { e.stopPropagation(); onPrevious(); }}
+            className="absolute left-2 sm:left-4 lg:left-6 top-1/2 -translate-y-1/2 z-[110] w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-black/60 backdrop-blur-md hover:bg-white/20 flex items-center justify-center text-white transition-all border border-white/15 shadow-lg shadow-black/30 group"
+            title="Previous (P)"
+          >
+            <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6 group-hover:-translate-x-0.5 transition-transform" />
+          </motion.button>
+        )}
+
+        {/* Next button */}
+        {hasNext && onNext && (
+          <motion.button
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 20 }}
+            transition={{ delay: 0.4 }}
+            onClick={(e) => { e.stopPropagation(); onNext(); }}
+            className="absolute right-2 sm:right-4 lg:right-6 top-1/2 -translate-y-1/2 z-[110] w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-black/60 backdrop-blur-md hover:bg-white/20 flex items-center justify-center text-white transition-all border border-white/15 shadow-lg shadow-black/30 group"
+            title="Next (N)"
+          >
+            <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-0.5 transition-transform" />
+          </motion.button>
+        )}
+
         {/* Video Container */}
         <motion.div
           ref={containerRef}
@@ -238,7 +286,7 @@ export default function VideoPlayerModal({
           animate={{ scale: 1, opacity: 1, y: 0 }}
           exit={{ scale: 0.85, opacity: 0, y: 30 }}
           transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-          className="relative w-full max-w-6xl mx-2 sm:mx-4 rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl shadow-black/50"
+          className="relative w-full max-w-6xl lg:max-w-[60%] xl:max-w-[55%] mx-2 sm:mx-4 lg:mx-auto rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl shadow-black/50"
           onClick={(e) => e.stopPropagation()}
           onMouseMove={showControlsTemporarily}
           onMouseLeave={() => isPlaying && setShowControls(false)}

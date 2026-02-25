@@ -43,6 +43,7 @@ export default function AdminReelsPage() {
 
   // Form fields
   const [title, setTitle] = useState('');
+  const [order, setOrder] = useState<number | ''>('');
   const [videoFile, setVideoFile] = useState<File | null>(null);
   const [thumbFile, setThumbFile] = useState<File | null>(null);
   const [thumbPreview, setThumbPreview] = useState('');
@@ -71,6 +72,7 @@ export default function AdminReelsPage() {
 
   const resetForm = () => {
     setTitle('');
+    setOrder('');
     setVideoFile(null);
     setThumbFile(null);
     setThumbPreview('');
@@ -87,6 +89,7 @@ export default function AdminReelsPage() {
   const openEditForm = (item: ReelItem) => {
     setEditing(item);
     setTitle(item.title);
+    setOrder(item.order || '');
     setThumbPreview(item.thumbnailUrl || '');
     setUploadedVideoUrl('');
     setUploadedVideoKey('');
@@ -194,7 +197,7 @@ export default function AdminReelsPage() {
 
       if (editing) {
         // PATCH – only send fields that changed
-        const body: Record<string, unknown> = { title };
+        const body: Record<string, unknown> = { title, order: order === '' ? 0 : Number(order) };
         if (videoKey) { body.videoUrl = videoUrl; body.videoKey = videoKey; }
         if (thumbnailKey) { body.thumbnailUrl = thumbnailUrl; body.thumbnailKey = thumbnailKey; }
 
@@ -215,7 +218,7 @@ export default function AdminReelsPage() {
         const res = await fetch('/api/admin/reels', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ title, videoUrl, videoKey, thumbnailUrl, thumbnailKey }),
+          body: JSON.stringify({ title, videoUrl, videoKey, thumbnailUrl, thumbnailKey, order: order === '' ? 0 : Number(order) }),
         });
         const data = await res.json();
         if (!data.success) throw new Error(data.error || 'Create failed');
@@ -305,6 +308,22 @@ export default function AdminReelsPage() {
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm"
                     placeholder="e.g. Brand Reel 2025"
                   />
+                </div>
+
+                {/* Order */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Display Order <span className="text-gray-400 font-normal">(Optional)</span>
+                  </label>
+                  <input
+                    type="number"
+                    value={order}
+                    onChange={(e) => setOrder(e.target.value === '' ? '' : parseInt(e.target.value, 10))}
+                    min={0}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm"
+                    placeholder="0 (lower = appears first)"
+                  />
+                  <p className="text-xs text-gray-400 mt-1">Items with lower order numbers appear first. Leave blank for default (0).</p>
                 </div>
 
                 {/* Video Upload */}
@@ -456,9 +475,16 @@ export default function AdminReelsPage() {
                 {/* Info */}
                 <div className="p-4">
                   <h3 className="font-semibold text-gray-900 text-sm truncate mb-1">{item.title}</h3>
-                  <p className="text-xs text-gray-400">
-                    {new Date(item.createdAt).toLocaleDateString()}
-                  </p>
+                  <div className="flex items-center gap-2">
+                    <p className="text-xs text-gray-400">
+                      {new Date(item.createdAt).toLocaleDateString()}
+                    </p>
+                    {item.order > 0 && (
+                      <span className="text-xs font-medium text-purple-600 bg-purple-50 px-1.5 py-0.5 rounded">
+                        Order: {item.order}
+                      </span>
+                    )}
+                  </div>
                 </div>
 
                 {/* Actions */}

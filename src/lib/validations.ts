@@ -16,9 +16,13 @@ export const createPortfolioSchema = z.object({
   videoKey: z.string().optional(),
   thumbnailUrl: z.string().url().optional(),
   thumbnailKey: z.string().optional(),
+  order: z.number().int().min(0).optional(),
 });
 
-export const updatePortfolioSchema = createPortfolioSchema.partial();
+export const updatePortfolioSchema = createPortfolioSchema.partial().extend({
+  isActive: z.boolean().optional(),
+  order: z.number().int().min(0).optional(),
+});
 
 export type CreatePortfolioInput = z.infer<typeof createPortfolioSchema>;
 export type UpdatePortfolioInput = z.infer<typeof updatePortfolioSchema>;
@@ -204,6 +208,7 @@ export const createReelSchema = z.object({
   videoKey: z.string().optional(),
   thumbnailUrl: z.union([z.string().url(), z.literal('')]).optional(),
   thumbnailKey: z.string().optional(),
+  order: z.number().int().min(0).optional(),
 });
 
 export const updateReelSchema = createReelSchema.partial().extend({

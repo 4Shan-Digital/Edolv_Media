@@ -54,7 +54,7 @@ export async function POST(request: Request) {
       videoKey: validatedData.videoKey,
       thumbnailUrl: validatedData.thumbnailUrl || '',
       thumbnailKey: validatedData.thumbnailKey || '',
-      order: nextOrder,
+      order: validatedData.order != null ? validatedData.order : nextOrder,
       isActive: true,
     });
 

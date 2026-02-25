@@ -55,6 +55,7 @@ function preloadImages(items: { thumbnailUrl?: string }[]) {
 export default function PortfolioPageContent() {
   const [activeTab, setActiveTab] = useState<'videos' | 'thumbnails' | 'reels'>('reels');
   const [selectedVideo, setSelectedVideo] = useState<PortfolioItem | ReelItem | null>(null);
+  const [selectedIndex, setSelectedIndex] = useState<number>(-1);
   const [lightboxImage, setLightboxImage] = useState<ThumbnailItem | null>(null);
   const [portfolioItems, setPortfolioItems] = useState<PortfolioItem[]>([]);
   const [thumbnailItems, setThumbnailItems] = useState<ThumbnailItem[]>([]);
@@ -96,6 +97,34 @@ export default function PortfolioPageContent() {
   const handleTabSwitch = (tab: 'videos' | 'thumbnails' | 'reels') => {
     setActiveTab(tab);
     setVisibleCount(9);
+  };
+
+  // Get the current list based on active tab
+  const currentList = activeTab === 'reels' ? reelItems : activeTab === 'videos' ? portfolioItems : [];
+
+  const selectVideoByIndex = (index: number) => {
+    if (index >= 0 && index < currentList.length) {
+      setSelectedVideo(currentList[index]);
+      setSelectedIndex(index);
+    }
+  };
+
+  const handleSelectVideo = (item: PortfolioItem | ReelItem) => {
+    const idx = currentList.findIndex((i) => i._id === item._id);
+    setSelectedVideo(item);
+    setSelectedIndex(idx);
+  };
+
+  const handleNext = () => {
+    if (selectedIndex < currentList.length - 1) {
+      selectVideoByIndex(selectedIndex + 1);
+    }
+  };
+
+  const handlePrevious = () => {
+    if (selectedIndex > 0) {
+      selectVideoByIndex(selectedIndex - 1);
+    }
   };
 
   const visibleItems = portfolioItems.slice(0, visibleCount);
@@ -191,7 +220,7 @@ export default function PortfolioPageContent() {
                         className="group relative rounded-2xl overflow-hidden cursor-pointer bg-white border border-silver-100 shadow-soft hover:shadow-soft-lg hover:-translate-y-1.5 transition-all duration-500"
                         onMouseEnter={() => setHoveredId(item._id)}
                         onMouseLeave={() => setHoveredId(null)}
-                        onClick={() => setSelectedVideo(item)}
+                        onClick={() => handleSelectVideo(item)}
                       >
                         <div className="relative aspect-video overflow-hidden">
                           {item.thumbnailUrl ? (
@@ -306,7 +335,7 @@ export default function PortfolioPageContent() {
                         className="group relative rounded-2xl overflow-hidden cursor-pointer bg-white border border-silver-100 shadow-soft hover:shadow-soft-lg hover:-translate-y-1.5 transition-all duration-500"
                         onMouseEnter={() => setHoveredId(item._id)}
                         onMouseLeave={() => setHoveredId(null)}
-                        onClick={() => setSelectedVideo(item)}
+                        onClick={() => handleSelectVideo(item)}
                       >
                         <div className="relative aspect-[3/4] overflow-hidden">
                           {item.thumbnailUrl ? (
@@ -379,7 +408,7 @@ export default function PortfolioPageContent() {
       {/* Video / Reel Player Modal */}
       <VideoPlayerModal
         isOpen={!!selectedVideo}
-        onClose={() => setSelectedVideo(null)}
+        onClose={() => { setSelectedVideo(null); setSelectedIndex(-1); }}
         videoUrl={selectedVideo?.videoUrl || ''}
         title={selectedVideo?.title}
         category={selectedAsPortfolio?.category}
@@ -387,6 +416,10 @@ export default function PortfolioPageContent() {
         duration={selectedAsPortfolio?.duration}
         year={selectedAsPortfolio?.year}
         description={selectedAsPortfolio?.description}
+        onNext={handleNext}
+        onPrevious={handlePrevious}
+        hasNext={selectedIndex < currentList.length - 1}
+        hasPrevious={selectedIndex > 0}
       />
 
       {/* Thumbnail Lightbox */}

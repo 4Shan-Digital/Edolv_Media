@@ -46,6 +46,7 @@ export default function AdminPortfolioPage() {
   const [client, setClient] = useState('');
   const [duration, setDuration] = useState('');
   const [year, setYear] = useState(new Date().getFullYear().toString());
+  const [order, setOrder] = useState<number | ''>('');
   const [videoFile, setVideoFile] = useState<File | null>(null);
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
 
@@ -85,6 +86,7 @@ export default function AdminPortfolioPage() {
     setClient('');
     setDuration('');
     setYear(new Date().getFullYear().toString());
+    setOrder('');
     setVideoFile(null);
     setThumbnailFile(null);
     setEditing(null);
@@ -107,6 +109,7 @@ export default function AdminPortfolioPage() {
     setClient(item.client);
     setDuration(item.duration);
     setYear(item.year);
+    setOrder(item.order || '');
     setVideoFile(null);
     setThumbnailFile(null);
     setShowForm(true);
@@ -252,6 +255,7 @@ export default function AdminPortfolioPage() {
         client,
         duration,
         year,
+        order: order === '' ? 0 : Number(order),
         videoUrl,
         videoKey,
         thumbnailUrl,
@@ -423,7 +427,7 @@ export default function AdminPortfolioPage() {
                   />
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-slate-300 mb-1.5">Client</label>
                     <input
@@ -457,6 +461,17 @@ export default function AdminPortfolioPage() {
                       pattern="\d{4}"
                       className="w-full px-4 py-2.5 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500 text-sm"
                       placeholder="2024"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-300 mb-1.5">Order</label>
+                    <input
+                      type="number"
+                      value={order}
+                      onChange={(e) => setOrder(e.target.value === '' ? '' : parseInt(e.target.value, 10))}
+                      min={0}
+                      className="w-full px-4 py-2.5 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500 text-sm"
+                      placeholder="0 = first"
                     />
                   </div>
                 </div>
@@ -590,7 +605,14 @@ export default function AdminPortfolioPage() {
                 {/* Info */}
                 <div className="p-4">
                   <h3 className="text-sm font-semibold text-white truncate">{item.title}</h3>
-                  <p className="text-xs text-slate-400 mt-1">{item.client} • {item.year}</p>
+                  <div className="flex items-center gap-2 mt-1">
+                    <p className="text-xs text-slate-400">{item.client} • {item.year}</p>
+                    {item.order > 0 && (
+                      <span className="text-xs font-medium text-violet-300 bg-violet-500/15 px-1.5 py-0.5 rounded">
+                        Order: {item.order}
+                      </span>
+                    )}
+                  </div>
 
                   {/* Actions */}
                   <div className="flex items-center gap-2 mt-3 pt-3 border-t border-slate-800">

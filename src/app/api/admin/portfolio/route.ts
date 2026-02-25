@@ -85,7 +85,7 @@ export async function POST(request: Request) {
         videoKey: body.videoKey,
         thumbnailUrl: body.thumbnailUrl,
         thumbnailKey: body.thumbnailKey,
-        order: nextOrder,
+        order: validatedData.order != null ? validatedData.order : nextOrder,
       });
 
       return apiSuccess(portfolio, 201);
@@ -126,7 +126,7 @@ export async function POST(request: Request) {
         videoKey: videoUpload.key,
         thumbnailUrl: thumbnailUpload.url,
         thumbnailKey: thumbnailUpload.key,
-        order: nextOrder,
+        order: validatedData.order != null ? validatedData.order : nextOrder,
       });
 
       return apiSuccess(portfolio, 201);
