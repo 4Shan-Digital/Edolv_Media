@@ -26,20 +26,20 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://edolv.com'),
+  metadataBase: new URL('https://www.edolv.com'),
   alternates: {
     canonical: '/',
   },
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://edolv.com',
+    url: 'https://www.edolv.com/',
     siteName: 'Edolv Media',
     title: 'Edolv Media | Premium Video Editing Services',
     description: 'Transform your vision into stunning reality with Edolv Media. Premium video editing, motion graphics, and post-production services.',
     images: [
       {
-        url: 'https://edolv.com/og-image-v2.png',
+        url: 'https://www.edolv.com/og-image-v2.png',
         width: 1200,
         height: 630,
         alt: 'Edolv Media - Premium Video Editing',
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Edolv Media | Premium Video Editing Services',
     description: 'Transform your vision into stunning reality with Edolv Media.',
-    images: ['https://edolv.com/og-image-v2.png'],
+    images: ['https://www.edolv.com/og-image-v2.png'],
     creator: '@Edolvmedia',
   },
   robots: {
